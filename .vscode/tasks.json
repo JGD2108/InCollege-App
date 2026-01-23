@@ -1,0 +1,100 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "COBOL: Build active file",
+      "type": "shell",
+      "command": "mkdir -p bin && cobc -x -free -o bin/${fileBasenameNoExtension} ${file}",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "problemMatcher": [
+        {
+          "owner": "cobc",
+          "fileLocation": ["absolute"],
+          "pattern": {
+            "regexp": "^(.*):(\\d+): (warning|error): (.*)$",
+            "file": 1,
+            "line": 2,
+            "severity": 3,
+            "message": 4
+          }
+        }
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      }
+    },
+    {
+      "label": "COBOL: Run active file",
+      "type": "process",
+      "command": "bin/${fileBasenameNoExtension}",
+      "dependsOn": "COBOL: Build active file",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      }
+    },
+    {
+      "label": "COBOL: Build InitialMenu",
+      "type": "shell",
+      "command": "mkdir -p /workspace/bin && cobc -x -free -o /workspace/bin/InitialMenu /workspace/src/InitialMenu.cob /workspace/src/CREATEACCOUNT.cob",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": [
+        {
+          "owner": "cobc",
+          "fileLocation": ["absolute"],
+          "pattern": {
+            "regexp": "^(.*):(\\d+): (warning|error): (.*)$",
+            "file": 1,
+            "line": 2,
+            "severity": 3,
+            "message": 4
+          }
+        }
+      ]
+    },
+    {
+      "label": "COBOL: Run InitialMenu",
+      "type": "process",
+      "command": "/workspace/bin/InitialMenu",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      }
+    },
+    {
+      "label": "COBOL: Build and Run active file",
+      "type": "process",
+      "command": "mkdir -p \"${fileDirname}/bin\" && cobc -x -free -o \"${fileDirname}/bin/${fileBasenameNoExtension}\" \"${file}\"",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
