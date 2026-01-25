@@ -49,22 +49,48 @@
               77 LK-RET-CODE PIC 9.
 
            PROCEDURE DIVISION USING LK-USERNAME LK-PASSWORD LK-STATUS LK-MESSAGE LK-RET-CODE.
-             CHECK-INPUT.
+             *> Main sequence: load existing users, validate inputs, then save
+             PERFORM LOAD-USERS
+
+             IF WS-COUNT = 5
+                MOVE "N" TO LK-STATUS
+                MOVE 1 TO LK-RET-CODE
+                MOVE "All permitted accounts have been created, please come back later" TO LK-MESSAGE
+                GOBACK
+             END-IF
+
+             PERFORM CHECK-INPUT
+             IF LK-STATUS = "N"
+                GOBACK
+             END-IF
+
+             PERFORM CHECK-USERNAME-UNIQUE
+             IF LK-STATUS = "N"
+                GOBACK
+             END-IF
+
+             PERFORM VALIDATE-PASSWORD
+             IF LK-STATUS = "N"
+                GOBACK
+             END-IF
+
+             PERFORM ADD-SAVE
+             GOBACK.
+
+           *> Paragraphs
+           CHECK-INPUT.
                IF FUNCTION LENGTH(FUNCTION TRIM(LK-USERNAME)) = 0
                   OR FUNCTION LENGTH(FUNCTION TRIM(LK-PASSWORD)) = 0
                    MOVE "N" TO LK-STATUS
                    MOVE 7 TO LK-RET-CODE
                    MOVE "Username or password not provided; returning to menu." TO LK-MESSAGE
-                   GOBACK
                END-IF.
 
-             PERFORM CHECK-INPUT.
-               *> debug traces removed
-             LOAD-USERS.
+           LOAD-USERS.
              MOVE 0 TO WS-COUNT.
              MOVE "N" TO WS-USER-EOF.
-             OPEN INPUT USERS-FILE.
-             PERFORM UNTIL WS-USER-EOF = "Y" OR WS-COUNT=5
+             OPEN INPUT USERS-FILE
+             PERFORM UNTIL WS-USER-EOF = "Y" OR WS-COUNT = 5
                   READ USERS-FILE
                      AT END
                          MOVE "Y" TO WS-USER-EOF
@@ -73,34 +99,30 @@
                          MOVE FUNCTION TRIM(USERNAME) TO WS-USER-TABLE(WS-COUNT)
                          MOVE FUNCTION TRIM(PASSWORD) TO WS-PASS-TABLE(WS-COUNT)
                   END-READ
-              END-PERFORM.
-              CLOSE USERS-FILE.
+              END-PERFORM
+             CLOSE USERS-FILE.
 
            CHECK-USERNAME-UNIQUE.
-               MOVE "N" TO WS-FOUND.
-               PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I>WS-COUNT OR WS-FOUND="Y"
-                IF FUNCTION TRIM(LK-USERNAME) = FUNCTION TRIM(WS-USER-TABLE(WS-I)) MOVE "Y" TO WS-FOUND
-                    END-IF
-                    IF WS-FOUND="Y"
-                         move "N" TO LK-STATUS
-                         MOVE 2 TO LK-RET-CODE
-                         MOVE "Username already exists" TO LK-MESSAGE
-                         GOBACK
-                    END-IF
-               END-PERFORM.
-
+               MOVE "N" TO WS-FOUND
+               PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I > WS-COUNT OR WS-FOUND = "Y"
+                   IF FUNCTION TRIM(LK-USERNAME) = FUNCTION TRIM(WS-USER-TABLE(WS-I))
+                       MOVE "Y" TO WS-FOUND
+                   END-IF
+               END-PERFORM
+               IF WS-FOUND = "Y"
+                   MOVE "N" TO LK-STATUS
+                   MOVE 2 TO LK-RET-CODE
+                   MOVE "Username already exists" TO LK-MESSAGE
+               END-IF.
 
            VALIDATE-PASSWORD.
-               *> Reset flags each time
                MOVE "N" TO WS-HAS-UPPER
                MOVE "N" TO WS-HAS-DIGIT
                MOVE "N" TO WS-HAS-SPECIAL
 
-               *> Trim password and compute its real length
                MOVE FUNCTION TRIM(LK-PASSWORD) TO WS-TRIM-PASSWORD
                COMPUTE WS-PASS-LEN = FUNCTION LENGTH(FUNCTION TRIM(LK-PASSWORD))
 
-               *> Length check first
                IF WS-PASS-LEN < 8 OR WS-PASS-LEN > 12
                    MOVE "N" TO LK-STATUS
                    MOVE 3 TO LK-RET-CODE
@@ -108,17 +130,14 @@
                    EXIT PARAGRAPH
                END-IF
 
-               *> Scan each character to find uppercase/digit/special
                PERFORM VARYING WS-POS FROM 1 BY 1 UNTIL WS-POS > WS-PASS-LEN
                    MOVE WS-TRIM-PASSWORD(WS-POS:1) TO WS-CHAR
-
                    IF WS-CHAR >= "A" AND WS-CHAR <= "Z"
                        MOVE "Y" TO WS-HAS-UPPER
                    ELSE
                        IF WS-CHAR >= "0" AND WS-CHAR <= "9"
                            MOVE "Y" TO WS-HAS-DIGIT
                        ELSE
-                           *> Special = not letter, not digit, not space
                            IF WS-CHAR NOT = " "
                               AND NOT (WS-CHAR >= "a" AND WS-CHAR <= "z")
                               AND NOT (WS-CHAR >= "A" AND WS-CHAR <= "Z")
@@ -127,9 +146,8 @@
                            END-IF
                        END-IF
                    END-IF
-               END-PERFORM.
+               END-PERFORM
 
-               *> Final rule checks
                IF WS-HAS-UPPER NOT = "Y"
                    MOVE "N" TO LK-STATUS
                    MOVE 4 TO LK-RET-CODE
@@ -151,39 +169,22 @@
                    EXIT PARAGRAPH
                END-IF
 
-               *> If we get here, it's valid
                MOVE "Y" TO LK-STATUS
                MOVE 0 TO LK-RET-CODE
                MOVE "Password is valid." TO LK-MESSAGE.
 
            ADD-SAVE.
-               ADD 1 TO WS-COUNT.
-               MOVE FUNCTION TRIM(LK-USERNAME) TO WS-USER-TABLE(WS-COUNT).
-               MOVE FUNCTION TRIM(LK-PASSWORD) TO WS-PASS-TABLE(WS-COUNT).
-      *> Rewrite USERS.DAT from scratch using the table
-               OPEN OUTPUT USERS-FILE.
-               PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I>WS-COUNT
+               ADD 1 TO WS-COUNT
+               MOVE FUNCTION TRIM(LK-USERNAME) TO WS-USER-TABLE(WS-COUNT)
+               MOVE FUNCTION TRIM(LK-PASSWORD) TO WS-PASS-TABLE(WS-COUNT)
+               OPEN OUTPUT USERS-FILE
+               PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I > WS-COUNT
                     MOVE WS-USER-TABLE(WS-I) TO USERNAME
                     MOVE WS-PASS-TABLE(WS-I) TO PASSWORD
                     WRITE USER-RECORD
-               END-PERFORM.
-               CLOSE USERS-FILE.
-
-      *> RETURN SUCCES TO THE CALLER
+               END-PERFORM
+               CLOSE USERS-FILE
                MOVE "Y" TO LK-STATUS
                MOVE 0 TO LK-RET-CODE
                MOVE "Account created succesfully." TO LK-MESSAGE.
-
-           PERFORM LOAD-USERS.
-           IF WS-COUNT=5
-               MOVE "N" TO LK-STATUS
-               MOVE 1 TO LK-RET-CODE
-               MOVE "All permitted accounts have been created, please come back later" TO LK-MESSAGE
-               GOBACK
-           END-IF.
-
-           PERFORM CHECK-USERNAME-UNIQUE.
-           PERFORM VALIDATE-PASSWORD.
-           PERFORM ADD-SAVE.
-           GOBACK.
 
