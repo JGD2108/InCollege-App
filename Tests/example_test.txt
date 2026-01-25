@@ -1,3 +1,21 @@
+Hey testers, this is an example of how to perform tests, you should use INPUT and OUTPUT files for your test cases,
+storing them in a file inside this Tests folder. Make sure to name them appropriately so they can be easily identified.
+Make sure to include each test in the folder corresponding to the epic of the week.
+
+Example of INPUT.DAT file:
+2
+User1
+P@ssw0rd1!
+1
+User1
+P@ssw0rd1!
+1
+3
+1
+0
+4
+
+Corresponding OUTPUT.DAT file (as of week 1 epic):
 Welcome to InCollege!
 Please select an option:
 1. Log In
@@ -56,3 +74,7 @@ Returning to post-login menu.
 4. Logout
 4
 Logging out. Goodbye!
+
+
+
+The output file saves both the input and its corresponding output as specified by the instructions given.
