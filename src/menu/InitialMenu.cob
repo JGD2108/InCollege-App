@@ -79,6 +79,8 @@ IDENTIFICATION DIVISION.
           *> Post-login menu choice and skill selection choice
             77 WS-POST-CHOICE PIC X(1).
             77 WS-SKILL-CHOICE PIC X(1).
+          *> Action code set by POSTLOGINPROG: 1=print message,2=skill submenu,3=logout
+            77 WS-POST-ACTION PIC 9.
           *> Simple list of 5 skills; populated when needed
             01 WS-SKILL-LIST.
              05 WS-SKILL PIC X(30) OCCURS 5 TIMES.
