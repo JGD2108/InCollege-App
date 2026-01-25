@@ -73,6 +73,15 @@ IDENTIFICATION DIVISION.
           77 WS-COUNT PIC 9 VALUE 0.
           77 WS-USER-EOF PIC X VALUE "N".
           77 WS-FOUND PIC X VALUE "N".
+          77 WS-FOUND-INDEX PIC 9 VALUE 0.
+          *> Flag set to "Y" once login succeeds; controls post-login menu flow
+            77 WS-LOGGED-IN PIC X VALUE "N".
+          *> Post-login menu choice and skill selection choice
+            77 WS-POST-CHOICE PIC X(1).
+            77 WS-SKILL-CHOICE PIC X(1).
+          *> Simple list of 5 skills; populated when needed
+            01 WS-SKILL-LIST.
+             05 WS-SKILL PIC X(30) OCCURS 5 TIMES.
           01 WS-ACCOUNTS-EXISTING.
             05 WS-USER-TABLE PIC X(12) OCCURS 5 TIMES.
             05 WS-PASS-TABLE PIC X(12) OCCURS 5 TIMES.
@@ -129,17 +138,24 @@ IDENTIFICATION DIVISION.
 
             *> Search for username
             MOVE "N" TO WS-FOUND
+            MOVE 0 TO WS-FOUND-INDEX
             PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I > WS-COUNT OR WS-FOUND = "Y"
               IF FUNCTION TRIM(WS-USERNAME) = FUNCTION TRIM(WS-USER-TABLE(WS-I))
                 MOVE "Y" TO WS-FOUND
+                MOVE WS-I TO WS-FOUND-INDEX
               END-IF
             END-PERFORM
 
             *> Check if username exists and password matches
             IF WS-FOUND = "Y"
-              IF FUNCTION TRIM(WS-PASSWORD) = FUNCTION TRIM(WS-PASS-TABLE(WS-I))
+              IF FUNCTION TRIM(WS-PASSWORD) = FUNCTION TRIM(WS-PASS-TABLE(WS-FOUND-INDEX))
+                *> Successful login: set flag and show post-login menu
                 MOVE "You have successfully logged in" TO OUTPUT-RECORD
                 PERFORM PRINT-LINE
+                MOVE "Y" TO WS-LOGGED-IN
+                PERFORM POST-LOGIN-MENU
+                *> After returning from post-login, clear flag and exit login loop
+                MOVE "N" TO WS-LOGGED-IN
                 EXIT PERFORM
               ELSE
                 MOVE "Incorrect username / password, please try again" TO OUTPUT-RECORD
@@ -168,6 +184,10 @@ IDENTIFICATION DIVISION.
          PERFORM PRINT-LINE
 
          MOVE "2. Create a new account" TO OUTPUT-RECORD
+         PERFORM PRINT-LINE
+
+         *> Top-level logout option; terminates the program gracefully
+         MOVE "3. Logout" TO OUTPUT-RECORD
          PERFORM PRINT-LINE
 
          PERFORM READ-AND-LOG
@@ -232,12 +252,120 @@ IDENTIFICATION DIVISION.
              MOVE WS-MESSAGE TO OUTPUT-RECORD
              PERFORM PRINT-LINE
            ELSE
+             IF MENU-CHOICE = "3"
+               MOVE "Logging out. Goodbye!" TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+               MOVE "Y" TO WS-EOF
+             ELSE
       *> ===== INVALID MENU SELECTION =====
-             MOVE "Invalid Selection." TO OUTPUT-RECORD
-             PERFORM PRINT-LINE
+               MOVE "Invalid Selection." TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+             END-IF
            END-IF
          END-IF
        END-PERFORM.
+
+      *> ------------------------------------------------------------------
+      *> Post-login menu: provides options required by the assignment
+      *> 1 = Search for a job (under construction)
+      *> 2 = Find someone you know (under construction)
+      *> 3 = Learn a new skill (lists 5 skills; each selection is under construction)
+      *> 4 = Logout (terminates the program)
+      *> Uses INPUT.DAT for selections; gracefully returns if EOF is reached.
+      *> ------------------------------------------------------------------
+        POST-LOGIN-MENU.
+          PERFORM UNTIL WS-EOF = "Y"
+            MOVE "--- Welcome to InCollege, select an option ---" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "1. Search for a job" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "2. Find someone you know" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "3. Learn a new skill" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "4. Logout" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+
+            PERFORM READ-AND-LOG
+            IF WS-EOF = "Y"
+              MOVE "No input for selection; returning to top level." TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PERFORM
+            END-IF
+
+            MOVE INPUT-RECORD(1:1) TO WS-POST-CHOICE
+
+            EVALUATE WS-POST-CHOICE
+              WHEN "1"
+                MOVE "Job search is under construction." TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+              WHEN "2"
+                MOVE "Find someone you know is under construction." TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+              WHEN "3"
+                PERFORM LEARN-SKILL-MENU
+              WHEN "4"
+                MOVE "Logging out. Goodbye!" TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+                MOVE "Y" TO WS-EOF
+                EXIT PERFORM
+              WHEN OTHER
+                MOVE "Invalid Selection." TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+            END-EVALUATE
+          END-PERFORM.
+
+      *> ------------------------------------------------------------------
+      *> Learn-a-new-skill submenu:
+      *> - Presents 5 skills (you can adjust the names as needed).
+      *> - Selecting any skill prints an "under construction" message.
+      *> - Selecting 0 returns to the post-login menu.
+      *> ------------------------------------------------------------------
+        LEARN-SKILL-MENU.
+          *> Populate skill list (kept simple for readability)
+          MOVE "Python Basics"           TO WS-SKILL(1)
+          MOVE "Data Analysis"          TO WS-SKILL(2)
+          MOVE "Public Speaking"        TO WS-SKILL(3)
+          MOVE "Project Management"     TO WS-SKILL(4)
+          MOVE "Networking Essentials"  TO WS-SKILL(5)
+
+          PERFORM UNTIL WS-EOF = "Y"
+            MOVE "Select a skill to learn (0 to return):" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "1. Python Basics" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "2. Data Analysis" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "3. Public Speaking" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "4. Project Management" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "5. Networking Essentials" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+
+            PERFORM READ-AND-LOG
+            IF WS-EOF = "Y"
+              MOVE "No input for skill; returning to post-login menu." TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PERFORM
+            END-IF
+
+            MOVE INPUT-RECORD(1:1) TO WS-SKILL-CHOICE
+
+            IF WS-SKILL-CHOICE = "0"
+              MOVE "Returning to post-login menu." TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PERFORM
+            ELSE
+              IF WS-SKILL-CHOICE >= "1" AND WS-SKILL-CHOICE <= "5"
+                MOVE "Selected skill is under construction." TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+              ELSE
+                MOVE "Invalid Selection." TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+              END-IF
+            END-IF
+          END-PERFORM.
 
          *> ------------------------------------------------------------------
          *> Inlined CREATE-ACCOUNT logic (adapted from CREATEACCOUNT.cob)
@@ -369,3 +497,4 @@ IDENTIFICATION DIVISION.
             WRITE USER-RECORD
            END-PERFORM
            CLOSE USERS-FILE.
+         END PROGRAM INCOLLEGE-START.
