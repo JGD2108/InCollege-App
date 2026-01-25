@@ -111,61 +111,7 @@ IDENTIFICATION DIVISION.
                     PERFORM PRINT-LINE
            END-READ.
 
-       LOGIN-PARA.
-          PERFORM LOAD-USERS-LOCAL
-
-          *> Keep trying until successful login or EOF
-          PERFORM UNTIL WS-EOF = "Y"
-            MOVE "Enter username:" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            PERFORM READ-AND-LOG
-            IF WS-EOF = "Y"
-              MOVE "No input for username; returning to menu." TO OUTPUT-RECORD
-              PERFORM PRINT-LINE
-              EXIT PERFORM
-            END-IF
-            MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-USERNAME
-
-            MOVE "Enter password:" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            PERFORM READ-AND-LOG
-            IF WS-EOF = "Y"
-              MOVE "No input for password; returning to menu." TO OUTPUT-RECORD
-              PERFORM PRINT-LINE
-              EXIT PERFORM
-            END-IF
-            MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-PASSWORD
-
-            *> Search for username
-            MOVE "N" TO WS-FOUND
-            MOVE 0 TO WS-FOUND-INDEX
-            PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I > WS-COUNT OR WS-FOUND = "Y"
-              IF FUNCTION TRIM(WS-USERNAME) = FUNCTION TRIM(WS-USER-TABLE(WS-I))
-                MOVE "Y" TO WS-FOUND
-                MOVE WS-I TO WS-FOUND-INDEX
-              END-IF
-            END-PERFORM
-
-            *> Check if username exists and password matches
-            IF WS-FOUND = "Y"
-              IF FUNCTION TRIM(WS-PASSWORD) = FUNCTION TRIM(WS-PASS-TABLE(WS-FOUND-INDEX))
-                *> Successful login: set flag and show post-login menu
-                MOVE "You have successfully logged in" TO OUTPUT-RECORD
-                PERFORM PRINT-LINE
-                MOVE "Y" TO WS-LOGGED-IN
-                PERFORM POST-LOGIN-MENU
-                *> After returning from post-login, clear flag and exit login loop
-                MOVE "N" TO WS-LOGGED-IN
-                EXIT PERFORM
-              ELSE
-                MOVE "Incorrect username / password, please try again" TO OUTPUT-RECORD
-                PERFORM PRINT-LINE
-              END-IF
-            ELSE
-              MOVE "Incorrect username / password, please try again" TO OUTPUT-RECORD
-              PERFORM PRINT-LINE
-            END-IF
-          END-PERFORM.
+      *> LOGIN handled by src/login_prog.cob (called via CALL "LOGINPROG").
 
        MAIN-PARA.
        OPEN INPUT INPUT-FILE
@@ -200,7 +146,113 @@ IDENTIFICATION DIVISION.
          MOVE INPUT-RECORD(1:1) TO MENU-CHOICE
 
          IF MENU-CHOICE = "1"
-           PERFORM LOGIN-PARA
+           *> Login loop: prompt, read, call auth subprogram until success or EOF
+           PERFORM UNTIL WS-EOF = "Y"
+             MOVE "Enter username:" TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             PERFORM READ-AND-LOG
+             IF WS-EOF = "Y"
+               MOVE "No input for username; returning to menu." TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+               EXIT PERFORM
+             END-IF
+             MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-USERNAME
+
+             MOVE "Enter password:" TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             PERFORM READ-AND-LOG
+             IF WS-EOF = "Y"
+               MOVE "No input for password; returning to menu." TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+               EXIT PERFORM
+             END-IF
+             MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-PASSWORD
+
+             CALL "LOGINPROG" USING WS-USERNAME WS-PASSWORD WS-STATUS WS-MESSAGE
+             MOVE WS-MESSAGE TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             IF WS-STATUS = "Y"
+               *> Enter post-login menu
+               MOVE "N" TO WS-EOF
+               PERFORM UNTIL WS-EOF = "Y"
+                 MOVE "--- Welcome to InCollege, select an option ---" TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 MOVE "1. Search for a job" TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 MOVE "2. Find someone you know" TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 MOVE "3. Learn a new skill" TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 MOVE "4. Logout" TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+
+                 PERFORM READ-AND-LOG
+                 IF WS-EOF = "Y"
+                   MOVE "No input for selection; returning to top level." TO OUTPUT-RECORD
+                   PERFORM PRINT-LINE
+                   EXIT PERFORM
+                 END-IF
+
+                 MOVE INPUT-RECORD(1:1) TO WS-POST-CHOICE
+
+                 *> Call post-login logic handler
+                 MOVE SPACES TO WS-MESSAGE
+                 MOVE SPACES TO WS-SKILL-CHOICE
+                 CALL "POSTLOGINPROG" USING WS-POST-CHOICE WS-SKILL-CHOICE WS-POST-ACTION WS-MESSAGE
+                 IF WS-POST-ACTION = 1
+                   MOVE WS-MESSAGE TO OUTPUT-RECORD
+                   PERFORM PRINT-LINE
+                 ELSE
+                   IF WS-POST-ACTION = 2
+                     *> Enter skill submenu: show list and read choices, call POSTLOGINPROG with skill choice
+                     MOVE "Python Basics"           TO WS-SKILL(1)
+                     MOVE "Data Analysis"          TO WS-SKILL(2)
+                     MOVE "Public Speaking"        TO WS-SKILL(3)
+                     MOVE "Project Management"     TO WS-SKILL(4)
+                     MOVE "Networking Essentials"  TO WS-SKILL(5)
+
+                     PERFORM UNTIL WS-EOF = "Y"
+                       MOVE "Select a skill to learn (0 to return):" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       MOVE "1. Python Basics" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       MOVE "2. Data Analysis" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       MOVE "3. Public Speaking" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       MOVE "4. Project Management" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       MOVE "5. Networking Essentials" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+
+                       PERFORM READ-AND-LOG
+                       IF WS-EOF = "Y"
+                         MOVE "No input for skill; returning to post-login menu." TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                         EXIT PERFORM
+                       END-IF
+
+                       MOVE INPUT-RECORD(1:1) TO WS-SKILL-CHOICE
+                       CALL "POSTLOGINPROG" USING WS-POST-CHOICE WS-SKILL-CHOICE WS-POST-ACTION WS-MESSAGE
+                       MOVE WS-MESSAGE TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       IF WS-SKILL-CHOICE = "0"
+                         EXIT PERFORM
+                       END-IF
+                     END-PERFORM
+                   ELSE
+                     IF WS-POST-ACTION = 3
+                       MOVE WS-MESSAGE TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       MOVE "Y" TO WS-EOF
+                       EXIT PERFORM
+                     END-IF
+                   END-IF
+                 END-IF
+               END-PERFORM
+               EXIT PERFORM
+             END-IF
+           END-PERFORM
          ELSE
            IF MENU-CHOICE = "2"
       *> ===== USERNAME INPUT LOOP =====
@@ -247,8 +299,8 @@ IDENTIFICATION DIVISION.
                END-IF
              END-PERFORM
 
-      *> ===== CREATE THE ACCOUNT =====
-             PERFORM CREATE-ACCOUNT
+            *> ===== CREATE THE ACCOUNT =====
+              CALL "CREATEACCOUNT" USING WS-USERNAME WS-PASSWORD WS-STATUS WS-MESSAGE WS-RET-CODE
              MOVE WS-MESSAGE TO OUTPUT-RECORD
              PERFORM PRINT-LINE
            ELSE
@@ -265,236 +317,6 @@ IDENTIFICATION DIVISION.
          END-IF
        END-PERFORM.
 
-      *> ------------------------------------------------------------------
-      *> Post-login menu: provides options required by the assignment
-      *> 1 = Search for a job (under construction)
-      *> 2 = Find someone you know (under construction)
-      *> 3 = Learn a new skill (lists 5 skills; each selection is under construction)
-      *> 4 = Logout (terminates the program)
-      *> Uses INPUT.DAT for selections; gracefully returns if EOF is reached.
-      *> ------------------------------------------------------------------
-        POST-LOGIN-MENU.
-          PERFORM UNTIL WS-EOF = "Y"
-            MOVE "--- Welcome to InCollege, select an option ---" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            MOVE "1. Search for a job" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            MOVE "2. Find someone you know" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            MOVE "3. Learn a new skill" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            MOVE "4. Logout" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
+      *> Post-login handled by src/postlogin_prog.cob (called from login program).
 
-            PERFORM READ-AND-LOG
-            IF WS-EOF = "Y"
-              MOVE "No input for selection; returning to top level." TO OUTPUT-RECORD
-              PERFORM PRINT-LINE
-              EXIT PERFORM
-            END-IF
-
-            MOVE INPUT-RECORD(1:1) TO WS-POST-CHOICE
-
-            EVALUATE WS-POST-CHOICE
-              WHEN "1"
-                MOVE "Job search is under construction." TO OUTPUT-RECORD
-                PERFORM PRINT-LINE
-              WHEN "2"
-                MOVE "Find someone you know is under construction." TO OUTPUT-RECORD
-                PERFORM PRINT-LINE
-              WHEN "3"
-                PERFORM LEARN-SKILL-MENU
-              WHEN "4"
-                MOVE "Logging out. Goodbye!" TO OUTPUT-RECORD
-                PERFORM PRINT-LINE
-                MOVE "Y" TO WS-EOF
-                EXIT PERFORM
-              WHEN OTHER
-                MOVE "Invalid Selection." TO OUTPUT-RECORD
-                PERFORM PRINT-LINE
-            END-EVALUATE
-          END-PERFORM.
-
-      *> ------------------------------------------------------------------
-      *> Learn-a-new-skill submenu:
-      *> - Presents 5 skills (you can adjust the names as needed).
-      *> - Selecting any skill prints an "under construction" message.
-      *> - Selecting 0 returns to the post-login menu.
-      *> ------------------------------------------------------------------
-        LEARN-SKILL-MENU.
-          *> Populate skill list (kept simple for readability)
-          MOVE "Python Basics"           TO WS-SKILL(1)
-          MOVE "Data Analysis"          TO WS-SKILL(2)
-          MOVE "Public Speaking"        TO WS-SKILL(3)
-          MOVE "Project Management"     TO WS-SKILL(4)
-          MOVE "Networking Essentials"  TO WS-SKILL(5)
-
-          PERFORM UNTIL WS-EOF = "Y"
-            MOVE "Select a skill to learn (0 to return):" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            MOVE "1. Python Basics" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            MOVE "2. Data Analysis" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            MOVE "3. Public Speaking" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            MOVE "4. Project Management" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            MOVE "5. Networking Essentials" TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-
-            PERFORM READ-AND-LOG
-            IF WS-EOF = "Y"
-              MOVE "No input for skill; returning to post-login menu." TO OUTPUT-RECORD
-              PERFORM PRINT-LINE
-              EXIT PERFORM
-            END-IF
-
-            MOVE INPUT-RECORD(1:1) TO WS-SKILL-CHOICE
-
-            IF WS-SKILL-CHOICE = "0"
-              MOVE "Returning to post-login menu." TO OUTPUT-RECORD
-              PERFORM PRINT-LINE
-              EXIT PERFORM
-            ELSE
-              IF WS-SKILL-CHOICE >= "1" AND WS-SKILL-CHOICE <= "5"
-                MOVE "Selected skill is under construction." TO OUTPUT-RECORD
-                PERFORM PRINT-LINE
-              ELSE
-                MOVE "Invalid Selection." TO OUTPUT-RECORD
-                PERFORM PRINT-LINE
-              END-IF
-            END-IF
-          END-PERFORM.
-
-         *> ------------------------------------------------------------------
-         *> Inlined CREATE-ACCOUNT logic (adapted from CREATEACCOUNT.cob)
-         *> ------------------------------------------------------------------
-         CREATE-ACCOUNT.
-           PERFORM CHECK-INPUT-LOCAL
-
-           PERFORM LOAD-USERS-LOCAL
-           IF WS-COUNT=5
-             MOVE "N" TO WS-STATUS
-             MOVE 1 TO WS-RET-CODE
-             MOVE "All permitted accounts have been created, please come back later" TO WS-MESSAGE
-             EXIT PARAGRAPH
-           END-IF
-
-           PERFORM CHECK-USERNAME-UNIQUE-LOCAL
-           IF WS-FOUND = "Y"
-             MOVE "N" TO WS-STATUS
-             MOVE 2 TO WS-RET-CODE
-             MOVE "Username already exists" TO WS-MESSAGE
-             EXIT PARAGRAPH
-           END-IF
-
-           PERFORM VALIDATE-PASSWORD-LOCAL
-           IF WS-STATUS = "N"
-             EXIT PARAGRAPH
-           END-IF
-
-           PERFORM ADD-SAVE-LOCAL
-           MOVE "Y" TO WS-STATUS
-           MOVE 0 TO WS-RET-CODE
-           MOVE "Account created succesfully." TO WS-MESSAGE.
-
-         CHECK-INPUT-LOCAL.
-           IF FUNCTION LENGTH(FUNCTION TRIM(WS-USERNAME)) = 0
-            OR FUNCTION LENGTH(FUNCTION TRIM(WS-PASSWORD)) = 0
-             MOVE "N" TO WS-STATUS
-             MOVE 7 TO WS-RET-CODE
-             MOVE "Username or password not provided; returning to menu." TO WS-MESSAGE
-             EXIT PARAGRAPH
-           END-IF.
-
-         LOAD-USERS-LOCAL.
-           MOVE 0 TO WS-COUNT
-           MOVE "N" TO WS-USER-EOF
-           OPEN INPUT USERS-FILE
-           PERFORM UNTIL WS-USER-EOF = "Y" OR WS-COUNT=5
-            READ USERS-FILE
-               AT END
-                 MOVE "Y" TO WS-USER-EOF
-               NOT AT END
-                 ADD 1 TO WS-COUNT
-                 MOVE FUNCTION TRIM(USERNAME) TO WS-USER-TABLE(WS-COUNT)
-                 MOVE FUNCTION TRIM(PASSWORD) TO WS-PASS-TABLE(WS-COUNT)
-            END-READ
-           END-PERFORM
-           CLOSE USERS-FILE.
-
-         CHECK-USERNAME-UNIQUE-LOCAL.
-           MOVE "N" TO WS-FOUND
-           PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I>WS-COUNT OR WS-FOUND="Y"
-            IF FUNCTION TRIM(WS-USERNAME) = FUNCTION TRIM(WS-USER-TABLE(WS-I))
-              MOVE "Y" TO WS-FOUND
-            END-IF
-           END-PERFORM.
-
-         VALIDATE-PASSWORD-LOCAL.
-           MOVE "N" TO WS-HAS-UPPER
-           MOVE "N" TO WS-HAS-DIGIT
-           MOVE "N" TO WS-HAS-SPECIAL
-
-           MOVE FUNCTION TRIM(WS-PASSWORD) TO WS-TRIM-PASSWORD
-           COMPUTE WS-PASS-LEN = FUNCTION LENGTH(FUNCTION TRIM(WS-PASSWORD))
-
-           IF WS-PASS-LEN < 8 OR WS-PASS-LEN > 12
-             MOVE "N" TO WS-STATUS
-             MOVE 3 TO WS-RET-CODE
-             MOVE "Password must be 8 to 12 characters." TO WS-MESSAGE
-             EXIT PARAGRAPH
-           END-IF
-
-           PERFORM VARYING WS-POS FROM 1 BY 1 UNTIL WS-POS > WS-PASS-LEN
-             MOVE WS-TRIM-PASSWORD(WS-POS:1) TO WS-CHAR
-             IF WS-CHAR >= "A" AND WS-CHAR <= "Z"
-               MOVE "Y" TO WS-HAS-UPPER
-             ELSE
-               IF WS-CHAR >= "0" AND WS-CHAR <= "9"
-                 MOVE "Y" TO WS-HAS-DIGIT
-               ELSE
-                 IF WS-CHAR NOT = " "
-                  AND NOT (WS-CHAR >= "a" AND WS-CHAR <= "z")
-                  AND NOT (WS-CHAR >= "A" AND WS-CHAR <= "Z")
-                  AND NOT (WS-CHAR >= "0" AND WS-CHAR <= "9")
-                   MOVE "Y" TO WS-HAS-SPECIAL
-                 END-IF
-               END-IF
-             END-IF
-           END-PERFORM
-
-           IF WS-HAS-UPPER NOT = "Y"
-             MOVE "N" TO WS-STATUS
-             MOVE 4 TO WS-RET-CODE
-             MOVE "Password must include at least one capital letter." TO WS-MESSAGE
-             EXIT PARAGRAPH
-           END-IF
-
-           IF WS-HAS-DIGIT NOT = "Y"
-             MOVE "N" TO WS-STATUS
-             MOVE 5 TO WS-RET-CODE
-             MOVE "Password must include at least one digit." TO WS-MESSAGE
-             EXIT PARAGRAPH
-           END-IF
-
-           IF WS-HAS-SPECIAL NOT = "Y"
-             MOVE "N" TO WS-STATUS
-             MOVE 6 TO WS-RET-CODE
-             MOVE "Password must include at least one special character." TO WS-MESSAGE
-             EXIT PARAGRAPH
-           END-IF.
-
-         ADD-SAVE-LOCAL.
-           ADD 1 TO WS-COUNT
-           MOVE FUNCTION TRIM(WS-USERNAME) TO WS-USER-TABLE(WS-COUNT)
-           MOVE FUNCTION TRIM(WS-PASSWORD) TO WS-PASS-TABLE(WS-COUNT)
-           OPEN OUTPUT USERS-FILE
-           PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I>WS-COUNT
-            MOVE WS-USER-TABLE(WS-I) TO USERNAME
-            MOVE WS-PASS-TABLE(WS-I) TO PASSWORD
-            WRITE USER-RECORD
-           END-PERFORM
-           CLOSE USERS-FILE.
          END PROGRAM INCOLLEGE-START.
