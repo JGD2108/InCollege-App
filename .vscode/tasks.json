@@ -42,9 +42,9 @@
       }
     },
     {
-      "label": "COBOL: Build InitialMenu",
+      "label": "COBOL: Build InCollege",
       "type": "shell",
-      "command": "mkdir -p /workspace/bin && cobc -x -free -o /workspace/bin/InitialMenu /workspace/src/InitialMenu.cob /workspace/src/CREATEACCOUNT.cob",
+      "command": "mkdir -p /workspace/bin && cobc -x -free -o /workspace/bin/InCollege /workspace/src/InCollege.cob $(find /workspace/src -name '*.cob' -not -name 'InCollege.cob')",
       "group": {
         "kind": "build",
         "isDefault": true
@@ -70,9 +70,9 @@
       ]
     },
     {
-      "label": "COBOL: Run InitialMenu",
+      "label": "COBOL: Run InCollege",
       "type": "process",
-      "command": "/workspace/bin/InitialMenu",
+      "command": "/workspace/bin/InCollege",
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -82,7 +82,7 @@
     },
     {
       "label": "COBOL: Build and Run active file",
-      "type": "process",
+      "type": "shell",
       "command": "mkdir -p \"${fileDirname}/bin\" && cobc -x -free -o \"${fileDirname}/bin/${fileBasenameNoExtension}\" \"${file}\"",
       "group": {
         "kind": "build",
