@@ -42,12 +42,40 @@
       }
     },
     {
-      "label": "COBOL: Build InCollege",
+      "label": "COBOL: Build Modular InCollege",
       "type": "shell",
-      "command": "mkdir -p /workspace/bin && cobc -x -free -o /workspace/bin/InCollege /workspace/src/InCollege.cob $(find /workspace/src -name '*.cob' -not -name 'InCollege.cob')",
+      "command": "mkdir -p /workspace/bin && cobc -x -free -o /workspace/bin/InCollege /workspace/src/InCollegeModules.cob $(find /workspace/src -name '*.cob' -not -name 'InCollege.cob' -not -name 'InCollegeModules.cob')",
       "group": {
         "kind": "build",
         "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": [
+        {
+          "owner": "cobc",
+          "fileLocation": ["absolute"],
+          "pattern": {
+            "regexp": "^(.*):(\\d+): (warning|error): (.*)$",
+            "file": 1,
+            "line": 2,
+            "severity": 3,
+            "message": 4
+          }
+        }
+      ]
+    },
+    {
+      "label": "COBOL: Build Single-file InCollege",
+      "type": "shell",
+      "command": "mkdir -p /workspace/bin && cobc -x -free -o /workspace/bin/InCollegeSingle /workspace/src/InCollege.cob",
+      "group": {
+        "kind": "build",
+        "isDefault": false
       },
       "presentation": {
         "echo": true,

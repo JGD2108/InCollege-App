@@ -3,7 +3,7 @@
 # Test runner for InCollege COBOL program
 # Runs all test cases and reports pass/fail status
 
-PROGRAM="/workspace/bin/InCollege"
+PROGRAM="/workspace/bin/InCollegeSingle"
 WORKSPACE="/workspace"
 TEST_DIR="/workspace/Tests/Epic1"
 BASELINE_USERS="$WORKSPACE/USERS.DAT.baseline"
@@ -60,31 +60,31 @@ run_test() {
     local test_path="$1"
     local test_name=$(basename "$test_path")
     local feature_name=$(basename "$(dirname "$test_path")")
-    
+
     read_counters
-    
+
     echo -e "${BLUE}Running: $feature_name/$test_name${NC}"
-    
+
     # Check if INPUT.DAT exists
     if [ ! -f "$test_path/INPUT.DAT" ]; then
         echo -e "${YELLOW}  SKIP: No INPUT.DAT found${NC}"
         return
     fi
-    
+
     # Setup USERS.DAT based on test requirements
     if needs_baseline_users "$test_path/INPUT.DAT"; then
         setup_baseline_users
     else
         reset_users_dat
     fi
-    
+
     # Copy INPUT.DAT to workspace
     cp "$test_path/INPUT.DAT" "$WORKSPACE/INPUT.DAT"
-    
+
     # Run the program
     cd "$WORKSPACE"
     "$PROGRAM" > /dev/null 2>&1
-    
+
     # Compare output
     if [ -f "$test_path/OUTPUT.DAT" ]; then
         if diff -q "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT.DAT" > /dev/null 2>&1; then
@@ -96,13 +96,13 @@ run_test() {
         echo -e "${YELLOW}  SKIP: No OUTPUT.DAT found${NC}"
         return
     fi
-    
+
     # Check if there's a second run (INPUT2.DAT/OUTPUT2.DAT)
     if [ -f "$test_path/INPUT2.DAT" ]; then
         # Don't reset USERS.DAT for second run (testing persistence)
         cp "$test_path/INPUT2.DAT" "$WORKSPACE/INPUT.DAT"
         "$PROGRAM" > /dev/null 2>&1
-        
+
         if [ -f "$test_path/OUTPUT2.DAT" ]; then
             if diff -q "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT2.DAT" > /dev/null 2>&1; then
                 RUN2_RESULT="PASS"
@@ -110,7 +110,7 @@ run_test() {
                 RUN2_RESULT="FAIL"
             fi
         fi
-        
+
         # Overall result
         if [ "$RUN1_RESULT" = "PASS" ] && [ "$RUN2_RESULT" = "PASS" ]; then
             echo -e "${GREEN}  ✓ PASS${NC} (Run 1 & Run 2)"
@@ -118,7 +118,7 @@ run_test() {
         else
             echo -e "${RED}  ✗ FAIL${NC} (Run 1: $RUN1_RESULT, Run 2: $RUN2_RESULT)"
             FAILED_TESTS=$((FAILED_TESTS + 1))
-            
+
             # Show diff for debugging (first 10 lines)
             if [ "$RUN1_RESULT" = "FAIL" ]; then
                 echo -e "${YELLOW}  Run 1 differences (first 10 lines):${NC}"
@@ -147,13 +147,13 @@ run_test() {
         else
             echo -e "${RED}  ✗ FAIL${NC}"
             FAILED_TESTS=$((FAILED_TESTS + 1))
-            
+
             # Show diff for debugging (first 10 lines)
             echo -e "${YELLOW}  Differences (first 10 lines):${NC}"
             diff "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT.DAT" | head -10
         fi
     fi
-    
+
     TOTAL_TESTS=$((TOTAL_TESTS + 1))
     write_counters
     echo ""
