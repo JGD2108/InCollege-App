@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 2
 Enter desired username:
-MenuUser
+TestUser3
 Enter desired password:
-Menu@123
+Test@789
 Account created succesfully.
 Welcome to InCollege!
 Please select an option:
@@ -16,9 +16,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-MenuUser
+TestUser3
 Enter password:
-Menu@123
+Test@789
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 1. Search for a job
