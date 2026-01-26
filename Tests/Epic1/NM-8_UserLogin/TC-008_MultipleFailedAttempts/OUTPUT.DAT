@@ -1,0 +1,40 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+User8
+Enter password:
+Wrong@11
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+User8
+Incorrect username / password, please try again
+Enter username:
+Wrong@22
+Enter password:
+1
+Incorrect username / password, please try again
+Enter username:
+User8
+Enter password:
+Wrong@33
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+User8
+Incorrect username / password, please try again
+Enter username:
+Correct@8
+Enter password:
+4
+Incorrect username / password, please try again
+Enter username:
+3
+Enter password:
+No input for password; returning to menu.

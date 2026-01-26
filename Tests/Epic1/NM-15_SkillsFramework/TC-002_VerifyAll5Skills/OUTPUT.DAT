@@ -1,0 +1,32 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+FiveSkills
+Enter password:
+FiveSk@11
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+3
+Select a skill to learn (0 to return):
+1. Python Basics
+2. Data Analysis
+3. Public Speaking
+4. Project Management
+5. Networking Essentials
+0
+Returning to post-login menu.
+--- Welcome to InCollege, select an option ---
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+4
+Logging out. Goodbye!

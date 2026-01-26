@@ -1,0 +1,18 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+2
+Enter desired username:
+SpecialUser
+Enter desired password:
+Test!@#$5
+Account created succesfully.
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+3
+Logging out. Goodbye!

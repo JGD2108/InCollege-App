@@ -3,11 +3,22 @@ Please select an option:
 1. Log In
 2. Create a new account
 3. Logout
+2
+Enter desired username:
+User3
+Enter desired password:
+Test@456
+Account created succesfully.
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
 1
 Enter username:
-JourneyUser
+User3
 Enter password:
-Journey@1
+Test@456
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 1. Search for a job
@@ -60,14 +71,6 @@ Select a skill to learn (0 to return):
 4. Project Management
 5. Networking Essentials
 4
-Selected skill is under construction.
-Select a skill to learn (0 to return):
-1. Python Basics
-2. Data Analysis
-3. Public Speaking
-4. Project Management
-5. Networking Essentials
-5
 Selected skill is under construction.
 Select a skill to learn (0 to return):
 1. Python Basics
