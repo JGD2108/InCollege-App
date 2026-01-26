@@ -1,0 +1,29 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+2
+Enter desired username:
+MenuUser
+Enter desired password:
+Menu@123
+Account created succesfully.
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+MenuUser
+Enter password:
+Menu@123
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+4
+Logging out. Goodbye!
