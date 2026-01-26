@@ -5,82 +5,36 @@ Please select an option:
 3. Logout
 1
 Enter username:
-JourneyUser
+User8
 Enter password:
-Journey@1
-You have successfully logged in
---- Welcome to InCollege, select an option ---
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. Logout
+Wrong@11
+Incorrect username / password, please try again
+Enter username:
 1
-Job search is under construction.
---- Welcome to InCollege, select an option ---
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. Logout
-2
-Find someone you know is under construction.
---- Welcome to InCollege, select an option ---
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. Logout
-3
-Select a skill to learn (0 to return):
-1. Python Basics
-2. Data Analysis
-3. Public Speaking
-4. Project Management
-5. Networking Essentials
+Enter password:
+User8
+Incorrect username / password, please try again
+Enter username:
+Wrong@22
+Enter password:
 1
-Selected skill is under construction.
-Select a skill to learn (0 to return):
-1. Python Basics
-2. Data Analysis
-3. Public Speaking
-4. Project Management
-5. Networking Essentials
-2
-Selected skill is under construction.
-Select a skill to learn (0 to return):
-1. Python Basics
-2. Data Analysis
-3. Public Speaking
-4. Project Management
-5. Networking Essentials
+Incorrect username / password, please try again
+Enter username:
+User8
+Enter password:
+Wrong@33
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+User8
+Incorrect username / password, please try again
+Enter username:
+Correct@8
+Enter password:
+4
+Incorrect username / password, please try again
+Enter username:
 3
-Selected skill is under construction.
-Select a skill to learn (0 to return):
-1. Python Basics
-2. Data Analysis
-3. Public Speaking
-4. Project Management
-5. Networking Essentials
-4
-Selected skill is under construction.
-Select a skill to learn (0 to return):
-1. Python Basics
-2. Data Analysis
-3. Public Speaking
-4. Project Management
-5. Networking Essentials
-5
-Selected skill is under construction.
-Select a skill to learn (0 to return):
-1. Python Basics
-2. Data Analysis
-3. Public Speaking
-4. Project Management
-5. Networking Essentials
-0
-Returning to post-login menu.
---- Welcome to InCollege, select an option ---
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. Logout
-4
-Logging out. Goodbye!
+Enter password:
+No input for password; returning to menu.
