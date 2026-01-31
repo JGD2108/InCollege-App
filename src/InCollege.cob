@@ -22,8 +22,10 @@
            SELECT OUTPUT-FILE ASSIGN TO "OUTPUT.DAT"
                   ORGANIZATION IS LINE SEQUENTIAL.
 
-           SELECT USERS-FILE ASSIGN TO "USERS.DAT"
-                  ORGANIZATION IS LINE SEQUENTIAL.
+           SELECT OPTIONAL USERS-FILE
+                  ASSIGN TO "USERS.DAT"
+                  ORGANIZATION IS LINE SEQUENTIAL
+                  FILE STATUS IS WS-USERS-STATUS.
 
        DATA DIVISION.
        FILE SECTION.
@@ -77,6 +79,7 @@
           77 WS-TRIM-PASSWORD PIC X(12).
           77 WS-COUNT PIC 9 VALUE 0.
           77 WS-USER-EOF PIC X VALUE "N".
+          01 WS-USERS-STATUS PIC XX.
           77 WS-FOUND PIC X VALUE "N".
           77 WS-FOUND-INDEX PIC 9 VALUE 0.
           *> Flag set to "Y" once login succeeds; controls post-login menu flow
@@ -333,8 +336,11 @@
          INPUT-OUTPUT SECTION.
          FILE-CONTROL.
 
-           SELECT USERS-FILE ASSIGN TO "USERS.DAT"
-                  ORGANIZATION IS LINE SEQUENTIAL.
+           SELECT OPTIONAL USERS-FILE
+                   ASSIGN TO "USERS.DAT"
+                   ORGANIZATION IS LINE SEQUENTIAL
+                   FILE STATUS IS WS-USERS-STATUS.
+
        DATA DIVISION.
        FILE SECTION.
 
@@ -368,6 +374,7 @@
          01 WS-ACCOUNTS-EXISTING.
            05 WS-USER-TABLE PIC X(12) OCCURS 5 TIMES.
            05 WS-PASS-TABLE PIC X(12) OCCURS 5 TIMES.
+         01 WS-USERS-STATUS PIC XX.
 
        LINKAGE SECTION.
          77 LK-USERNAME PIC X(12).
@@ -418,6 +425,11 @@
          MOVE 0 TO WS-COUNT
          MOVE "N" TO WS-USER-EOF
          OPEN INPUT USERS-FILE
+         IF WS-USERS-STATUS = "35"
+            OPEN OUTPUT USERS-FILE
+            CLOSE USERS-FILE
+            OPEN INPUT USERS-FILE
+          END-IF
          PERFORM UNTIL WS-USER-EOF = "Y" OR WS-COUNT = 5
            READ USERS-FILE
              AT END
@@ -524,8 +536,10 @@
        ENVIRONMENT DIVISION.
          INPUT-OUTPUT SECTION.
          FILE-CONTROL.
-           SELECT USERS-FILE ASSIGN TO "USERS.DAT"
-                  ORGANIZATION IS LINE SEQUENTIAL.
+           SELECT OPTIONAL USERS-FILE
+                  ASSIGN TO "USERS.DAT"
+                  ORGANIZATION IS LINE SEQUENTIAL
+                  FILE STATUS IS WS-USERS-STATUS.
 
        DATA DIVISION.
        FILE SECTION.
@@ -544,6 +558,7 @@
            05 WS-UT PIC X(12) OCCURS 5 TIMES.
          01 WS-PASS-TABLE.
            05 WS-PT PIC X(12) OCCURS 5 TIMES.
+         01 WS-USERS-STATUS PIC XX.
 
        LINKAGE SECTION.
          77 LK-USERNAME PIC X(12).
@@ -583,6 +598,11 @@
          MOVE 0 TO WS-COUNT
          MOVE "N" TO WS-USER-EOF
          OPEN INPUT USERS-FILE
+         IF WS-USERS-STATUS = "35"
+           OPEN OUTPUT USERS-FILE
+           CLOSE USERS-FILE
+           OPEN INPUT USERS-FILE
+         END-IF
          PERFORM UNTIL WS-USER-EOF = "Y" OR WS-COUNT = 5
            READ USERS-FILE
              AT END
