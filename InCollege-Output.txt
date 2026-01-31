@@ -27,8 +27,34 @@ Info 2
 Enter your Graduation Year:
 2026
 About Me (Optional, type N to skip):
+I like D&D
+
+Would you like to add experience? (Y/N)
+Y
+Your Title:
+Title 1
+Company Name:
+Company 1
+Start Date:
+2018
+End Date:
+2020
+Description (Optional, type N to skip):
+Good teamwork and leadership skills
+
+Would you like to add experience? (Y/N)
+Y
+Your Title:
+Title 2
+Company Name:
+Company 2
+Start Date:
+2016
+End Date:
+2018
+Description (Optional, type N to skip):
 N
-Skipping About Me entry.
+Skipping Description entry.
 
 Would you like to add experience? (Y/N)
 N

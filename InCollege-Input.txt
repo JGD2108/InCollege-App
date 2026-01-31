@@ -7,6 +7,18 @@ Galdona
 Info 1
 Info 2
 2026
+I like D&D
+Y
+Title 1
+Company 1
+2018
+2020
+Good teamwork and leadership skills
+Y
+Title 2
+Company 2
+2016
+2018
 N
 N
 Y

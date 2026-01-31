@@ -407,7 +407,12 @@
                                PERFORM PRINT-LINE
                                EXIT PERFORM
                              END-IF
-                             MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-EXP-DESC
+                             IF INPUT-RECORD(1:1) = "N" OR INPUT-RECORD(1:1) = "n"
+                               MOVE "Skipping Description entry." TO OUTPUT-RECORD
+                               PERFORM PRINT-LINE
+                             ELSE
+                               MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-EXP-DESC
+                              END-IF
                              MOVE "2" TO WS-PROFILE-ACTION
                              CALL "EDITPROFILE" USING WS-USERNAME WS-EXPERIENCE WS-PROFILE-ACTION WS-MESSAGE
                              MOVE WS-MESSAGE TO OUTPUT-RECORD
