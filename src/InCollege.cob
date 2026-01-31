@@ -831,9 +831,20 @@
            05 LK-EDU-END-YEAR PIC 9(4).
          77 LK-MESSAGE PIC X(100).
 
-        PROCEDURE DIVISION USING LK-USERNAME LK-PROFILE-DATA LK-PROFILE-ACTION LK-MESSAGE.
+        PROCEDURE DIVISION
+        ENTRY "BASIC" USING LK-USERNAME LK-PROFILE-DATA LK-PROFILE-ACTION LK-MESSAGE.
           *> Profile creation/editing is not yet implemented
          MOVE "Profile creation/editing is under construction." TO LK-MESSAGE
+         GOBACK.
+
+         ENTRY "EXPERIENCE" USING LK-USERNAME LK-EXPERIENCE LK-PROFILE-ACTION LK-MESSAGE.
+          *> Experience addition is not yet implemented
+         MOVE "Experience addition is under construction." TO LK-MESSAGE
+         GOBACK.
+
+          ENTRY "EDUCATION" USING LK-USERNAME LK-EDUCATION LK-PROFILE-ACTION LK-MESSAGE.
+            *> Education addition is not yet implemented
+         MOVE "Education addition is under construction." TO LK-MESSAGE
          GOBACK.
 
         END PROGRAM EDITPROFILE.
