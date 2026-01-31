@@ -60,6 +60,31 @@
       *> WS-RET-CODE is a numeric return code from CREATE-ACCOUNT
          77 WS-RET-CODE PIC 9 VALUE 0.
 
+      *> Profile creation/editing variables
+         01 WS-PROFILE-DATA.
+           05 WS-FIRST-NAME PIC X(20).
+           05 WS-LAST-NAME PIC X(20).
+           05 WS-COLLEGE PIC X(30).
+           05 WS-MAJOR PIC X(30).
+           05 WS-GRAD-YEAR PIC 9(4).
+           05 WS-ABOUT-ME PIC X(100).
+      *> WS-PROFILE-CHOICE Indicates if user wants to add optional info or not
+         77 WS-PROFILE-CHOICE PIC X(1).
+      *> WS-PROFILE-ACTION Indicates to EDITPROFILE what part of profile to edit: 1=basic,2=experience,3=education
+         77 WS-PROFILE-ACTION PIC 9(1).
+      *> Optional experience entries
+         01 WS-EXPERIENCE.
+           05 WS-EXP-TITLE PIC X(30).
+           05 WS-EXP-COMPANY PIC X(30).
+           05 WS-EXP-START-DATE PIC X(10).
+           05 WS-EXP-END-DATE PIC X(10).
+           05 WS-EXP-DESC PIC X(100).
+      *> Optional education entries
+         01 WS-EDUCATION.
+           05 WS-EDU-DEGREE PIC X(30).
+           05 WS-EDU-UNI PIC X(30).
+           05 WS-EDU-START-YEAR PIC 9(4).
+           05 WS-EDU-END-YEAR PIC 9(4).
 
       *> WS-TRIMMED-IN: holds trimmed input
       *> WS-IN-LEN: length trimmed input
@@ -187,6 +212,8 @@
                PERFORM UNTIL WS-EOF = "Y"
                  MOVE "--- Welcome to InCollege, select an option ---" TO OUTPUT-RECORD
                  PERFORM PRINT-LINE
+                 MOVE "0. Create/Edit your profile" TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
                  MOVE "1. Search for a job" TO OUTPUT-RECORD
                  PERFORM PRINT-LINE
                  MOVE "2. Find someone you know" TO OUTPUT-RECORD
@@ -209,11 +236,11 @@
                  MOVE SPACES TO WS-MESSAGE
                  MOVE SPACES TO WS-SKILL-CHOICE
                  CALL "POSTLOGINPROG" USING WS-POST-CHOICE WS-SKILL-CHOICE WS-POST-ACTION WS-MESSAGE
-                 IF WS-POST-ACTION = 1
+                 EVALUATE WS-POST-ACTION
+                  WHEN 1
                    MOVE WS-MESSAGE TO OUTPUT-RECORD
                    PERFORM PRINT-LINE
-                 ELSE
-                   IF WS-POST-ACTION = 2
+                  WHEN 2
                      *> Enter skill submenu: show list and read choices, call POSTLOGINPROG with skill choice
                      MOVE "Python Basics"           TO WS-SKILL(1)
                      MOVE "Data Analysis"          TO WS-SKILL(2)
@@ -250,15 +277,112 @@
                          EXIT PERFORM
                        END-IF
                      END-PERFORM
-                   ELSE
-                     IF WS-POST-ACTION = 3
+                  WHEN 3
+                     *> Logout action
                        MOVE WS-MESSAGE TO OUTPUT-RECORD
                        PERFORM PRINT-LINE
                        MOVE "Y" TO WS-EOF
                        EXIT PERFORM
-                     END-IF
-                   END-IF
-                 END-IF
+                  WHEN 4
+                      *> Profile creation/editing
+                      MOVE "1" TO WS-PROFILE-ACTION
+                       MOVE "Enter your First Name:" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       PERFORM READ-AND-LOG
+                       IF WS-EOF = "Y"
+                         MOVE "No input for profile; returning to post-login menu." TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                         EXIT PERFORM
+                       END-IF
+                       MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-FIRST-NAME
+                       MOVE "Enter your Last Name:" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       PERFORM READ-AND-LOG
+                       IF WS-EOF = "Y"
+                         MOVE "No input for profile; returning to post-login menu." TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                         EXIT PERFORM
+                       END-IF
+                       MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-LAST-NAME
+                       MOVE "Enter your College's Name:" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       PERFORM READ-AND-LOG
+                       IF WS-EOF = "Y"
+                         MOVE "No input for profile; returning to post-login menu." TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                         EXIT PERFORM
+                       END-IF
+                       MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-COLLEGE
+                       MOVE "Enter your Major:" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       PERFORM READ-AND-LOG
+                       IF WS-EOF = "Y"
+                         MOVE "No input for profile; returning to post-login menu." TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                         EXIT PERFORM
+                       END-IF
+                       MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-MAJOR
+                       MOVE "Enter your Graduation Year:" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       PERFORM READ-AND-LOG
+                       IF WS-EOF = "Y"
+                         MOVE "No input for profile; returning to post-login menu." TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                         EXIT PERFORM
+                       END-IF
+                       MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-GRAD-YEAR
+
+                       MOVE "About Me (Optional, type N to skip):" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       PERFORM READ-AND-LOG
+                       IF WS-EOF = "Y"
+                         MOVE "No input for profile; returning to post-login menu." TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                         EXIT PERFORM
+                       END-IF
+                       *> Check for 'N' to skip About Me
+                       IF INPUT-RECORD(1:1) = "N" OR INPUT-RECORD(1:1) = "n"
+                         MOVE "Skipping About Me entry." TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                       ELSE
+                         MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-ABOUT-ME
+                       END-IF
+                       CALL "EDITPROFILE" USING WS-USERNAME WS-PROFILE-DATA WS-PROFILE-ACTION WS-MESSAGE
+
+                       *> Need to add loop for adding multiple experiences?
+                       MOVE "Would you like to add experience? (Y/N)" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       PERFORM READ-AND-LOG
+                       IF WS-EOF = "Y"
+                         MOVE "No input for experiences; returning to post-login menu." TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                         EXIT PERFORM
+                       END-IF
+                       IF INPUT-RECORD(1:1) = "Y" OR INPUT-RECORD(1:1) = "y"
+                       *> NEED TO ADD EXPERIENCE INPUTS HERE
+                         MOVE "2" TO WS-PROFILE-ACTION
+                         CALL "EDITPROFILE" USING WS-USERNAME WS-EXPERIENCE WS-PROFILE-ACTION WS-MESSAGE
+                         MOVE WS-MESSAGE TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                       END-IF
+
+                       *> Need to add loop for adding multiple educations?
+                       MOVE "Would you like to add education? (Y/N)" TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
+                       PERFORM READ-AND-LOG
+                       IF WS-EOF = "Y"
+                         MOVE "No input for education; returning to post-login menu." TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                         EXIT PERFORM
+                       END-IF
+                       IF INPUT-RECORD(1:1) = "Y" OR INPUT-RECORD(1:1) = "y"
+                         *> NEED TO ADD EDUCATION INPUTS HERE
+                         MOVE "3" TO WS-PROFILE-ACTION
+                         CALL "EDITPROFILE" USING WS-USERNAME WS-EDUCATION WS-PROFILE-ACTION WS-MESSAGE
+                         MOVE WS-MESSAGE TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                       END-IF
+                  END-EVALUATE
                END-PERFORM
                EXIT PERFORM
              END-IF
@@ -638,6 +762,8 @@
          *> 3 = logout
 
          EVALUATE LK-POST-CHOICE
+          WHEN "0"
+             MOVE 4 TO LK-ACTION
            WHEN "1"
              MOVE "Job search is under construction." TO LK-MESSAGE
              MOVE 1 TO LK-ACTION
@@ -673,3 +799,39 @@
          GOBACK.
 
       END PROGRAM POSTLOGINPROG.
+
+      IDENTIFICATION DIVISION.
+       PROGRAM-ID. EDITPROFILE.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+
+        LINKAGE SECTION.
+         77 LK-USERNAME PIC X(12).
+         77 LK-PROFILE-ACTION PIC X(1).
+         01 LK-PROFILE-DATA.
+           05 LK-FIRST-NAME PIC X(20).
+           05 LK-LAST-NAME PIC X(20).
+           05 LK-COLLEGE PIC X(30).
+           05 LK-MAJOR PIC X(30).
+           05 LK-GRAD-YEAR PIC 9(4).
+           05 LK-ABOUT-ME PIC X(100).
+         01 LK-EXPERIENCE.
+           05 LK-EXP-TITLE PIC X(30).
+           05 LK-EXP-COMPANY PIC X(30).
+           05 LK-EXP-START-DATE PIC X(10).
+           05 LK-EXP-END-DATE PIC X(10).
+           05 LK-EXP-DESC PIC X(100).
+         01 LK-EDUCATION.
+           05 LK-EDU-DEGREE PIC X(30).
+           05 LK-EDU-UNI PIC X(30).
+           05 LK-EDU-START-YEAR PIC 9(4).
+           05 LK-EDU-END-YEAR PIC 9(4).
+         77 LK-MESSAGE PIC X(100).
+
+        PROCEDURE DIVISION USING LK-USERNAME LK-MESSAGE.
+          *> Profile creation/editing is not yet implemented
+         MOVE "Profile creation/editing is under construction." TO LK-MESSAGE
+         GOBACK.
+
+        END PROGRAM EDITPROFILE.
