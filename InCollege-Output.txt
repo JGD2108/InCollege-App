@@ -29,9 +29,20 @@ Enter your Graduation Year:
 About Me (Optional, type N to skip):
 N
 Skipping About Me entry.
-Profile creation/editing is under construction.
+
 Would you like to add experience? (Y/N)
 N
+Would you like to add education? (Y/N)
+Y
+Degree:
+Master of Wizardry
+University Name:
+Hoggwarts University
+Start Year:
+2020
+End Year:
+2024
+
 Would you like to add education? (Y/N)
 N
 --- Welcome to InCollege, select an option ---

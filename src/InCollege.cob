@@ -351,39 +351,129 @@
                        MOVE WS-MESSAGE TO OUTPUT-RECORD
                        PERFORM PRINT-LINE
 
-                       *> Need to add loop for adding multiple experiences?
-                       MOVE "Would you like to add experience? (Y/N)" TO OUTPUT-RECORD
-                       PERFORM PRINT-LINE
-                       PERFORM READ-AND-LOG
-                       IF WS-EOF = "Y"
-                         MOVE "No input for experiences; returning to post-login menu." TO OUTPUT-RECORD
-                         PERFORM PRINT-LINE
-                         EXIT PERFORM
-                       END-IF
-                       IF INPUT-RECORD(1:1) = "Y" OR INPUT-RECORD(1:1) = "y"
-                       *> NEED TO ADD EXPERIENCE INPUTS HERE
-                         MOVE "2" TO WS-PROFILE-ACTION
-                         CALL "EDITPROFILE" USING WS-USERNAME WS-EXPERIENCE WS-PROFILE-ACTION WS-MESSAGE
-                         MOVE WS-MESSAGE TO OUTPUT-RECORD
-                         PERFORM PRINT-LINE
-                       END-IF
+       *> ===== OPTIONAL EXPERIENCE AND EDUCATION ENTRY =====
+                       PERFORM UNTIL WS-PROFILE-CHOICE = "N" OR WS-PROFILE-CHOICE = "n"
+                           MOVE "Would you like to add experience? (Y/N)" TO OUTPUT-RECORD
+                           PERFORM PRINT-LINE
+                           PERFORM READ-AND-LOG
+                           IF WS-EOF = "Y"
+                             MOVE "No input for experiences; returning to post-login menu." TO OUTPUT-RECORD
+                             PERFORM PRINT-LINE
+                             EXIT PERFORM
+                           END-IF
+                           IF INPUT-RECORD(1:1) = "Y" OR INPUT-RECORD(1:1) = "y"
+                           *> NEED TO ADD EXPERIENCE INPUTS HERE
+                           MOVE "Your Title:" TO OUTPUT-RECORD
+                           PERFORM PRINT-LINE
+                           PERFORM READ-AND-LOG
+                           IF WS-EOF = "Y"
+                             MOVE "No input for experience; returning to post-login menu." TO OUTPUT-RECORD
+                             PERFORM PRINT-LINE
+                             EXIT PERFORM
+                           END-IF
+                           MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-EXP-TITLE
+                           MOVE "Company Name:" TO OUTPUT-RECORD
+                           PERFORM PRINT-LINE
+                           PERFORM READ-AND-LOG
+                           IF WS-EOF = "Y"
+                             MOVE "No input for experience; returning to post-login menu." TO OUTPUT-RECORD
+                             PERFORM PRINT-LINE
+                             EXIT PERFORM
+                           END-IF
+                           MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-EXP-COMPANY
+                            MOVE "Start Date:" TO OUTPUT-RECORD
+                             PERFORM PRINT-LINE
+                             PERFORM READ-AND-LOG
+                             IF WS-EOF = "Y"
+                               MOVE "No input for experience; returning to post-login menu." TO OUTPUT-RECORD
+                               PERFORM PRINT-LINE
+                               EXIT PERFORM
+                             END-IF
+                             MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-EXP-START-DATE
+                              MOVE "End Date:" TO OUTPUT-RECORD
+                             PERFORM PRINT-LINE
+                             PERFORM READ-AND-LOG
+                             IF WS-EOF = "Y"
+                               MOVE "No input for experience; returning to post-login menu." TO OUTPUT-RECORD
+                               PERFORM PRINT-LINE
+                               EXIT PERFORM
+                             END-IF
+                             MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-EXP-END-DATE
+                              MOVE "Description (Optional, type N to skip):" TO OUTPUT-RECORD
+                             PERFORM PRINT-LINE
+                             PERFORM READ-AND-LOG
+                             IF WS-EOF = "Y"
+                               MOVE "No input for experience; returning to post-login menu." TO OUTPUT-RECORD
+                               PERFORM PRINT-LINE
+                               EXIT PERFORM
+                             END-IF
+                             MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-EXP-DESC
+                             MOVE "2" TO WS-PROFILE-ACTION
+                             CALL "EDITPROFILE" USING WS-USERNAME WS-EXPERIENCE WS-PROFILE-ACTION WS-MESSAGE
+                             MOVE WS-MESSAGE TO OUTPUT-RECORD
+                             PERFORM PRINT-LINE
+                           ELSE
+                             MOVE "N" TO WS-PROFILE-CHOICE
+                           END-IF
+                       END-PERFORM
+                       MOVE "Y" TO WS-PROFILE-CHOICE
 
-                       *> Need to add loop for adding multiple educations?
-                       MOVE "Would you like to add education? (Y/N)" TO OUTPUT-RECORD
-                       PERFORM PRINT-LINE
-                       PERFORM READ-AND-LOG
-                       IF WS-EOF = "Y"
-                         MOVE "No input for education; returning to post-login menu." TO OUTPUT-RECORD
-                         PERFORM PRINT-LINE
-                         EXIT PERFORM
-                       END-IF
-                       IF INPUT-RECORD(1:1) = "Y" OR INPUT-RECORD(1:1) = "y"
-                         *> NEED TO ADD EDUCATION INPUTS HERE
-                         MOVE "3" TO WS-PROFILE-ACTION
-                         CALL "EDITPROFILE" USING WS-USERNAME WS-EDUCATION WS-PROFILE-ACTION WS-MESSAGE
-                         MOVE WS-MESSAGE TO OUTPUT-RECORD
-                         PERFORM PRINT-LINE
-                       END-IF
+                       PERFORM UNTIL WS-PROFILE-CHOICE = "N" OR WS-PROFILE-CHOICE = "n"
+                           MOVE "Would you like to add education? (Y/N)" TO OUTPUT-RECORD
+                           PERFORM PRINT-LINE
+                           PERFORM READ-AND-LOG
+                           IF WS-EOF = "Y"
+                             MOVE "No input for education; returning to post-login menu." TO OUTPUT-RECORD
+                             PERFORM PRINT-LINE
+                             EXIT PERFORM
+                           END-IF
+                           IF INPUT-RECORD(1:1) = "Y" OR INPUT-RECORD(1:1) = "y"
+                             *> NEED TO ADD EDUCATION INPUTS HERE
+                              MOVE "Degree:" TO OUTPUT-RECORD
+                              PERFORM PRINT-LINE
+                              PERFORM READ-AND-LOG
+                             IF WS-EOF = "Y"
+                               MOVE "No input for education; returning to post-login menu." TO OUTPUT-RECORD
+                               PERFORM PRINT-LINE
+                               EXIT PERFORM
+                             END-IF
+                             MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-EDU-DEGREE
+                              MOVE "University Name:" TO OUTPUT-RECORD
+                              PERFORM PRINT-LINE
+                              PERFORM READ-AND-LOG
+                             IF WS-EOF = "Y"
+                               MOVE "No input for education; returning to post-login menu." TO OUTPUT-RECORD
+                               PERFORM PRINT-LINE
+                               EXIT PERFORM
+                             END-IF
+                             MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-EDU-UNI
+                              MOVE "Start Year:" TO OUTPUT-RECORD
+                              PERFORM PRINT-LINE
+                              PERFORM READ-AND-LOG
+                              IF WS-EOF = "Y"
+                                MOVE "No input for education; returning to post-login menu." TO OUTPUT-RECORD
+                                PERFORM PRINT-LINE
+                                EXIT PERFORM
+                              END-IF
+                              MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-EDU-START-YEAR
+                               MOVE "End Year:" TO OUTPUT-RECORD
+                                PERFORM PRINT-LINE
+                                PERFORM READ-AND-LOG
+                                IF WS-EOF = "Y"
+                                  MOVE "No input for education; returning to post-login menu." TO OUTPUT-RECORD
+                                  PERFORM PRINT-LINE
+                                  EXIT PERFORM
+                                END-IF
+                                MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-EDU-END-YEAR
+                             MOVE "3" TO WS-PROFILE-ACTION
+                             CALL "EDITPROFILE" USING WS-USERNAME WS-EDUCATION WS-PROFILE-ACTION WS-MESSAGE
+                             MOVE WS-MESSAGE TO OUTPUT-RECORD
+                             PERFORM PRINT-LINE
+                            ELSE
+                             MOVE "N" TO WS-PROFILE-CHOICE
+                           END-IF
+                       END-PERFORM
+
                   END-EVALUATE
                END-PERFORM
                EXIT PERFORM
@@ -831,7 +921,10 @@
            05 LK-EDU-END-YEAR PIC 9(4).
          77 LK-MESSAGE PIC X(100).
 
-        PROCEDURE DIVISION
+        PROCEDURE DIVISION.
+        MAIN-ENTRY.
+          GOBACK.
+
         ENTRY "BASIC" USING LK-USERNAME LK-PROFILE-DATA LK-PROFILE-ACTION LK-MESSAGE.
           *> Profile creation/editing is not yet implemented
          MOVE "Profile creation/editing is under construction." TO LK-MESSAGE

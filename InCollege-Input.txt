@@ -9,6 +9,11 @@ Info 2
 2026
 N
 N
+Y
+Master of Wizardry
+Hoggwarts University
+2020
+2024
 N
 4
 4
