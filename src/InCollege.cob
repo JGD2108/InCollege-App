@@ -348,6 +348,8 @@
                          MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-ABOUT-ME
                        END-IF
                        CALL "EDITPROFILE" USING WS-USERNAME WS-PROFILE-DATA WS-PROFILE-ACTION WS-MESSAGE
+                       MOVE WS-MESSAGE TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
 
                        *> Need to add loop for adding multiple experiences?
                        MOVE "Would you like to add experience? (Y/N)" TO OUTPUT-RECORD
@@ -829,7 +831,7 @@
            05 LK-EDU-END-YEAR PIC 9(4).
          77 LK-MESSAGE PIC X(100).
 
-        PROCEDURE DIVISION USING LK-USERNAME LK-MESSAGE.
+        PROCEDURE DIVISION USING LK-USERNAME LK-PROFILE-DATA LK-PROFILE-ACTION LK-MESSAGE.
           *> Profile creation/editing is not yet implemented
          MOVE "Profile creation/editing is under construction." TO LK-MESSAGE
          GOBACK.

@@ -15,5 +15,30 @@ You have successfully logged in
 2. Find someone you know
 3. Learn a new skill
 4. Logout
+0
+Enter your First Name:
+Noah
+Enter your Last Name:
+Galdona
+Enter your College's Name:
+Info 1
+Enter your Major:
+Info 2
+Enter your Graduation Year:
+2026
+About Me (Optional, type N to skip):
+N
+Skipping About Me entry.
+Profile creation/editing is under construction.
+Would you like to add experience? (Y/N)
+N
+Would you like to add education? (Y/N)
+N
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
 4
 Logging out. Goodbye!
