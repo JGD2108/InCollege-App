@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="InCollege" tests="58" failures="0">
+<testcase classname="Integration" name="TC-002_MultipleUsers">
+</testcase>
+<testcase classname="Integration" name="TC-003_AccountLimitWorkflow">
+</testcase>
+<testcase classname="Integration" name="TC-004_ErrorRecovery">
+</testcase>
+<testcase classname="NM-10_SavingAccountInformation" name="TC-001_AccountPersistsAfterRestart">
+</testcase>
+<testcase classname="NM-10_SavingAccountInformation" name="TC-002_MultipleAccountsPersist">
+</testcase>
+<testcase classname="NM-10_SavingAccountInformation" name="TC-003_VerifyUsersDataFileUpdated">
+</testcase>
+<testcase classname="NM-11_LimitAccountsTo5" name="TC-001_Create5AccountsSuccessfully">
+</testcase>
+<testcase classname="NM-11_LimitAccountsTo5" name="TC-002_Attempt6thAccount">
+</testcase>
+<testcase classname="NM-11_LimitAccountsTo5" name="TC-003_Attempt7thAccount">
+</testcase>
+<testcase classname="NM-11_LimitAccountsTo5" name="TC-004_AttemptCreationAfterLimitReached">
+</testcase>
+<testcase classname="NM-11_LimitAccountsTo5" name="TC-005_LoginToExistingAccountsAfterLimit">
+</testcase>
+<testcase classname="NM-12_NotifyUnsuccessfulLogin" name="TC-001_WrongPasswordMessage">
+</testcase>
+<testcase classname="NM-12_NotifyUnsuccessfulLogin" name="TC-002_WrongUsernameMessage">
+</testcase>
+<testcase classname="NM-12_NotifyUnsuccessfulLogin" name="TC-003_RetryAfterFailure">
+</testcase>
+<testcase classname="NM-12_NotifyUnsuccessfulLogin" name="TC-004_MultipleFailuresThenSuccess">
+</testcase>
+<testcase classname="NM-13_InitialNavigationOptions" name="TC-001_VerifyPostLoginMenu">
+</testcase>
+<testcase classname="NM-13_InitialNavigationOptions" name="TC-002_VerifyWelcomeMessage">
+</testcase>
+<testcase classname="NM-13_InitialNavigationOptions" name="TC-003_MenuPersistsUntilLogout">
+</testcase>
+<testcase classname="NM-14_UnderConstructionMessages" name="TC-001_JobSearchUnderConstruction">
+</testcase>
+<testcase classname="NM-14_UnderConstructionMessages" name="TC-002_FindSomeoneUnderConstruction">
+</testcase>
+<testcase classname="NM-14_UnderConstructionMessages" name="TC-003_SkillUnderConstruction">
+</testcase>
+<testcase classname="NM-14_UnderConstructionMessages" name="TC-004_ReturnToMenuAfterUnderConstruction">
+</testcase>
+<testcase classname="NM-15_SkillsFramework" name="TC-001_ShowSkillsMenu">
+</testcase>
+<testcase classname="NM-15_SkillsFramework" name="TC-002_VerifyAll5Skills">
+</testcase>
+<testcase classname="NM-15_SkillsFramework" name="TC-003_ReturnToPostLoginMenu">
+</testcase>
+<testcase classname="NM-15_SkillsFramework" name="TC-004_NavigateSkillsMultipleTimes">
+</testcase>
+<testcase classname="NM-15_SkillsFramework" name="TC-005_InvalidSkillSelection">
+</testcase>
+<testcase classname="NM-17_WriteOutputToFile" name="TC-001_CompleteWorkflowOutputVerification">
+</testcase>
+<testcase classname="NM-17_WriteOutputToFile" name="TC-002_ScreenMatchesFileOutput">
+</testcase>
+<testcase classname="NM-17_WriteOutputToFile" name="TC-003_MultipleMenuSelectionsLogged">
+</testcase>
+<testcase classname="NM-18_ReadInputFromFile" name="TC-001_ValidInputSequentialRead">
+</testcase>
+<testcase classname="NM-18_ReadInputFromFile" name="TC-002_MultipleOperations">
+</testcase>
+<testcase classname="NM-18_ReadInputFromFile" name="TC-003_LineByLineHandling">
+</testcase>
+<testcase classname="NM-18_ReadInputFromFile" name="TC-004_PrematureEOF">
+</testcase>
+<testcase classname="NM-18_ReadInputFromFile" name="TC-005_EmptyInputFile">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-001_ValidAccountCreation">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-002_PasswordExactly8Chars">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-003_PasswordExactly12Chars">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-004_UsernameExactly12Chars">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-005_VariousSpecialCharacters">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-006_PasswordTooShort">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-007_PasswordTooLong">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-008_PasswordMissingUppercase">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-009_PasswordMissingDigit">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-010_PasswordMissingSpecialChar">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-011_UsernameAlreadyExists">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-012_EmptyUsername">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-013_EmptyPassword">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-014_UsernameTooLong">
+</testcase>
+<testcase classname="NM-7_NewUserRegistration" name="TC-015_MinimumValidRequirements">
+</testcase>
+<testcase classname="NM-8_UserLogin" name="TC-001_SuccessfulLogin">
+</testcase>
+<testcase classname="NM-8_UserLogin" name="TC-002_LoginAfterCreatingAccount">
+</testcase>
+<testcase classname="NM-8_UserLogin" name="TC-003_IncorrectPassword">
+</testcase>
+<testcase classname="NM-8_UserLogin" name="TC-004_NonExistentUsername">
+</testcase>
+<testcase classname="NM-8_UserLogin" name="TC-005_CorrectUsernameWrongPassword">
+</testcase>
+<testcase classname="NM-8_UserLogin" name="TC-006_EmptyUsername">
+</testcase>
+<testcase classname="NM-8_UserLogin" name="TC-007_EmptyPassword">
+</testcase>
+<testcase classname="NM-8_UserLogin" name="TC-008_MultipleFailedAttempts">
+</testcase>
+</testsuite>
