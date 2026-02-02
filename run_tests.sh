@@ -60,6 +60,12 @@ run_test() {
     local test_path="$1"
     local test_name=$(basename "$test_path")
     local feature_name=$(basename "$(dirname "$test_path")")
+    local input_file=""
+    local output_file=""
+    local input2_file=""
+    local output2_file=""
+    local ws_input_file=""
+    local ws_output_file=""
 
     read_counters
 
@@ -71,46 +77,60 @@ run_test() {
         return
     fi
 
-    # Check if INPUT.DAT exists
-    if [ ! -f "$test_path/INPUT.DAT" ]; then
-        echo -e "${YELLOW}  SKIP: No INPUT.DAT found${NC}"
+    # Determine input/output filenames (DAT vs TXT)
+    if [ -f "$test_path/InCollege-Input.txt" ]; then
+        input_file="$test_path/InCollege-Input.txt"
+        output_file="$test_path/InCollege-Output.txt"
+        input2_file="$test_path/InCollege-Input2.txt"
+        output2_file="$test_path/InCollege-Output2.txt"
+        ws_input_file="$WORKSPACE/InCollege-Input.txt"
+        ws_output_file="$WORKSPACE/InCollege-Output.txt"
+    elif [ -f "$test_path/INPUT.DAT" ]; then
+        input_file="$test_path/INPUT.DAT"
+        output_file="$test_path/OUTPUT.DAT"
+        input2_file="$test_path/INPUT2.DAT"
+        output2_file="$test_path/OUTPUT2.DAT"
+        ws_input_file="$WORKSPACE/INPUT.DAT"
+        ws_output_file="$WORKSPACE/OUTPUT.DAT"
+    else
+        echo -e "${YELLOW}  SKIP: No input file found${NC}"
         return
     fi
 
     # Setup USERS.DAT based on test requirements
-    if needs_baseline_users "$test_path/INPUT.DAT"; then
+    if needs_baseline_users "$input_file"; then
         setup_baseline_users
     else
         reset_users_dat
     fi
 
-    # Copy INPUT.DAT to workspace
-    cp "$test_path/INPUT.DAT" "$WORKSPACE/INPUT.DAT"
+    # Copy input file to workspace
+    cp "$input_file" "$ws_input_file"
 
     # Run the program
     cd "$WORKSPACE"
     "$PROGRAM" > /dev/null 2>&1
 
     # Compare output
-    if [ -f "$test_path/OUTPUT.DAT" ]; then
-        if diff -q "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT.DAT" > /dev/null 2>&1; then
+    if [ -f "$output_file" ]; then
+        if diff -q "$ws_output_file" "$output_file" > /dev/null 2>&1; then
             RUN1_RESULT="PASS"
         else
             RUN1_RESULT="FAIL"
         fi
     else
-        echo -e "${YELLOW}  SKIP: No OUTPUT.DAT found${NC}"
+        echo -e "${YELLOW}  SKIP: No output file found${NC}"
         return
     fi
 
-    # Check if there's a second run (INPUT2.DAT/OUTPUT2.DAT)
-    if [ -f "$test_path/INPUT2.DAT" ]; then
+    # Check if there's a second run
+    if [ -f "$input2_file" ]; then
         # Don't reset USERS.DAT for second run (testing persistence)
-        cp "$test_path/INPUT2.DAT" "$WORKSPACE/INPUT.DAT"
+        cp "$input2_file" "$ws_input_file"
         "$PROGRAM" > /dev/null 2>&1
 
-        if [ -f "$test_path/OUTPUT2.DAT" ]; then
-            if diff -q "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT2.DAT" > /dev/null 2>&1; then
+        if [ -f "$output2_file" ]; then
+            if diff -q "$ws_output_file" "$output2_file" > /dev/null 2>&1; then
                 RUN2_RESULT="PASS"
             else
                 RUN2_RESULT="FAIL"
@@ -128,21 +148,21 @@ run_test() {
             # Show diff for debugging (first 10 lines)
             if [ "$RUN1_RESULT" = "FAIL" ]; then
                 echo -e "${YELLOW}  Run 1 differences (first 10 lines):${NC}"
-                diff "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT.DAT" | head -10
+                diff "$ws_output_file" "$output_file" | head -10
             fi
             if [ "$RUN2_RESULT" = "FAIL" ]; then
                 echo -e "${YELLOW}  Run 2 differences (first 10 lines):${NC}"
-                # Need to rerun to get OUTPUT.DAT
-                if needs_baseline_users "$test_path/INPUT.DAT"; then
+                # Need to rerun to get fresh output
+                if needs_baseline_users "$input_file"; then
                     setup_baseline_users
                 else
                     reset_users_dat
                 fi
-                cp "$test_path/INPUT.DAT" "$WORKSPACE/INPUT.DAT"
+                cp "$input_file" "$ws_input_file"
                 "$PROGRAM" > /dev/null 2>&1
-                cp "$test_path/INPUT2.DAT" "$WORKSPACE/INPUT.DAT"
+                cp "$input2_file" "$ws_input_file"
                 "$PROGRAM" > /dev/null 2>&1
-                diff "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT2.DAT" | head -10
+                diff "$ws_output_file" "$output2_file" | head -10
             fi
         fi
     else
@@ -156,7 +176,7 @@ run_test() {
 
             # Show diff for debugging (first 10 lines)
             echo -e "${YELLOW}  Differences (first 10 lines):${NC}"
-            diff "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT.DAT" | head -10
+            diff "$ws_output_file" "$output_file" | head -10
         fi
     fi
 
@@ -171,10 +191,10 @@ echo "InCollege Test Suite"
 echo "========================================"
 echo ""
 
-# Find all test directories (those containing INPUT.DAT files) and sort them
+# Find all test directories (those containing input files) and sort them
 for test_root in "${TEST_DIRS[@]}"; do
     if [ -d "$test_root" ]; then
-        find "$test_root" -type f -name "INPUT.DAT" | sort | while read input_file; do
+        find "$test_root" -type f \( -name "INPUT.DAT" -o -name "InCollege-Input.txt" \) | sort -u | while read input_file; do
             test_dir=$(dirname "$input_file")
             run_test "$test_dir"
         done
