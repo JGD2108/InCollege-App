@@ -19,6 +19,8 @@ IDENTIFICATION DIVISION.
          *> 3 = logout
 
          EVALUATE LK-POST-CHOICE
+          WHEN "0"
+            MOVE 4 TO LK-ACTION
            WHEN "1"
              MOVE "Job search is under construction." TO LK-MESSAGE
              MOVE 1 TO LK-ACTION
@@ -30,6 +32,8 @@ IDENTIFICATION DIVISION.
            WHEN "4"
              MOVE "Logging out. Goodbye!" TO LK-MESSAGE
              MOVE 3 TO LK-ACTION
+          WHEN "5"
+            MOVE 5 TO LK-ACTION
            WHEN OTHER
              MOVE "Invalid Selection." TO LK-MESSAGE
              MOVE 1 TO LK-ACTION
