@@ -1,0 +1,40 @@
+1
+TestUser1
+Test@123
+1
+Max
+Entries
+Example University
+Engineering
+2025
+About me
+Y
+Intern I
+Company A
+Summer 2022
+Did A
+Y
+Intern II
+Company B
+Summer 2023
+Did B
+Y
+Intern III
+Company C
+Summer 2024
+Did C
+DONE
+Y
+Degree One
+University A
+2018-2020
+Y
+Degree Two
+University B
+2020-2022
+Y
+Degree Three
+University C
+2022-2024
+DONE
+6
