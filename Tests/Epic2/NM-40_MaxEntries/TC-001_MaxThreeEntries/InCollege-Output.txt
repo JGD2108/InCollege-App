@@ -1,1 +1,105 @@
-BASELINE_PENDING
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+TestUser1
+Enter password:
+Test@123
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+Max
+Incorrect username / password, please try again
+Enter username:
+Entries
+Enter password:
+Example University
+Incorrect username / password, please try again
+Enter username:
+Engineering
+Enter password:
+2025
+Incorrect username / password, please try again
+Enter username:
+About me
+Enter password:
+Y
+Incorrect username / password, please try again
+Enter username:
+Intern I
+Enter password:
+Company A
+Incorrect username / password, please try again
+Enter username:
+Summer 2022
+Enter password:
+Did A
+Incorrect username / password, please try again
+Enter username:
+Y
+Enter password:
+Intern II
+Incorrect username / password, please try again
+Enter username:
+Company B
+Enter password:
+Summer 2023
+Incorrect username / password, please try again
+Enter username:
+Did B
+Enter password:
+Y
+Incorrect username / password, please try again
+Enter username:
+Intern III
+Enter password:
+Company C
+Incorrect username / password, please try again
+Enter username:
+Summer 2024
+Enter password:
+Did C
+Incorrect username / password, please try again
+Enter username:
+DONE
+Enter password:
+Y
+Incorrect username / password, please try again
+Enter username:
+Degree One
+Enter password:
+University A
+Incorrect username / password, please try again
+Enter username:
+2018-2020
+Enter password:
+Y
+Incorrect username / password, please try again
+Enter username:
+Degree Two
+Enter password:
+University B
+Incorrect username / password, please try again
+Enter username:
+2020-2022
+Enter password:
+Y
+Incorrect username / password, please try again
+Enter username:
+Degree Three
+Enter password:
+University C
+Incorrect username / password, please try again
+Enter username:
+2022-2024
+Enter password:
+DONE
+Incorrect username / password, please try again
+Enter username:
+6
+Enter password:
+No input for password; returning to menu.

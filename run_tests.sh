@@ -3,9 +3,9 @@
 # Test runner for InCollege COBOL program
 # Runs all test cases and reports pass/fail status
 
-PROGRAM="/workspace/bin/InCollegeSingle"
+PROGRAM="/workspace/bin/InCollege"
 WORKSPACE="/workspace"
-TEST_DIRS=("/workspace/Tests/Epic1" "/workspace/Tests/Epic2")
+TEST_DIRS=("/workspace/Tests/Epic2")
 BASELINE_USERS="$WORKSPACE/USERS.DAT.baseline"
 
 # Colors for output

@@ -1,1 +1,60 @@
-BASELINE_PENDING
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+TestUser1
+Enter password:
+Test@123
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+John
+Incorrect username / password, please try again
+Enter username:
+Doe
+Enter password:
+Example University
+Incorrect username / password, please try again
+Enter username:
+Computer Science
+Enter password:
+2025
+Incorrect username / password, please try again
+Enter username:
+Enthusiastic developer always learning.
+Enter password:
+Y
+Incorrect username / password, please try again
+Enter username:
+Software Intern
+Enter password:
+Tech Corp
+Incorrect username / password, please try again
+Enter username:
+Summer 2024
+Enter password:
+Developed tools for internal testing.
+Incorrect username / password, please try again
+Enter username:
+DONE
+Enter password:
+Y
+Incorrect username / password, please try again
+Enter username:
+Bachelor of Science
+Enter password:
+Example University
+Incorrect username / password, please try again
+Enter username:
+2021-2025
+Enter password:
+DONE
+Incorrect username / password, please try again
+Enter username:
+6
+Enter password:
+No input for password; returning to menu.

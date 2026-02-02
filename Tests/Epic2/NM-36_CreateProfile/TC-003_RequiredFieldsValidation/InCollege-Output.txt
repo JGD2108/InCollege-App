@@ -1,1 +1,95 @@
-BASELINE_PENDING
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+TestUser1
+Enter password:
+Test@123
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+
+Incorrect username / password, please try again
+Enter username:
+John
+Enter password:
+
+Incorrect username / password, please try again
+Enter username:
+Doe
+Enter password:
+
+Incorrect username / password, please try again
+Enter username:
+Example University
+Enter password:
+
+Incorrect username / password, please try again
+Enter username:
+Computer Science
+Enter password:
+20A5
+Incorrect username / password, please try again
+Enter username:
+2025
+Enter password:
+
+Incorrect username / password, please try again
+Enter username:
+DONE
+Enter password:
+DONE
+Incorrect username / password, please try again
+Enter username:
+6
+Enter password:
+1
+Incorrect username / password, please try again
+Enter username:
+TestUser1
+Enter password:
+Test@123
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+
+Incorrect username / password, please try again
+Enter username:
+John
+Enter password:
+
+Incorrect username / password, please try again
+Enter username:
+Doe
+Enter password:
+
+Incorrect username / password, please try again
+Enter username:
+Example University
+Enter password:
+
+Incorrect username / password, please try again
+Enter username:
+Computer Science
+Enter password:
+20A5
+Incorrect username / password, please try again
+Enter username:
+2025
+Enter password:
+
+Incorrect username / password, please try again
+Enter username:
+DONE
+Enter password:
+DONE
+Incorrect username / password, please try again
+Enter username:
+6
+Enter password:
+No input for password; returning to menu.

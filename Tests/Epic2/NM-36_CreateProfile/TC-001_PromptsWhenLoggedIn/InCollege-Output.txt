@@ -15,6 +15,7 @@ You have successfully logged in
 2. Find someone you know
 3. Learn a new skill
 4. Logout
+5. View My Profile
 Y
 Invalid Selection.
 --- Welcome to InCollege, select an option ---
@@ -23,6 +24,7 @@ Invalid Selection.
 2. Find someone you know
 3. Learn a new skill
 4. Logout
+5. View My Profile
 Software Engineer
 Invalid Selection.
 --- Welcome to InCollege, select an option ---
@@ -31,6 +33,7 @@ Invalid Selection.
 2. Find someone you know
 3. Learn a new skill
 4. Logout
+5. View My Profile
 Acme Corp
 Invalid Selection.
 --- Welcome to InCollege, select an option ---
@@ -39,6 +42,7 @@ Invalid Selection.
 2. Find someone you know
 3. Learn a new skill
 4. Logout
+5. View My Profile
 N
 Invalid Selection.
 --- Welcome to InCollege, select an option ---
@@ -47,6 +51,7 @@ Invalid Selection.
 2. Find someone you know
 3. Learn a new skill
 4. Logout
+5. View My Profile
 3
 Select a skill to learn (0 to return):
 1. Python Basics

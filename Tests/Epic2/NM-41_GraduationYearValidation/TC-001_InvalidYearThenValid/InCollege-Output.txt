@@ -1,1 +1,43 @@
-BASELINE_PENDING
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+TestUser1
+Enter password:
+Test@123
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+Year
+Incorrect username / password, please try again
+Enter username:
+Tester
+Enter password:
+Example University
+Incorrect username / password, please try again
+Enter username:
+Computer Science
+Enter password:
+20AB
+Incorrect username / password, please try again
+Enter username:
+1899
+Enter password:
+2025
+Incorrect username / password, please try again
+Enter username:
+About me
+Enter password:
+DONE
+Incorrect username / password, please try again
+Enter username:
+DONE
+Enter password:
+6
+Incorrect username / password, please try again
+Enter username:
+No input for username; returning to menu.

@@ -15,5 +15,6 @@ You have successfully logged in
 2. Find someone you know
 3. Learn a new skill
 4. Logout
+5. View My Profile
 4
 Logging out. Goodbye!

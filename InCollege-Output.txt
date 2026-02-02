@@ -5,67 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-NewPersist
+TestUser1
 Enter password:
-Persist@1
-You have successfully logged in
---- Welcome to InCollege, select an option ---
-0. Create/Edit your profile
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. Logout
-5. View My Profile
-0
-Enter your First Name:
-John
-Enter your Last Name:
-Doe
-Enter your College's Name:
-University Of South Florida
-Enter your Major:
-Masters in Computer Science
-Enter your Graduation Year:
-2028
-About Me (Optional, type N to skip):
-I'm interested in the field of AI
-Profile created.
-Would you like to add experience? (Y/N)
-Y
-Your Title:
-Software Intern
-Company Name:
-Tech Solutions Inc.
-Start Date:
-May 2025
-End Date:
-August 2025
-Description (Optional, type N to skip):
-Learnt how to design and maintain software
-Experience saved.
-Would you like to add experience? (Y/N)
-N
-Would you like to add education? (Y/N)
-Y
-Degree:
-Undergraduate Computer Science
-University Name:
-University of South Florida
-Start Year:
-2021
-End Year:
-2025
-Education saved.
-Would you like to add education? (Y/N)
-N
-Return to the top-level menu? (Y/N)
-N
---- Welcome to InCollege, select an option ---
-0. Create/Edit your profile
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. Logout
-5. View My Profile
-4
-Logging out. Goodbye!
+Test@123
+Incorrect username / password, please try again
+Enter username:
+No input for username; returning to menu.
