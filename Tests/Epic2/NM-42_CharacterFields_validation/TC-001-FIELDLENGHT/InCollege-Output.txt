@@ -28,46 +28,20 @@ Computer Science
 Enter your Graduation Year:
 2025
 About Me (Optional, type N to skip):
-N
-Skipping About Me entry.
+This is a very long About Me section that exceeds the normal character limit of
 Profile updated.
 Would you like to add experience? (Y/N)
 Y
 Your Title:
-
-Title is required.
-Your Title:
-
-Title is required.
-Your Title:
 Software Engineer
-Company Name:
-
-Company/Organization is required.
-Company Name:
-
-Company/Organization is required.
 Company Name:
 Google
 Start Date:
-
-Dates are required.
-Start Date:
-
-Dates are required.
-Start Date:
 01/2023
-End Date:
-
-Dates are required.
-End Date:
-
-Dates are required.
 End Date:
 12/2024
 Description (Optional, type N to skip):
-N
-Skipping Description entry.
+This is an extremely long description that exceeds 100 characters to test trunca
 Experience limit reached (max 3).
 Would you like to add experience? (Y/N)
 N

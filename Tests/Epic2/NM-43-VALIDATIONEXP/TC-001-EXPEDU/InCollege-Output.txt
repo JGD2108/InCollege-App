@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-JourneyUser
+SkillsUser
 Enter password:
-Journey@1
+Skills@11
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -32,45 +32,42 @@ N
 Skipping About Me entry.
 Profile updated.
 Would you like to add experience? (Y/N)
+N
+Would you like to add education? (Y/N)
 Y
-Your Title:
+Degree:
 
-Title is required.
-Your Title:
+Degree is required.
+Degree:
 
-Title is required.
-Your Title:
-Software Engineer
-Company Name:
+Degree is required.
+Degree:
+Bachelor of Science
+University Name:
 
-Company/Organization is required.
-Company Name:
+University/College is required.
+University Name:
 
-Company/Organization is required.
-Company Name:
-Google
-Start Date:
+University/College is required.
+University Name:
+MIT
+Start Year:
 
-Dates are required.
-Start Date:
+Start Year must be a valid 4-digit year.
+Start Year:
 
-Dates are required.
-Start Date:
-01/2023
-End Date:
+Start Year must be a valid 4-digit year.
+Start Year:
+2021
+End Year:
 
-Dates are required.
-End Date:
+End Year must be a valid 4-digit year.
+End Year:
 
-Dates are required.
-End Date:
-12/2024
-Description (Optional, type N to skip):
-N
-Skipping Description entry.
-Experience limit reached (max 3).
-Would you like to add experience? (Y/N)
-N
+End Year must be a valid 4-digit year.
+End Year:
+2025
+Education saved.
 Would you like to add education? (Y/N)
 N
 Return to the top-level menu? (Y/N)

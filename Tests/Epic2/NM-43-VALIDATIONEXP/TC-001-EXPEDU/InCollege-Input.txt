@@ -1,6 +1,6 @@
 1
-JourneyUser
-Journey@1
+SkillsUser
+Skills@11
 0
 John
 Doe
@@ -8,21 +8,20 @@ Harvard University
 Computer Science
 2025
 N
+N
 Y
 
 
-Software Engineer
+Bachelor of Science
 
 
-Google
+MIT
 
 
-01/2023
+2021
 
 
-12/2024
-N
-N
+2025
 N
 Y
 3

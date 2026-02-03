@@ -104,17 +104,11 @@ run_test() {
         return
     fi
 
-    # If test directory contains REMOVE_USERS, remove USERS.DAT to simulate missing file
-    if [ -f "$test_path/REMOVE_USERS" ]; then
-        rm -f "$WORKSPACE/USERS.DAT" 2>/dev/null || true
-        echo -e "  Note: USERS.DAT removed for this test (${test_name})"
+    # Setup USERS.DAT based on test requirements
+    if needs_baseline_users "$input_file"; then
+        setup_baseline_users
     else
-        # Setup USERS.DAT based on test requirements
-        if needs_baseline_users "$input_file"; then
-            setup_baseline_users
-        else
-            reset_users_dat
-        fi
+        reset_users_dat
     fi
 
     # Copy input file to workspace
