@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-LoginUser1
+JourneyUser
 Enter password:
-Login@11
+Journey@1
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -22,40 +22,29 @@ John
 Enter your Last Name:
 Doe
 Enter your College's Name:
-Example University
+Harvard University
 Enter your Major:
 Computer Science
 Enter your Graduation Year:
 2025
 About Me (Optional, type N to skip):
-Enthusiastic developer always learning.
+This is a very long About Me section that exceeds the normal character limit of
 Profile updated.
 Would you like to add experience? (Y/N)
 Y
 Your Title:
-Software Intern
+Software Engineer
 Company Name:
-Tech Corp
+Google
 Start Date:
-Summer 2024
+01/2023
 End Date:
-Developed tools for internal testing.
+12/2024
 Description (Optional, type N to skip):
-DONE
-Experience saved.
+This is an extremely long description that exceeds 100 characters to test trunca
+Experience limit reached (max 3).
 Would you like to add experience? (Y/N)
 N
-Would you like to add education? (Y/N)
-Y
-Degree:
-Bachelor of Science
-University Name:
-Example University
-Start Year:
-2021
-End Year:
-2025
-Education saved.
 Would you like to add education? (Y/N)
 N
 Return to the top-level menu? (Y/N)

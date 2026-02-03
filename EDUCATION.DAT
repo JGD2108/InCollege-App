@@ -1,1 +1,9 @@
-NewPersist  1Undergraduate Computer ScienceUniversity of South Florida   20212025
+LoginUser1  1Bachelor of Science           Example University            20212025
+LoginUser1  2Bachelor of Science           Example University            20212025
+JourneyUser 1Bachelor of Science           MIT                           20212025
+JourneyUser 2Associate Degree              Community College             20192021
+JourneyUser 3High School Diploma           Boston High School            20152019
+WelcomeUser 1Bachelor of Science           MIT                           20212025
+WelcomeUser 2Master of Science             Stanford University           20202024
+WelcomeUser 3Bachelor's Degree (Honors)    École Polytechnique          20212025
+SkillsUser  1Bachelor of Science           MIT                           20212025

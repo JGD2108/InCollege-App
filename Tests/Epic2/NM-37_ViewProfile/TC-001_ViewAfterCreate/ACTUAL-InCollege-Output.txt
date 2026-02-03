@@ -15,27 +15,26 @@ You have successfully logged in
 2. Find someone you know
 3. Learn a new skill
 4. Logout
-N
-Invalid Selection.
+5. View My Profile
+5
+--- My Profile ---
+Name: John                 Doe
+College: Example University
+Major: Computer Science
+Graduation Year: 2025
+About Me: Enthusiastic developer always learning.
+Experience:
+  1. Software Intern                - Tech Corp
+     Dates: Summer 202 - Developed
+     Description: DONE
+Education:
+  1. Bachelor of Science            - Example University
+     Years: 2021 - 2025
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
 2. Find someone you know
 3. Learn a new skill
 4. Logout
-N
-Invalid Selection.
---- Welcome to InCollege, select an option ---
-0. Create/Edit your profile
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. Logout
-3
-Select a skill to learn (0 to return):
-1. Python Basics
-2. Data Analysis
-3. Public Speaking
-4. Project Management
-5. Networking Essentials
-No input for skill; returning to post-login menu.
+5. View My Profile
+No input for selection; returning to top level.

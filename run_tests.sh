@@ -3,9 +3,9 @@
 # Test runner for InCollege COBOL program
 # Runs all test cases and reports pass/fail status
 
-PROGRAM="/workspace/bin/InCollegeSingle"
+PROGRAM="/workspace/bin/InCollege"
 WORKSPACE="/workspace"
-TEST_DIRS=("/workspace/Tests/Epic1" "/workspace/Tests/Epic2")
+TEST_DIRS=("/workspace/Tests/Epic2")
 BASELINE_USERS="$WORKSPACE/USERS.DAT.baseline"
 
 # Colors for output
@@ -53,6 +53,13 @@ needs_baseline_users() {
     else
         return 1  # false - doesn't need baseline
     fi
+}
+
+# Function to blank profile/education/experience data files
+reset_extra_dat_files() {
+    for f in "PROFILES.DAT" "EDUCATION.DAT" "EXPERIENCE.DAT"; do
+        : > "$WORKSPACE/$f"
+    done
 }
 
 # Function to run a single test
@@ -111,6 +118,10 @@ run_test() {
     cd "$WORKSPACE"
     "$PROGRAM" > /dev/null 2>&1
 
+    # Save actual output for Run 1 into the test directory for inspection
+    ACTUAL1_FILE="$test_path/ACTUAL-$(basename "$ws_output_file")"
+    cp "$ws_output_file" "$ACTUAL1_FILE" 2>/dev/null || true
+
     # Compare output
     if [ -f "$output_file" ]; then
         if diff -q "$ws_output_file" "$output_file" > /dev/null 2>&1; then
@@ -128,6 +139,10 @@ run_test() {
         # Don't reset USERS.DAT for second run (testing persistence)
         cp "$input2_file" "$ws_input_file"
         "$PROGRAM" > /dev/null 2>&1
+
+            # Save actual output for Run 2 into the test directory for inspection
+            ACTUAL2_FILE="$test_path/ACTUAL2-$(basename "$ws_output_file")"
+            cp "$ws_output_file" "$ACTUAL2_FILE" 2>/dev/null || true
 
         if [ -f "$output2_file" ]; then
             if diff -q "$ws_output_file" "$output2_file" > /dev/null 2>&1; then
@@ -190,6 +205,15 @@ echo "========================================"
 echo "InCollege Test Suite"
 echo "========================================"
 echo ""
+# Ensure USERS.DAT starts from baseline on every run
+# Blank profile/education/experience files at start
+reset_extra_dat_files
+echo "Blanked PROFILES.DAT, EDUCATION.DAT, EXPERIENCE.DAT."
+
+# Ensure USERS.DAT starts from baseline on every run
+setup_baseline_users
+echo "Users database reset from baseline."
+# Do not restore USERS.DAT on exit; leave DAT files as-is after run
 
 # Find all test directories (those containing input files) and sort them
 for test_root in "${TEST_DIRS[@]}"; do

@@ -1,0 +1,20 @@
+1
+JourneyUser
+Journey@1
+0
+John
+Doe
+Harvard University
+Computer Science
+2025
+This is a very long About Me section that exceeds the normal character limit of 100 characters to test if the system properly handles truncation or validation errors when users enter excessive text
+Y
+Software Engineer
+Google
+01/2023
+12/2024
+This is an extremely long description that exceeds 100 characters to test truncation handling in the COBOL program when users provide detailed work experience descriptions that are too verbose
+N
+N
+Y
+3

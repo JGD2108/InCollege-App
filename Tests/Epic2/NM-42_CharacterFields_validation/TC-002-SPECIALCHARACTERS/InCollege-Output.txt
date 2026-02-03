@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-LoginUser1
+WelcomeUser
 Enter password:
-Login@11
+Welcome@1
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -18,39 +18,39 @@ You have successfully logged in
 5. View My Profile
 0
 Enter your First Name:
-John
+José
 Enter your Last Name:
-Doe
+O'Brien-Smith
 Enter your College's Name:
-Example University
+Université de Montréal
 Enter your Major:
-Computer Science
+Computer Science & AI
 Enter your Graduation Year:
 2025
 About Me (Optional, type N to skip):
-Enthusiastic developer always learning.
+I'm passionate about AI/ML & data science! I've worked on various projects: chat
 Profile updated.
 Would you like to add experience? (Y/N)
 Y
 Your Title:
-Software Intern
+Software Engineer (Full-Stack)
 Company Name:
-Tech Corp
+O'Reilly Media & Co.
 Start Date:
-Summer 2024
+01/2023
 End Date:
-Developed tools for internal testing.
+12/2024
 Description (Optional, type N to skip):
-DONE
+Developed web apps using React/Node.js; improved API performance by 50%; led tea
 Experience saved.
 Would you like to add experience? (Y/N)
 N
 Would you like to add education? (Y/N)
 Y
 Degree:
-Bachelor of Science
+Bachelor's Degree (Honors)
 University Name:
-Example University
+École Polytechnique
 Start Year:
 2021
 End Year:

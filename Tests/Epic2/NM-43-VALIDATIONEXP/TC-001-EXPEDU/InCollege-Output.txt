@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-LoginUser1
+SkillsUser
 Enter password:
-Login@11
+Skills@11
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -22,37 +22,49 @@ John
 Enter your Last Name:
 Doe
 Enter your College's Name:
-Example University
+Harvard University
 Enter your Major:
 Computer Science
 Enter your Graduation Year:
 2025
 About Me (Optional, type N to skip):
-Enthusiastic developer always learning.
+N
+Skipping About Me entry.
 Profile updated.
-Would you like to add experience? (Y/N)
-Y
-Your Title:
-Software Intern
-Company Name:
-Tech Corp
-Start Date:
-Summer 2024
-End Date:
-Developed tools for internal testing.
-Description (Optional, type N to skip):
-DONE
-Experience saved.
 Would you like to add experience? (Y/N)
 N
 Would you like to add education? (Y/N)
 Y
 Degree:
+
+Degree is required.
+Degree:
+
+Degree is required.
+Degree:
 Bachelor of Science
 University Name:
-Example University
+
+University/College is required.
+University Name:
+
+University/College is required.
+University Name:
+MIT
+Start Year:
+
+Start Year must be a valid 4-digit year.
+Start Year:
+
+Start Year must be a valid 4-digit year.
 Start Year:
 2021
+End Year:
+
+End Year must be a valid 4-digit year.
+End Year:
+
+End Year must be a valid 4-digit year.
 End Year:
 2025
 Education saved.
