@@ -5,36 +5,36 @@ Please select an option:
 3. Logout
 1
 Enter username:
-TestUser1
+LoginUser1
 Enter password:
-Test@123
-Incorrect username / password, please try again
-Enter username:
-1
-Enter password:
-John
-Incorrect username / password, please try again
-Enter username:
-Doe
-Enter password:
-Example University
-Incorrect username / password, please try again
-Enter username:
-Computer Science
-Enter password:
-2025
-Incorrect username / password, please try again
-Enter username:
-About me text
-Enter password:
-DONE
-Incorrect username / password, please try again
-Enter username:
-DONE
-Enter password:
-2
-Incorrect username / password, please try again
-Enter username:
-6
-Enter password:
-No input for password; returning to menu.
+Login@11
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+5
+--- My Profile ---
+Name: John                 Doe
+College: Example University
+Major: Computer Science
+Graduation Year: 2025
+About Me: Enthusiastic developer always learning.
+Experience:
+  1. Software Intern                - Tech Corp
+     Dates: Summer 202 - Developed
+     Description: DONE
+Education:
+  1. Bachelor of Science            - Example University
+     Years: 2021 - 2025
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+No input for selection; returning to top level.

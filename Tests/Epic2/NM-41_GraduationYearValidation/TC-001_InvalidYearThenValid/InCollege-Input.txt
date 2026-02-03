@@ -1,15 +1,42 @@
 1
-TestUser1
-Test@123
-1
-Year
-Tester
-Example University
+WelcomeUser
+Welcome@1
+0
+John
+Doe
+Harvard University
 Computer Science
-20AB
-1899
+abc
+20
+202
+20255
 2025
-About me
-DONE
-DONE
-6
+I am passionate about software development and AI
+N
+Y
+Bachelor of Science
+MIT
+abc
+20
+202
+20255
+2021
+xyz
+20
+202
+20266
+2025
+Y
+Master of Science
+Stanford University
+abc
+123
+12345
+2020
+abc
+123
+12345
+2024
+N
+Y
+3

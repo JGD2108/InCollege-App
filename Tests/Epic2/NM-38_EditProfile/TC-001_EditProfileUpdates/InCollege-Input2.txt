@@ -1,14 +1,17 @@
 1
-TestUser1
-Test@123
-1
-Johnny
-Doe
-Example University
-Software Engineering
-2026
-Updated about me
-DONE
-DONE
-2
-6
+JobUser
+JobUser@1
+0
+Jose
+Gomez
+University of Testing
+Computer Science
+2025
+N
+N
+N
+Y
+3
+
+
+

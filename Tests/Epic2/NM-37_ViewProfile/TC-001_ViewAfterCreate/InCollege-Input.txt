@@ -1,14 +1,4 @@
 1
-TestUser1
-Test@123
-1
-John
-Doe
-Example University
-Computer Science
-2025
-About me text
-DONE
-DONE
-2
-6
+LoginUser1
+Login@11
+5

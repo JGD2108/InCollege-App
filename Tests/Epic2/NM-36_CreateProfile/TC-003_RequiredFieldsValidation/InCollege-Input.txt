@@ -1,36 +1,21 @@
 1
-TestUser1
-Test@123
-1
+SkillsUser
+Skills@11
+0
 
-John
+Jose
 
-Doe
+Gomez
 
-Example University
-
-Computer Science
-20A5
-2025
-
-DONE
-DONE
-6
-1
-TestUser1
-Test@123
-1
-
-John
-
-Doe
-
-Example University
+University of Testing
 
 Computer Science
-20A5
-2025
 
-DONE
-DONE
-6
+2025
+N
+N
+N
+Y
+3
+
+

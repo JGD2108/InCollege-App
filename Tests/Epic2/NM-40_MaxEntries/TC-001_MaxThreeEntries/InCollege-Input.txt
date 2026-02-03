@@ -1,40 +1,47 @@
 1
-TestUser1
-Test@123
-1
-Max
-Entries
-Example University
-Engineering
+JourneyUser
+Journey@1
+0
+John
+Doe
+Harvard University
+Computer Science
 2025
-About me
+I am passionate about software development and AI
 Y
-Intern I
-Company A
-Summer 2022
-Did A
+Software Engineer
+Google
+01/2023
+12/2024
+Developed cloud-based applications
 Y
-Intern II
-Company B
-Summer 2023
-Did B
+Data Analyst Intern
+Microsoft
+05/2022
+08/2022
+Analyzed user behavior data
 Y
-Intern III
-Company C
-Summer 2024
-Did C
-DONE
+Research Assistant
+Stanford Lab
+06/2021
+12/2021
+Conducted machine learning research
 Y
-Degree One
-University A
-2018-2020
 Y
-Degree Two
-University B
-2020-2022
+Bachelor of Science
+MIT
+2021
+2025
 Y
-Degree Three
-University C
-2022-2024
-DONE
-6
+Associate Degree
+Community College
+2019
+2021
+Y
+High School Diploma
+Boston High School
+2015
+2019
+Y
+Y
+3
