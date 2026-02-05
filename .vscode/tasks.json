@@ -44,7 +44,7 @@
     {
       "label": "COBOL: Build Modular InCollege",
       "type": "shell",
-      "command": "mkdir -p /workspace/bin && cobc -x -free -o /workspace/bin/InCollegeModules /workspace/src/InCollegeModules.cob $(find /workspace/src -name '*.cob' -not -name 'InCollege.cob' -not -name 'InCollegeModules.cob') && cobc -x -free -o /workspace/bin/InCollege /workspace/src/InCollege.cob /workspace/src/Profile/ProfileManager.cob",
+      "command": "mkdir -p /workspace/bin && cobc -x -free -o /workspace/bin/InCollegeModules /workspace/src/InCollegeModules.cob $(find /workspace/src -name '*.cob' -not -name 'InCollege.cob' -not -name 'InCollegeModules.cob') && cobc -x -free -o /workspace/bin/InCollege /workspace/src/InCollege.cob",
       "group": {
         "kind": "build",
         "isDefault": true

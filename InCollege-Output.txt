@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-JourneyUser
+JoseD
 Enter password:
-Journey@1
+Jose1234*
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -16,69 +16,4 @@ You have successfully logged in
 3. Learn a new skill
 4. Logout
 5. View My Profile
-0
-Enter your First Name:
-John
-Enter your Last Name:
-Doe
-Enter your College's Name:
-Harvard University
-Enter your Major:
-Computer Science
-Enter your Graduation Year:
-2025
-About Me (Optional, type N to skip):
-N
-Skipping About Me entry.
-Profile updated.
-Would you like to add experience? (Y/N)
-Y
-Your Title:
-
-Title is required.
-Your Title:
-
-Title is required.
-Your Title:
-Software Engineer
-Company Name:
-
-Company/Organization is required.
-Company Name:
-
-Company/Organization is required.
-Company Name:
-Google
-Start Date:
-
-Dates are required.
-Start Date:
-
-Dates are required.
-Start Date:
-01/2023
-End Date:
-
-Dates are required.
-End Date:
-
-Dates are required.
-End Date:
-12/2024
-Description (Optional, type N to skip):
-N
-Skipping Description entry.
-Experience limit reached (max 3).
-Would you like to add experience? (Y/N)
-N
-Would you like to add education? (Y/N)
-N
-Return to the top-level menu? (Y/N)
-Y
-Welcome to InCollege!
-Please select an option:
-1. Log In
-2. Create a new account
-3. Logout
-3
-Logging out. Goodbye!
+No input for selection; returning to top level.
