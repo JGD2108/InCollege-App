@@ -1,0 +1,17 @@
+1
+JobUser
+JobUser@1
+0
+Jose
+Gomez
+University of Testing
+Computer Science
+2025
+N
+N
+N
+Y
+3
+
+
+

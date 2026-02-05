@@ -1,0 +1,69 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+WelcomeUser
+Enter password:
+Welcome@1
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+0
+Enter your First Name:
+José
+Enter your Last Name:
+O'Brien-Smith
+Enter your College's Name:
+Université de Montréal
+Enter your Major:
+Computer Science & AI
+Enter your Graduation Year:
+2025
+About Me (Optional, type N to skip):
+I'm passionate about AI/ML & data science! I've worked on various projects: chat
+Profile updated.
+Would you like to add experience? (Y/N)
+Y
+Your Title:
+Software Engineer (Full-Stack)
+Company Name:
+O'Reilly Media & Co.
+Start Date:
+01/2023
+End Date:
+12/2024
+Description (Optional, type N to skip):
+Developed web apps using React/Node.js; improved API performance by 50%; led tea
+Experience saved.
+Would you like to add experience? (Y/N)
+N
+Would you like to add education? (Y/N)
+Y
+Degree:
+Bachelor's Degree (Honors)
+University Name:
+École Polytechnique
+Start Year:
+2021
+End Year:
+2025
+Education saved.
+Would you like to add education? (Y/N)
+N
+Return to the top-level menu? (Y/N)
+Y
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+3
+Logging out. Goodbye!

@@ -1,0 +1,121 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+WelcomeUser
+Enter password:
+Welcome@1
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+0
+Enter your First Name:
+John
+Enter your Last Name:
+Doe
+Enter your College's Name:
+Harvard University
+Enter your Major:
+Computer Science
+Enter your Graduation Year:
+abc
+Graduation Year must be a valid 4-digit year.
+Enter your Graduation Year:
+20
+Graduation Year must be a valid 4-digit year.
+Enter your Graduation Year:
+202
+Graduation Year must be a valid 4-digit year.
+Enter your Graduation Year:
+20255
+Graduation Year must be a valid 4-digit year.
+Enter your Graduation Year:
+2025
+About Me (Optional, type N to skip):
+I am passionate about software development and AI
+Profile created.
+Would you like to add experience? (Y/N)
+N
+Would you like to add education? (Y/N)
+Y
+Degree:
+Bachelor of Science
+University Name:
+MIT
+Start Year:
+abc
+Start Year must be a valid 4-digit year.
+Start Year:
+20
+Start Year must be a valid 4-digit year.
+Start Year:
+202
+Start Year must be a valid 4-digit year.
+Start Year:
+20255
+Start Year must be a valid 4-digit year.
+Start Year:
+2021
+End Year:
+xyz
+End Year must be a valid 4-digit year.
+End Year:
+20
+End Year must be a valid 4-digit year.
+End Year:
+202
+End Year must be a valid 4-digit year.
+End Year:
+20266
+End Year must be a valid 4-digit year.
+End Year:
+2025
+Education saved.
+Would you like to add education? (Y/N)
+Y
+Degree:
+Master of Science
+University Name:
+Stanford University
+Start Year:
+abc
+Start Year must be a valid 4-digit year.
+Start Year:
+123
+Start Year must be a valid 4-digit year.
+Start Year:
+12345
+Start Year must be a valid 4-digit year.
+Start Year:
+2020
+End Year:
+abc
+End Year must be a valid 4-digit year.
+End Year:
+123
+End Year must be a valid 4-digit year.
+End Year:
+12345
+End Year must be a valid 4-digit year.
+End Year:
+2024
+Education saved.
+Would you like to add education? (Y/N)
+N
+Return to the top-level menu? (Y/N)
+Y
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+3
+Logging out. Goodbye!

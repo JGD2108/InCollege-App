@@ -1,0 +1,27 @@
+1
+SkillsUser
+Skills@11
+0
+John
+Doe
+Harvard University
+Computer Science
+2025
+N
+N
+Y
+
+
+Bachelor of Science
+
+
+MIT
+
+
+2021
+
+
+2025
+N
+Y
+3

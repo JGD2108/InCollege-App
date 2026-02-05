@@ -1,0 +1,28 @@
+1
+JourneyUser
+Journey@1
+0
+John
+Doe
+Harvard University
+Computer Science
+2025
+N
+Y
+
+
+Software Engineer
+
+
+Google
+
+
+01/2023
+
+
+12/2024
+N
+N
+N
+Y
+3

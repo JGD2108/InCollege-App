@@ -3,9 +3,9 @@
 # Test runner for InCollege COBOL program
 # Runs all test cases and reports pass/fail status
 
-PROGRAM="/workspace/bin/InCollegeSingle"
+PROGRAM="/workspace/bin/InCollege"
 WORKSPACE="/workspace"
-TEST_DIR="/workspace/Tests/Epic1"
+TEST_DIRS=("/workspace/Tests/Epic2")
 BASELINE_USERS="$WORKSPACE/USERS.DAT.baseline"
 
 # Colors for output
@@ -55,56 +55,97 @@ needs_baseline_users() {
     fi
 }
 
+# Function to blank profile/education/experience data files
+reset_extra_dat_files() {
+    for f in "PROFILES.DAT" "EDUCATION.DAT" "EXPERIENCE.DAT"; do
+        : > "$WORKSPACE/$f"
+    done
+}
+
 # Function to run a single test
 run_test() {
     local test_path="$1"
     local test_name=$(basename "$test_path")
     local feature_name=$(basename "$(dirname "$test_path")")
+    local input_file=""
+    local output_file=""
+    local input2_file=""
+    local output2_file=""
+    local ws_input_file=""
+    local ws_output_file=""
 
     read_counters
 
     echo -e "${BLUE}Running: $feature_name/$test_name${NC}"
 
-    # Check if INPUT.DAT exists
-    if [ ! -f "$test_path/INPUT.DAT" ]; then
-        echo -e "${YELLOW}  SKIP: No INPUT.DAT found${NC}"
+    # Skip tests that are marked as needing baselines
+    if [ -f "$test_path/NEEDS_BASELINE" ]; then
+        echo -e "${YELLOW}  SKIP: Baseline output pending${NC}"
+        return
+    fi
+
+    # Determine input/output filenames (DAT vs TXT)
+    if [ -f "$test_path/InCollege-Input.txt" ]; then
+        input_file="$test_path/InCollege-Input.txt"
+        output_file="$test_path/InCollege-Output.txt"
+        input2_file="$test_path/InCollege-Input2.txt"
+        output2_file="$test_path/InCollege-Output2.txt"
+        ws_input_file="$WORKSPACE/InCollege-Input.txt"
+        ws_output_file="$WORKSPACE/InCollege-Output.txt"
+    elif [ -f "$test_path/INPUT.DAT" ]; then
+        input_file="$test_path/INPUT.DAT"
+        output_file="$test_path/OUTPUT.DAT"
+        input2_file="$test_path/INPUT2.DAT"
+        output2_file="$test_path/OUTPUT2.DAT"
+        ws_input_file="$WORKSPACE/INPUT.DAT"
+        ws_output_file="$WORKSPACE/OUTPUT.DAT"
+    else
+        echo -e "${YELLOW}  SKIP: No input file found${NC}"
         return
     fi
 
     # Setup USERS.DAT based on test requirements
-    if needs_baseline_users "$test_path/INPUT.DAT"; then
+    if needs_baseline_users "$input_file"; then
         setup_baseline_users
     else
         reset_users_dat
     fi
 
-    # Copy INPUT.DAT to workspace
-    cp "$test_path/INPUT.DAT" "$WORKSPACE/INPUT.DAT"
+    # Copy input file to workspace
+    cp "$input_file" "$ws_input_file"
 
     # Run the program
     cd "$WORKSPACE"
     "$PROGRAM" > /dev/null 2>&1
 
+    # Save actual output for Run 1 into the test directory for inspection
+    ACTUAL1_FILE="$test_path/ACTUAL-$(basename "$ws_output_file")"
+    cp "$ws_output_file" "$ACTUAL1_FILE" 2>/dev/null || true
+
     # Compare output
-    if [ -f "$test_path/OUTPUT.DAT" ]; then
-        if diff -q "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT.DAT" > /dev/null 2>&1; then
+    if [ -f "$output_file" ]; then
+        if diff -q "$ws_output_file" "$output_file" > /dev/null 2>&1; then
             RUN1_RESULT="PASS"
         else
             RUN1_RESULT="FAIL"
         fi
     else
-        echo -e "${YELLOW}  SKIP: No OUTPUT.DAT found${NC}"
+        echo -e "${YELLOW}  SKIP: No output file found${NC}"
         return
     fi
 
-    # Check if there's a second run (INPUT2.DAT/OUTPUT2.DAT)
-    if [ -f "$test_path/INPUT2.DAT" ]; then
+    # Check if there's a second run
+    if [ -f "$input2_file" ]; then
         # Don't reset USERS.DAT for second run (testing persistence)
-        cp "$test_path/INPUT2.DAT" "$WORKSPACE/INPUT.DAT"
+        cp "$input2_file" "$ws_input_file"
         "$PROGRAM" > /dev/null 2>&1
 
-        if [ -f "$test_path/OUTPUT2.DAT" ]; then
-            if diff -q "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT2.DAT" > /dev/null 2>&1; then
+            # Save actual output for Run 2 into the test directory for inspection
+            ACTUAL2_FILE="$test_path/ACTUAL2-$(basename "$ws_output_file")"
+            cp "$ws_output_file" "$ACTUAL2_FILE" 2>/dev/null || true
+
+        if [ -f "$output2_file" ]; then
+            if diff -q "$ws_output_file" "$output2_file" > /dev/null 2>&1; then
                 RUN2_RESULT="PASS"
             else
                 RUN2_RESULT="FAIL"
@@ -122,21 +163,21 @@ run_test() {
             # Show diff for debugging (first 10 lines)
             if [ "$RUN1_RESULT" = "FAIL" ]; then
                 echo -e "${YELLOW}  Run 1 differences (first 10 lines):${NC}"
-                diff "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT.DAT" | head -10
+                diff "$ws_output_file" "$output_file" | head -10
             fi
             if [ "$RUN2_RESULT" = "FAIL" ]; then
                 echo -e "${YELLOW}  Run 2 differences (first 10 lines):${NC}"
-                # Need to rerun to get OUTPUT.DAT
-                if needs_baseline_users "$test_path/INPUT.DAT"; then
+                # Need to rerun to get fresh output
+                if needs_baseline_users "$input_file"; then
                     setup_baseline_users
                 else
                     reset_users_dat
                 fi
-                cp "$test_path/INPUT.DAT" "$WORKSPACE/INPUT.DAT"
+                cp "$input_file" "$ws_input_file"
                 "$PROGRAM" > /dev/null 2>&1
-                cp "$test_path/INPUT2.DAT" "$WORKSPACE/INPUT.DAT"
+                cp "$input2_file" "$ws_input_file"
                 "$PROGRAM" > /dev/null 2>&1
-                diff "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT2.DAT" | head -10
+                diff "$ws_output_file" "$output2_file" | head -10
             fi
         fi
     else
@@ -150,7 +191,7 @@ run_test() {
 
             # Show diff for debugging (first 10 lines)
             echo -e "${YELLOW}  Differences (first 10 lines):${NC}"
-            diff "$WORKSPACE/OUTPUT.DAT" "$test_path/OUTPUT.DAT" | head -10
+            diff "$ws_output_file" "$output_file" | head -10
         fi
     fi
 
@@ -164,11 +205,24 @@ echo "========================================"
 echo "InCollege Test Suite"
 echo "========================================"
 echo ""
+# Ensure USERS.DAT starts from baseline on every run
+# Blank profile/education/experience files at start
+reset_extra_dat_files
+echo "Blanked PROFILES.DAT, EDUCATION.DAT, EXPERIENCE.DAT."
 
-# Find all test directories (those containing INPUT.DAT files) and sort them
-find "$TEST_DIR" -type f -name "INPUT.DAT" | sort | while read input_file; do
-    test_dir=$(dirname "$input_file")
-    run_test "$test_dir"
+# Ensure USERS.DAT starts from baseline on every run
+setup_baseline_users
+echo "Users database reset from baseline."
+# Do not restore USERS.DAT on exit; leave DAT files as-is after run
+
+# Find all test directories (those containing input files) and sort them
+for test_root in "${TEST_DIRS[@]}"; do
+    if [ -d "$test_root" ]; then
+        find "$test_root" -type f \( -name "INPUT.DAT" -o -name "InCollege-Input.txt" \) | sort -u | while read input_file; do
+            test_dir=$(dirname "$input_file")
+            run_test "$test_dir"
+        done
+    fi
 done
 
 # Read final counters

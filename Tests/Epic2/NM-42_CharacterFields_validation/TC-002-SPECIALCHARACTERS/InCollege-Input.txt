@@ -1,0 +1,25 @@
+1
+WelcomeUser
+Welcome@1
+0
+José
+O'Brien-Smith
+Université de Montréal
+Computer Science & AI
+2025
+I'm passionate about AI/ML & data science! I've worked on various projects: chatbots, recommendation systems, etc.
+Y
+Software Engineer (Full-Stack)
+O'Reilly Media & Co.
+01/2023
+12/2024
+Developed web apps using React/Node.js; improved API performance by 50%; led team of 5 engineers.
+N
+Y
+Bachelor's Degree (Honors)
+École Polytechnique
+2021
+2025
+N
+Y
+3

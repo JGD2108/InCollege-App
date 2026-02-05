@@ -1,0 +1,47 @@
+1
+JourneyUser
+Journey@1
+0
+John
+Doe
+Harvard University
+Computer Science
+2025
+I am passionate about software development and AI
+Y
+Software Engineer
+Google
+01/2023
+12/2024
+Developed cloud-based applications
+Y
+Data Analyst Intern
+Microsoft
+05/2022
+08/2022
+Analyzed user behavior data
+Y
+Research Assistant
+Stanford Lab
+06/2021
+12/2021
+Conducted machine learning research
+Y
+Y
+Bachelor of Science
+MIT
+2021
+2025
+Y
+Associate Degree
+Community College
+2019
+2021
+Y
+High School Diploma
+Boston High School
+2015
+2019
+Y
+Y
+3

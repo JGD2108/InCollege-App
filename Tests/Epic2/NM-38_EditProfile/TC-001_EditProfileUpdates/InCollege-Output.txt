@@ -1,0 +1,69 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+LoginUser1
+Enter password:
+Login@11
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+0
+Enter your First Name:
+John
+Enter your Last Name:
+Doe
+Enter your College's Name:
+Example University
+Enter your Major:
+Computer Science
+Enter your Graduation Year:
+2025
+About Me (Optional, type N to skip):
+Enthusiastic developer always learning.
+Profile updated.
+Would you like to add experience? (Y/N)
+Y
+Your Title:
+Software Intern
+Company Name:
+Tech Corp
+Start Date:
+Summer 2024
+End Date:
+Developed tools for internal testing.
+Description (Optional, type N to skip):
+DONE
+Experience saved.
+Would you like to add experience? (Y/N)
+N
+Would you like to add education? (Y/N)
+Y
+Degree:
+Bachelor of Science
+University Name:
+Example University
+Start Year:
+2021
+End Year:
+2025
+Education saved.
+Would you like to add education? (Y/N)
+N
+Return to the top-level menu? (Y/N)
+Y
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+3
+Logging out. Goodbye!
