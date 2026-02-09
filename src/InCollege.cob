@@ -27,6 +27,11 @@
                   ORGANIZATION IS LINE SEQUENTIAL
                   FILE STATUS IS WS-USERS-STATUS.
 
+              SELECT OPTIONAL PROFILES-FILE
+                ASSIGN TO "PROFILES.DAT"
+                  ORGANIZATION IS LINE SEQUENTIAL
+                  FILE STATUS IS WS-PROFILES-STATUS.
+
        DATA DIVISION.
        FILE SECTION.
 
@@ -40,6 +45,16 @@
            01 USER-RECORD.
              05 USERNAME PIC X(12).
              05 PASSWORD PIC X(12).
+
+         FD PROFILES-FILE.
+           01 PROFILE-RECORD.
+             05 PROFILE-USERNAME PIC X(12).
+             05 PROFILE-FIRST-NAME PIC X(20).
+             05 PROFILE-LAST-NAME PIC X(20).
+             05 PROFILE-COLLEGE PIC X(30).
+             05 PROFILE-MAJOR PIC X(30).
+             05 PROFILE-GRAD-YEAR PIC 9(4).
+             05 PROFILE-ABOUT-ME PIC X(100).
 
        WORKING-STORAGE SECTION.
 
@@ -100,6 +115,11 @@
         77 WS-YEAR-TEXT PIC X(4).
         77 WS-DESC-TEMP PIC X(100).
         77 WS-IN-LEN-3 PIC 999 VALUE 0.
+      *> Search functionality variables
+        77 WS-SEARCH-NAME PIC X(50).
+        77 WS-SEARCH-RESULT-USERNAME PIC X(12).
+        77 WS-PROFILES-STATUS PIC XX.
+        77 WS-PROFILE-EOF PIC X VALUE "N".
       *> WS-PROFILE-CHOICE Indicates if user wants to add optional info or not
          77 WS-PROFILE-CHOICE PIC X(1).
       *> WS-PROFILE-ACTION Indicates to EDITPROFILE what part of profile to edit: 1=basic,2=experience,3=education
@@ -177,7 +197,7 @@
            DISPLAY OUTPUT-RECORD
            WRITE OUTPUT-RECORD.
 
-      HANDLE-VIEW-PROFILE.
+       HANDLE-VIEW-PROFILE.
           MOVE SPACES TO WS-VIEW-PROFILE-DATA
           MOVE SPACES TO WS-VIEW-EXPERIENCE-LIST
           MOVE SPACES TO WS-VIEW-EDUCATION-LIST
@@ -308,6 +328,212 @@
               PERFORM PRINT-LINE
             END-PERFORM
           END-IF.
+
+       HANDLE-SEARCH-USER.
+           MOVE "Enter the full name of the person you are looking for:" TO OUTPUT-RECORD
+           PERFORM PRINT-LINE
+           PERFORM READ-AND-LOG
+           IF WS-EOF = "Y"
+             MOVE "No input for search; returning to post-login menu." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             EXIT PARAGRAPH
+           END-IF
+
+           MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-SEARCH-NAME
+           PERFORM SEARCH-FOR-USER-PROFILE.
+
+       SEARCH-FOR-USER-PROFILE.
+           MOVE "N" TO WS-PROFILE-FOUND
+           MOVE SPACES TO WS-SEARCH-RESULT-USERNAME
+
+           *> Open PROFILES.DAT and search
+           OPEN INPUT PROFILES-FILE
+           IF WS-PROFILES-STATUS = "35"
+             MOVE "No profiles exist yet." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             EXIT PARAGRAPH
+           END-IF
+
+           IF WS-PROFILES-STATUS NOT = "00"
+             MOVE "Unable to search profiles." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             CLOSE PROFILES-FILE
+             EXIT PARAGRAPH
+           END-IF
+
+           MOVE "N" TO WS-PROFILE-EOF
+           PERFORM UNTIL WS-PROFILE-EOF = "Y"
+             READ PROFILES-FILE
+               AT END
+                 MOVE "Y" TO WS-PROFILE-EOF
+               NOT AT END
+                 *> Build full name from profile
+                 MOVE SPACES TO WS-TRIMMED-IN
+                 STRING FUNCTION TRIM(PROFILE-FIRST-NAME) DELIMITED BY SIZE
+                        " " DELIMITED BY SIZE
+                        FUNCTION TRIM(PROFILE-LAST-NAME) DELIMITED BY SIZE
+                   INTO WS-TRIMMED-IN
+                 END-STRING
+
+                 *> Check for exact match
+                 IF FUNCTION TRIM(WS-TRIMMED-IN) = FUNCTION TRIM(WS-SEARCH-NAME)
+                   MOVE "Y" TO WS-PROFILE-FOUND
+                   MOVE PROFILE-USERNAME TO WS-SEARCH-RESULT-USERNAME
+                   MOVE "Y" TO WS-PROFILE-EOF
+                 END-IF
+             END-READ
+           END-PERFORM
+
+           CLOSE PROFILES-FILE
+
+           *> Handle search results
+           IF WS-PROFILE-FOUND = "N"
+             MOVE "No one by that name could be found." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+           ELSE
+             PERFORM DISPLAY-FOUND-USER-PROFILE
+           END-IF.
+
+       DISPLAY-FOUND-USER-PROFILE.
+           *> Initialize view structures
+           MOVE SPACES TO WS-VIEW-PROFILE-DATA
+           MOVE SPACES TO WS-VIEW-EXPERIENCE-LIST
+           MOVE SPACES TO WS-VIEW-EDUCATION-LIST
+           MOVE 0 TO WS-VIEW-EXP-COUNT
+           MOVE 0 TO WS-VIEW-EDU-COUNT
+           MOVE "N" TO WS-PROFILE-FOUND
+
+           *> Load the found user's complete profile
+           CALL "VIEWPROFILE" USING WS-SEARCH-RESULT-USERNAME WS-VIEW-PROFILE-DATA
+                                    WS-VIEW-EXPERIENCE-LIST WS-VIEW-EDUCATION-LIST
+                                    WS-VIEW-EXP-COUNT WS-VIEW-EDU-COUNT
+                                    WS-PROFILE-FOUND WS-MESSAGE
+
+           IF WS-PROFILE-FOUND = "N"
+             MOVE WS-MESSAGE TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             EXIT PARAGRAPH
+           END-IF
+
+           *> Display header
+           MOVE "--- Found User Profile ---" TO OUTPUT-RECORD
+           PERFORM PRINT-LINE
+
+           *> Display basic info
+           MOVE SPACES TO OUTPUT-RECORD
+           STRING "Name: " DELIMITED BY SIZE
+                  WS-VIEW-FIRST-NAME DELIMITED BY SIZE
+                  " " DELIMITED BY SIZE
+                  WS-VIEW-LAST-NAME DELIMITED BY SIZE
+             INTO OUTPUT-RECORD
+           END-STRING
+           PERFORM PRINT-LINE
+
+           MOVE SPACES TO OUTPUT-RECORD
+           STRING "University: " DELIMITED BY SIZE
+                  WS-VIEW-COLLEGE DELIMITED BY SIZE
+             INTO OUTPUT-RECORD
+           END-STRING
+           PERFORM PRINT-LINE
+
+           MOVE SPACES TO OUTPUT-RECORD
+           STRING "Major: " DELIMITED BY SIZE
+                  WS-VIEW-MAJOR DELIMITED BY SIZE
+             INTO OUTPUT-RECORD
+           END-STRING
+           PERFORM PRINT-LINE
+
+           MOVE WS-VIEW-GRAD-YEAR TO WS-YEAR-TEXT
+           MOVE SPACES TO OUTPUT-RECORD
+           STRING "Graduation Year: " DELIMITED BY SIZE
+                  WS-YEAR-TEXT DELIMITED BY SIZE
+             INTO OUTPUT-RECORD
+           END-STRING
+           PERFORM PRINT-LINE
+
+           MOVE SPACES TO OUTPUT-RECORD
+           STRING "About Me: " DELIMITED BY SIZE
+                  WS-VIEW-ABOUT-ME DELIMITED BY SIZE
+             INTO OUTPUT-RECORD
+           END-STRING
+           PERFORM PRINT-LINE
+
+           *> Display Experience
+           MOVE "Experience:" TO OUTPUT-RECORD
+           PERFORM PRINT-LINE
+           IF WS-VIEW-EXP-COUNT = 0
+             MOVE "  None" TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+           ELSE
+             PERFORM VARYING WS-VIEW-INDEX FROM 1 BY 1
+               UNTIL WS-VIEW-INDEX > WS-VIEW-EXP-COUNT
+               MOVE SPACES TO OUTPUT-RECORD
+               STRING "  " DELIMITED BY SIZE
+                      WS-VIEW-INDEX DELIMITED BY SIZE
+                      ". " DELIMITED BY SIZE
+                      WS-VIEW-EXP-TITLE(WS-VIEW-INDEX) DELIMITED BY SIZE
+                      " - " DELIMITED BY SIZE
+                      WS-VIEW-EXP-COMPANY(WS-VIEW-INDEX) DELIMITED BY SIZE
+                 INTO OUTPUT-RECORD
+               END-STRING
+               PERFORM PRINT-LINE
+
+               MOVE SPACES TO OUTPUT-RECORD
+               STRING "     Dates: " DELIMITED BY SIZE
+                      WS-VIEW-EXP-START-DATE(WS-VIEW-INDEX) DELIMITED BY SIZE
+                      " - " DELIMITED BY SIZE
+                      WS-VIEW-EXP-END-DATE(WS-VIEW-INDEX) DELIMITED BY SIZE
+                 INTO OUTPUT-RECORD
+               END-STRING
+               PERFORM PRINT-LINE
+
+               MOVE FUNCTION TRIM(WS-VIEW-EXP-DESC(WS-VIEW-INDEX)) TO WS-DESC-TEMP
+               MOVE FUNCTION LENGTH(WS-DESC-TEMP) TO WS-IN-LEN-3
+               IF WS-IN-LEN-3 > 0
+                 MOVE SPACES TO OUTPUT-RECORD
+                 STRING "     Description: " DELIMITED BY SIZE
+                        WS-DESC-TEMP DELIMITED BY SIZE
+                   INTO OUTPUT-RECORD
+                 END-STRING
+                 PERFORM PRINT-LINE
+               END-IF
+             END-PERFORM
+           END-IF
+
+           *> Display Education
+           MOVE "Education:" TO OUTPUT-RECORD
+           PERFORM PRINT-LINE
+           IF WS-VIEW-EDU-COUNT = 0
+             MOVE "  None" TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+           ELSE
+             PERFORM VARYING WS-VIEW-INDEX FROM 1 BY 1
+               UNTIL WS-VIEW-INDEX > WS-VIEW-EDU-COUNT
+               MOVE SPACES TO OUTPUT-RECORD
+               STRING "  " DELIMITED BY SIZE
+                      WS-VIEW-INDEX DELIMITED BY SIZE
+                      ". " DELIMITED BY SIZE
+                      WS-VIEW-EDU-DEGREE(WS-VIEW-INDEX) DELIMITED BY SIZE
+                      " - " DELIMITED BY SIZE
+                      WS-VIEW-EDU-UNI(WS-VIEW-INDEX) DELIMITED BY SIZE
+                 INTO OUTPUT-RECORD
+               END-STRING
+               PERFORM PRINT-LINE
+
+               MOVE WS-VIEW-EDU-START-YEAR(WS-VIEW-INDEX) TO WS-YEAR-TEXT
+               MOVE SPACES TO OUTPUT-RECORD
+               STRING "     Years: " DELIMITED BY SIZE
+                      WS-YEAR-TEXT DELIMITED BY SIZE
+                      " - " DELIMITED BY SIZE
+                      WS-VIEW-EDU-END-YEAR(WS-VIEW-INDEX) DELIMITED BY SIZE
+                 INTO OUTPUT-RECORD
+               END-STRING
+               PERFORM PRINT-LINE
+             END-PERFORM
+           END-IF
+
+           MOVE "-------------------------" TO OUTPUT-RECORD
+           PERFORM PRINT-LINE.
 
        READ-AND-LOG.
            READ INPUT-FILE
@@ -923,6 +1149,9 @@
 
                  WHEN 5
                     PERFORM HANDLE-VIEW-PROFILE
+                 WHEN 6
+                    *> User search functionality
+                    PERFORM HANDLE-SEARCH-USER
                  END-EVALUATE
                END-PERFORM
                EXIT PERFORM
@@ -1844,9 +2073,8 @@
            WHEN "1"
              MOVE "Job search is under construction." TO LK-MESSAGE
              MOVE 1 TO LK-ACTION
-           WHEN "2"
-             MOVE "Find someone you know is under construction." TO LK-MESSAGE
-             MOVE 1 TO LK-ACTION
+          WHEN "2"
+            MOVE 6 TO LK-ACTION
            WHEN "3"
              MOVE 2 TO LK-ACTION
            WHEN "4"

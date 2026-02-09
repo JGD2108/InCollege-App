@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-JoseD
+testuser1
 Enter password:
-Jose1234*
+Password1!
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -16,4 +16,125 @@ You have successfully logged in
 3. Learn a new skill
 4. Logout
 5. View My Profile
-No input for selection; returning to top level.
+2
+Enter the full name of the person you are looking for:
+John Doe
+--- Found User Profile ---
+Name: John                 Doe
+University: State University
+Major: Computer Science
+Graduation Year: 2025
+About Me: I love coding
+Experience:
+  None
+Education:
+  None
+-------------------------
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+2
+Enter the full name of the person you are looking for:
+Jane Smith
+--- Found User Profile ---
+Name: Jane                 Smith
+University: City College
+Major: Data Science
+Graduation Year: 2026
+About Me: Data enthusiast
+Experience:
+  None
+Education:
+  None
+-------------------------
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+2
+Enter the full name of the person you are looking for:
+NonExistent Person
+No one by that name could be found.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+4
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+3
+Logging out. Goodbye!
+                     
+--- Found User Profile ---                                                      
+Name: John                 Doe                                                  
+University: State University                                                    
+Major: Computer Science                                                         
+Graduation Year: 2025                                                           
+About Me: I love coding                                                         
+Experience:                                                                     
+  None                                                                          
+Education:                                                                      
+  None                                                                          
+-------------------------                                                       
+--- Welcome to InCollege, select an option ---                                  
+0. Create/Edit your profile                                                     
+1. Search for a job                                                             
+2. Find someone you know                                                        
+3. Learn a new skill                                                            
+4. Logout                                                                       
+5. View My Profile                                                              
+2                                                                               
+Enter the full name of the person you are looking for:                          
+Jane Smith                                                                      
+--- Found User Profile ---                                                      
+Name: Jane                 Smith                                                
+University: City College                                                        
+Major: Data Science                                                             
+Graduation Year: 2026                                                           
+About Me: Data enthusiast                                                       
+Experience:                                                                     
+  None                                                                          
+Education:                                                                      
+  None                                                                          
+-------------------------                                                       
+--- Welcome to InCollege, select an option ---                                  
+0. Create/Edit your profile                                                     
+1. Search for a job                                                             
+2. Find someone you know                                                        
+3. Learn a new skill                                                            
+4. Logout                                                                       
+5. View My Profile                                                              
+2                                                                               
+Enter the full name of the person you are looking for:                          
+NonExistent Person                                                              
+No one by that name could be found.                                             
+--- Welcome to InCollege, select an option ---                                  
+0. Create/Edit your profile                                                     
+1. Search for a job                                                             
+2. Find someone you know                                                        
+3. Learn a new skill                                                            
+4. Logout                                                                       
+5. View My Profile                                                              
+4                                                                               
+Logging out. Goodbye!                                                           
+Welcome to InCollege!                                                           
+Please select an option:                                                        
+1. Log In                                                                       
+2. Create a new account                                                         
+3. Logout                                                                       
+3                                                                               
+Logging out. Goodbye!                                                           
