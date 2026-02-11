@@ -1,0 +1,53 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+testuser1
+Enter password:
+Password1!
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+5
+--- My Profile ---
+Name: John Doe
+College: State University
+Major: Computer Science
+Graduation Year: 2025
+About Me: I love coding and building software solutions.
+Experience:
+  1. Software Engineer Intern - Tech Innovations Inc.
+     Dates: 01/2023 - 05/2023
+     Description: Developed web applications using React and Node.js. Collaborated with senior developers.
+  2. Research Assistant - University Research Lab
+     Dates: 06/2022 - 12/2022
+     Description: Conducted research on machine learning algorithms and data analysis techniques.
+Education:
+  1. Bachelor of Science - State University
+     Years: 2021 - 2025
+  2. High School Diploma - Lincoln High School
+     Years: 2017 - 2021
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+4
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+3
+Logging out. Goodbye!

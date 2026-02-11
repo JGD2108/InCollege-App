@@ -5,7 +5,7 @@
 
 PROGRAM="/workspace/bin/InCollege"
 WORKSPACE="/workspace"
-TEST_DIRS=("/workspace/Tests/Epic2")
+TEST_DIRS=("/workspace/Tests/Epic3")
 BASELINE_USERS="$WORKSPACE/USERS.DAT.baseline"
 
 # Colors for output
@@ -105,10 +105,29 @@ run_test() {
     fi
 
     # Setup USERS.DAT based on test requirements
-    if needs_baseline_users "$input_file"; then
-        setup_baseline_users
+    # Allow a test-suite-provided USERS.DAT in the parent directory (e.g. Tests/Epic3/USERS.DAT).
+    # If present, copy it into the workspace and do not overwrite it with baseline/reset.
+    TEST_PARENT_DIR=$(dirname "$test_path")
+    if [ -f "$TEST_PARENT_DIR/USERS.DAT" ]; then
+        cp "$TEST_PARENT_DIR/USERS.DAT" "$WORKSPACE/USERS.DAT"
+        TEST_USERS_PROVIDED=1
+    elif [ -f "$test_root/USERS.DAT" ]; then
+        # Fallback to Epic level USERS.DAT
+        cp "$test_root/USERS.DAT" "$WORKSPACE/USERS.DAT"
+        TEST_USERS_PROVIDED=1
     else
-        reset_users_dat
+        TEST_USERS_PROVIDED=0
+    fi
+
+    if [ "$TEST_USERS_PROVIDED" -eq 1 ]; then
+        # Use the provided USERS.DAT; do not reset or overwrite for this test.
+        :
+    else
+        if needs_baseline_users "$input_file"; then
+            setup_baseline_users
+        else
+            reset_users_dat
+        fi
     fi
 
     # Copy input file to workspace
@@ -218,6 +237,16 @@ echo "Users database reset from baseline."
 # Find all test directories (those containing input files) and sort them
 for test_root in "${TEST_DIRS[@]}"; do
     if [ -d "$test_root" ]; then
+        # If the test directory contains shared DAT baseline files (for example
+        # PROFILES.DAT, EDUCATION.DAT, EXPERIENCE.DAT), copy them into the
+        # workspace so the tests in this directory can use that data.
+        # NEW CODE - Add USERS.DAT to the shared files:
+        for _dat in "USERS.DAT" "PROFILES.DAT" "EDUCATION.DAT" "EXPERIENCE.DAT"; do
+            if [ -f "$test_root/$_dat" ]; then
+                cp "$test_root/$_dat" "$WORKSPACE/$_dat"
+            fi
+        done
+
         find "$test_root" -type f \( -name "INPUT.DAT" -o -name "InCollege-Input.txt" \) | sort -u | while read input_file; do
             test_dir=$(dirname "$input_file")
             run_test "$test_dir"
