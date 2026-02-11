@@ -18,7 +18,7 @@ You have successfully logged in
 5. View My Profile
 2
 Enter the full name of the person you are looking for:
-Doe
+john doe
 No one by that name could be found.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile

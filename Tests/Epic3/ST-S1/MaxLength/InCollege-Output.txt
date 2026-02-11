@@ -18,8 +18,18 @@ You have successfully logged in
 5. View My Profile
 2
 Enter the full name of the person you are looking for:
-Doe
-No one by that name could be found.
+Abcdefghijklmnopqrst Uvwxyzabcdefghijklmn
+--- Found User Profile ---
+Name: Abcdefghijklmnopqrst Uvwxyzabcdefghijklmn
+University: Tech Institute
+Major: Information Technology
+Graduation Year: 2024
+About Me: Passionate about cybersecurity and networking.
+Experience:
+  None
+Education:
+  None
+-------------------------
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
