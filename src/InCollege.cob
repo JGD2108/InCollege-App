@@ -804,7 +804,7 @@
                        END-IF
                        MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
                        MOVE FUNCTION LENGTH(FUNCTION TRIM(INPUT-RECORD)) TO WS-IN-LEN
-                       IF WS-IN-LEN NOT = 4 OR WS-TRIMMED-IN(1:4) IS NOT NUMERIC
+                       IF WS-IN-LEN NOT = 4 OR WS-TRIMMED-IN(1:4) IS NOT NUMERIC OR WS-TRIMMED-IN(1:4) < "1900" OR WS-TRIMMED-IN(1:4) > "2050"
                          MOVE "Graduation Year must be a valid 4-digit year." TO OUTPUT-RECORD
                          PERFORM PRINT-LINE
                        ELSE
