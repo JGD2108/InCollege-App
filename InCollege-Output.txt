@@ -3,11 +3,125 @@ Please select an option:
 1. Log In
 2. Create a new account
 3. Logout
+2
+Enter desired username:
+user1
+Enter desired password:
+Password1!
+Account created succesfully.
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+2
+Enter desired username:
+user2
+Enter desired password:
+Password2!
+Account created succesfully.
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
 1
 Enter username:
-testuser1
+user1
 Enter password:
 Password1!
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+0
+Enter your First Name:
+John
+Enter your Last Name:
+Doe
+Enter your College's Name:
+University of California
+Enter your Major:
+Computer Science
+Enter your Graduation Year:
+2024
+About Me (Optional, type N to skip):
+I have a focus on data science and machine learning.
+Profile created.
+Would you like to add experience? (Y/N)
+Y
+Your Title:
+Lead Developer
+Company Name:
+TechUs
+Start Date:
+January 2022
+End Date:
+Present
+Description (Optional, type N to skip):
+Learned team management and project coordination skills.
+Experience saved.
+Would you like to add experience? (Y/N)
+N
+Would you like to add education? (Y/N)
+Y
+Degree:
+Masters in Business
+University Name:
+Stanford University
+Start Year:
+2016
+End Year:
+2020
+Education saved.
+Would you like to add education? (Y/N)
+N
+Return to the top-level menu? (Y/N)
+N
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+5
+--- My Profile ---
+Name: John Doe
+College: University of California
+Major: Computer Science
+Graduation Year: 2024
+About Me: I have a focus on data science and machine learning.
+Experience:
+  1. Lead Developer - TechUs
+     Dates: January 20 - Present
+     Description: Learned team management and project coordination skills.
+Education:
+  1. Masters in Business - Stanford University
+     Years: 2016 - 2020
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+5. View My Profile
+4
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+user2
+Enter password:
+Password2!
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -21,34 +135,18 @@ Enter the full name of the person you are looking for:
 John Doe
 --- Found User Profile ---
 Name: John                 Doe
-University: State University
+University: University of California
 Major: Computer Science
-Graduation Year: 2025
-About Me: I love coding and building software solutions.
+Graduation Year: 2024
+About Me: I have a focus on data science and machine learning.
 Experience:
-  1. Software Engineer Intern       - Tech Innovations Inc.
-     Dates: 01/2023    - 05/2023
-     Description: Developed web applications using React and Node.js. Collaborated with senior developers.
-  2. Research Assistant             - University Research Lab
-     Dates: 06/2022    - 12/2022
-     Description: Conducted research on machine learning algorithms and data analysis techniques.
+  1. Lead Developer                 - TechUs
+     Dates: January 20 - Present
+     Description: Learned team management and project coordination skills.
 Education:
-  1. Bachelor of Science            - State University
-     Years: 2021 - 2025
-  2. High School Diploma            - Lincoln High School
-     Years: 2017 - 2021
+  1. Masters in Business            - Stanford University
+     Years: 2016 - 2020
 -------------------------
---- Welcome to InCollege, select an option ---
-0. Create/Edit your profile
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. Logout
-5. View My Profile
-2
-Enter the full name of the person you are looking for:
-Jane Smith
-No one by that name could be found.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job

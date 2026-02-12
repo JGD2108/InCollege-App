@@ -1,9 +1,39 @@
-1
-testuser1
+2
+user1
 Password1!
 2
-John Doe
+user2
+Password2!
+1
+user1
+Password1!
+0
+John
+Doe
+University of California
+Computer Science
+2024
+I have a focus on data science and machine learning.
+Y
+Lead Developer
+TechUs
+January 2022
+Present
+Learned team management and project coordination skills.
+N
+Y
+Masters in Business
+Stanford University
+2016
+2020
+N
+N
+5
+4
+1
+user2
+Password2!
 2
-Jane Smith 
+John Doe
 4
 3
