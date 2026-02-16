@@ -27,6 +27,16 @@
                   ORGANIZATION IS LINE SEQUENTIAL
                   FILE STATUS IS WS-USERS-STATUS.
 
+              SELECT OPTIONAL CONNECTIONS-FILE
+                ASSIGN TO "CONNECTIONS.DAT"
+                  ORGANIZATION IS LINE SEQUENTIAL
+                  FILE STATUS IS WS-CONN-FILE-STATUS.
+
+              SELECT OPTIONAL PROFILES-FILE
+                ASSIGN TO "PROFILES.DAT"
+                  ORGANIZATION IS LINE SEQUENTIAL
+                  FILE STATUS IS WS-PROFILES-STATUS.
+
        DATA DIVISION.
        FILE SECTION.
 
@@ -40,6 +50,22 @@
            01 USER-RECORD.
              05 USERNAME PIC X(12).
              05 PASSWORD PIC X(12).
+
+         FD CONNECTIONS-FILE.
+           01 CONNECTION-RECORD.
+             05 REQUESTER-USERNAME    PIC X(12).
+             05 RECIPIENT-USERNAME    PIC X(12).
+             05 REQUEST-STATUS        PIC X.
+
+         FD PROFILES-FILE.
+           01 PROFILE-RECORD.
+             05 PROFILE-USERNAME      PIC X(12).
+             05 PROFILE-FIRST-NAME    PIC X(20).
+             05 PROFILE-LAST-NAME     PIC X(20).
+             05 PROFILE-COLLEGE       PIC X(30).
+             05 PROFILE-MAJOR         PIC X(30).
+             05 PROFILE-GRAD-YEAR     PIC 9(4).
+             05 PROFILE-ABOUT-ME      PIC X(100).
 
        WORKING-STORAGE SECTION.
 
@@ -160,6 +186,23 @@
           01 WS-ACCOUNTS-EXISTING.
              05 WS-USER-TABLE PIC X(12) OCCURS 5 TIMES.
              05 WS-PASS-TABLE PIC X(12) OCCURS 5 TIMES.
+
+      *> Connection request management
+          77 WS-CONN-FILE-STATUS      PIC XX.
+          77 WS-PROFILES-STATUS       PIC XX.
+          01 WS-CONNECTION-TABLE.
+             05 WS-CONN-ENTRY OCCURS 25 TIMES.
+                10 WS-CONN-REQUESTER     PIC X(12).
+                10 WS-CONN-RECIPIENT     PIC X(12).
+                10 WS-CONN-STATUS        PIC X.
+          77 WS-CONN-COUNT            PIC 99 VALUE 0.
+          77 WS-CONN-IDX              PIC 99.
+          77 WS-CONN-EOF              PIC X VALUE "N".
+
+      *> User search variables
+          77 WS-SEARCH-USERNAME       PIC X(12).
+          77 WS-SEARCH-FULL-NAME      PIC X(41).
+          77 WS-TEMP-FULL-NAME        PIC X(41).
 
 
        PROCEDURE DIVISION.
@@ -307,6 +350,145 @@
               END-STRING
               PERFORM PRINT-LINE
             END-PERFORM
+          END-IF.
+
+      HANDLE-USER-SEARCH.
+          MOVE "Enter the full name of the person you are looking for:" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
+          
+          PERFORM READ-AND-LOG
+          IF WS-EOF = "Y"
+            MOVE "No input received." TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            EXIT PARAGRAPH
+          END-IF
+          
+          MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-SEARCH-FULL-NAME
+          
+          *> Call EDITPROFILE to initialize it
+          CALL "EDITPROFILE"
+          
+          MOVE "N" TO WS-PROFILE-FOUND
+          MOVE SPACES TO WS-SEARCH-USERNAME
+          
+          *> Try to find profile by iterating through possible usernames from PROFILES.DAT
+          *> We'll read the profiles file directly
+          MOVE 0 TO WS-COUNT
+          MOVE "N" TO WS-USER-EOF
+          OPEN INPUT PROFILES-FILE
+          IF WS-PROFILES-STATUS = "35"
+            CLOSE PROFILES-FILE
+            MOVE "No profiles found." TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            EXIT PARAGRAPH
+          END-IF
+          
+          PERFORM UNTIL WS-USER-EOF = "Y" OR WS-PROFILE-FOUND = "Y"
+            READ PROFILES-FILE
+              AT END
+                MOVE "Y" TO WS-USER-EOF
+              NOT AT END
+                *> Check if this profile matches the search name
+                *> Build full name and compare
+                MOVE SPACES TO WS-TEMP-FULL-NAME
+                STRING FUNCTION TRIM(PROFILE-FIRST-NAME) DELIMITED BY SIZE
+                       " " DELIMITED BY SIZE
+                       FUNCTION TRIM(PROFILE-LAST-NAME) DELIMITED BY SIZE
+                  INTO WS-TEMP-FULL-NAME
+                END-STRING
+                
+                IF FUNCTION TRIM(WS-TEMP-FULL-NAME) = FUNCTION TRIM(WS-SEARCH-FULL-NAME)
+                   AND FUNCTION TRIM(PROFILE-USERNAME) NOT = WS-USERNAME
+                  *> Found matching profile
+                  MOVE "Y" TO WS-PROFILE-FOUND
+                  MOVE FUNCTION TRIM(PROFILE-USERNAME) TO WS-SEARCH-USERNAME
+                  *> Load this profile's details for display
+                  CALL "VIEWPROFILE" USING WS-SEARCH-USERNAME WS-VIEW-PROFILE-DATA
+                                       WS-VIEW-EXPERIENCE-LIST WS-VIEW-EDUCATION-LIST
+                                       WS-VIEW-EXP-COUNT WS-VIEW-EDU-COUNT
+                                       WS-PROFILE-FOUND WS-MESSAGE
+                END-IF
+            END-READ
+          END-PERFORM
+          
+          CLOSE PROFILES-FILE
+          
+          IF WS-PROFILE-FOUND = "N" OR WS-SEARCH-USERNAME = SPACES
+            MOVE "User not found." TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+          ELSE
+            PERFORM HANDLE-VIEW-OTHER-PROFILE
+          END-IF.
+
+      HANDLE-VIEW-OTHER-PROFILE.
+          *> Display found user's profile
+          MOVE "--- Found User Profile ---" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
+
+          MOVE SPACES TO OUTPUT-RECORD
+          STRING "Name: " DELIMITED BY SIZE
+                 FUNCTION TRIM(WS-VIEW-FIRST-NAME) DELIMITED BY SIZE
+                 " " DELIMITED BY SIZE
+                 FUNCTION TRIM(WS-VIEW-LAST-NAME) DELIMITED BY SIZE
+            INTO OUTPUT-RECORD
+          END-STRING
+          PERFORM PRINT-LINE
+
+          MOVE SPACES TO OUTPUT-RECORD
+          STRING "University: " DELIMITED BY SIZE
+                 FUNCTION TRIM(WS-VIEW-COLLEGE) DELIMITED BY SIZE
+            INTO OUTPUT-RECORD
+          END-STRING
+          PERFORM PRINT-LINE
+
+          MOVE SPACES TO OUTPUT-RECORD
+          STRING "Major: " DELIMITED BY SIZE
+                 FUNCTION TRIM(WS-VIEW-MAJOR) DELIMITED BY SIZE
+            INTO OUTPUT-RECORD
+          END-STRING
+          PERFORM PRINT-LINE
+
+          MOVE WS-VIEW-GRAD-YEAR TO WS-YEAR-TEXT
+          MOVE SPACES TO OUTPUT-RECORD
+          STRING "Graduation Year: " DELIMITED BY SIZE
+                 WS-YEAR-TEXT DELIMITED BY SIZE
+            INTO OUTPUT-RECORD
+          END-STRING
+          PERFORM PRINT-LINE
+
+          MOVE "-------------------------" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
+
+          *> Show connection request menu
+          MOVE "1. Send Connection Request" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
+          MOVE "2. Back to Main Menu" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
+
+          PERFORM READ-AND-LOG
+          IF WS-EOF = "Y"
+            MOVE "No input received; returning to menu." TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            EXIT PARAGRAPH
+          END-IF
+
+          MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+          IF WS-TRIMMED-IN(1:1) = "1"
+            *> Send connection request
+            MOVE SPACES TO WS-STATUS
+            MOVE SPACES TO WS-MESSAGE
+            CALL "SENDREQUEST" USING WS-USERNAME WS-SEARCH-USERNAME 
+                                     WS-STATUS WS-MESSAGE
+            MOVE WS-MESSAGE TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+          ELSE
+            IF WS-TRIMMED-IN(1:1) = "2"
+              MOVE "Returning to main menu." TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+            ELSE
+              MOVE "Invalid selection." TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+            END-IF
           END-IF.
 
        READ-AND-LOG.
@@ -923,6 +1105,8 @@
 
                  WHEN 5
                     PERFORM HANDLE-VIEW-PROFILE
+                 WHEN 6
+                    PERFORM HANDLE-USER-SEARCH
                  END-EVALUATE
                END-PERFORM
                EXIT PERFORM
@@ -1040,9 +1224,30 @@
                MOVE "Invalid Selection." TO OUTPUT-RECORD
                PERFORM PRINT-LINE
              END-IF
-           END-IF
-         END-IF
+          END-IF
+        END-IF
        END-PERFORM.
+
+      LOAD-USERS-MAIN.
+        MOVE 0 TO WS-COUNT
+        MOVE "N" TO WS-USER-EOF
+        OPEN INPUT USERS-FILE
+        IF WS-USERS-STATUS = "35"
+          OPEN OUTPUT USERS-FILE
+          CLOSE USERS-FILE
+          OPEN INPUT USERS-FILE
+        END-IF
+        PERFORM UNTIL WS-USER-EOF = "Y" OR WS-COUNT = 5
+          READ USERS-FILE
+            AT END
+              MOVE "Y" TO WS-USER-EOF
+            NOT AT END
+              ADD 1 TO WS-COUNT
+              MOVE FUNCTION TRIM(USERNAME) TO WS-USER-TABLE(WS-COUNT)
+              MOVE FUNCTION TRIM(PASSWORD) TO WS-PASS-TABLE(WS-COUNT)
+          END-READ
+        END-PERFORM
+        CLOSE USERS-FILE.
 
        END PROGRAM INCOLLEGE-START.
 
@@ -1837,6 +2042,9 @@
          *> 1 = print LK-MESSAGE
          *> 2 = caller should show skill submenu and pass skill choice back
          *> 3 = logout
+         *> 4 = edit profile
+         *> 5 = view profile
+         *> 6 = user search
 
          EVALUATE LK-POST-CHOICE
           WHEN "0"
@@ -1845,8 +2053,7 @@
              MOVE "Job search is under construction." TO LK-MESSAGE
              MOVE 1 TO LK-ACTION
            WHEN "2"
-             MOVE "Find someone you know is under construction." TO LK-MESSAGE
-             MOVE 1 TO LK-ACTION
+             MOVE 6 TO LK-ACTION
            WHEN "3"
              MOVE 2 TO LK-ACTION
            WHEN "4"

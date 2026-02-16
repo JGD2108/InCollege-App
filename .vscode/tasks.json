@@ -72,7 +72,7 @@
     {
       "label": "COBOL: Build Single-file InCollege",
       "type": "shell",
-      "command": "mkdir -p /workspace/bin && cobc -x -free -o /workspace/bin/InCollegeSingle /workspace/src/InCollege.cob",
+      "command": "mkdir -p /workspace/bin && cobc -x -free -o /workspace/bin/InCollege /workspace/src/InCollege.cob /workspace/src/SendRequest.cob",
       "group": {
         "kind": "build",
         "isDefault": false
