@@ -198,6 +198,7 @@
           77 WS-CONN-COUNT            PIC 99 VALUE 0.
           77 WS-CONN-IDX              PIC 99.
           77 WS-CONN-EOF              PIC X VALUE "N".
+          77 WS-PENDING-COUNT         PIC 99 VALUE 0.
 
       *> User search variables
           77 WS-SEARCH-USERNAME       PIC X(12).
@@ -351,6 +352,48 @@
               PERFORM PRINT-LINE
             END-PERFORM
           END-IF.
+
+      HANDLE-VIEW-PENDING-REQUESTS.
+          MOVE "--- Pending Connection Requests ---" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
+          MOVE "N" TO WS-CONN-EOF
+          OPEN INPUT CONNECTIONS-FILE
+          IF WS-CONN-FILE-STATUS = "35" OR WS-CONN-FILE-STATUS NOT = "00"
+            MOVE "You have no pending connection requests at this time."
+              TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            IF WS-CONN-FILE-STATUS = "00"
+              CLOSE CONNECTIONS-FILE
+            END-IF
+            EXIT PARAGRAPH
+          END-IF
+          MOVE 0 TO WS-PENDING-COUNT
+          PERFORM UNTIL WS-CONN-EOF = "Y"
+            READ CONNECTIONS-FILE
+              AT END
+                MOVE "Y" TO WS-CONN-EOF
+              NOT AT END
+                IF FUNCTION TRIM(RECIPIENT-USERNAME) =
+                   FUNCTION TRIM(WS-USERNAME)
+                  AND (REQUEST-STATUS = "P" OR REQUEST-STATUS = " ")
+                  ADD 1 TO WS-PENDING-COUNT
+                  MOVE SPACES TO OUTPUT-RECORD
+                  STRING "  " DELIMITED BY SIZE
+                         FUNCTION TRIM(REQUESTER-USERNAME) DELIMITED BY SIZE
+                    INTO OUTPUT-RECORD
+                  END-STRING
+                  PERFORM PRINT-LINE
+                END-IF
+            END-READ
+          END-PERFORM
+          CLOSE CONNECTIONS-FILE
+          IF WS-PENDING-COUNT = 0
+            MOVE "You have no pending connection requests at this time."
+              TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+          END-IF
+          MOVE "-----------------------------------" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE.
 
       HANDLE-USER-SEARCH.
           MOVE "Enter the full name of the person you are looking for:" TO OUTPUT-RECORD
@@ -576,9 +619,11 @@
                  PERFORM PRINT-LINE
                  MOVE "3. Learn a new skill" TO OUTPUT-RECORD
                  PERFORM PRINT-LINE
-                 MOVE "4. Logout" TO OUTPUT-RECORD
-                PERFORM PRINT-LINE
-                MOVE "5. View My Profile" TO OUTPUT-RECORD
+                 MOVE "4. View My Pending Connection Requests" TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 MOVE "5. Logout" TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 MOVE "6. View My Profile" TO OUTPUT-RECORD
                  PERFORM PRINT-LINE
 
                  PERFORM READ-AND-LOG
@@ -1107,6 +1152,8 @@
                     PERFORM HANDLE-VIEW-PROFILE
                  WHEN 6
                     PERFORM HANDLE-USER-SEARCH
+                 WHEN 7
+                    PERFORM HANDLE-VIEW-PENDING-REQUESTS
                  END-EVALUATE
                END-PERFORM
                EXIT PERFORM
@@ -2045,6 +2092,7 @@
          *> 4 = edit profile
          *> 5 = view profile
          *> 6 = user search
+         *> 7 = view pending connection requests
 
          EVALUATE LK-POST-CHOICE
           WHEN "0"
@@ -2057,9 +2105,11 @@
            WHEN "3"
              MOVE 2 TO LK-ACTION
            WHEN "4"
+             MOVE 7 TO LK-ACTION
+           WHEN "5"
              MOVE "Logging out. Goodbye!" TO LK-MESSAGE
              MOVE 3 TO LK-ACTION
-          WHEN "5"
+          WHEN "6"
             MOVE 5 TO LK-ACTION
            WHEN OTHER
              MOVE "Invalid Selection." TO LK-MESSAGE
