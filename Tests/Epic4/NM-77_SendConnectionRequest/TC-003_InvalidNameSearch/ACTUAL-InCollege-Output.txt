@@ -1,0 +1,23 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+SkillsUser
+Enter password:
+Skills@1
+Incorrect username / password, please try again
+Enter username:
+2
+Enter password:
+Alice Fake
+Incorrect username / password, please try again
+Enter username:
+5
+Enter password:
+3
+Incorrect username / password, please try again
+Enter username:
+No input for username; returning to menu.

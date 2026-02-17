@@ -1,0 +1,138 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+LoginUser1
+Enter password:
+Login@11
+Incorrect username / password, please try again
+Enter username:
+2
+Enter password:
+Jose Gomez
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+2
+Incorrect username / password, please try again
+Enter username:
+John Doe
+Enter password:
+1
+Incorrect username / password, please try again
+Enter username:
+2
+Enter password:
+Jane Doe
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+2
+Incorrect username / password, please try again
+Enter username:
+Ben Grimm
+Enter password:
+1
+Incorrect username / password, please try again
+Enter username:
+5
+Enter password:
+1
+Incorrect username / password, please try again
+Enter username:
+JobUser
+Enter password:
+JobUser@1
+Incorrect username / password, please try again
+Enter username:
+2
+Enter password:
+John Doe
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+2
+Incorrect username / password, please try again
+Enter username:
+Jane Doe
+Enter password:
+1
+Incorrect username / password, please try again
+Enter username:
+2
+Enter password:
+Ben Grimm
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+5
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+SkillsUser
+Incorrect username / password, please try again
+Enter username:
+Skills@1
+Enter password:
+2
+Incorrect username / password, please try again
+Enter username:
+Jane Doe
+Enter password:
+1
+Incorrect username / password, please try again
+Enter username:
+2
+Enter password:
+Ben Grimm
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+5
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+WelcomeUser
+Incorrect username / password, please try again
+Enter username:
+Welcome@1
+Enter password:
+2
+Incorrect username / password, please try again
+Enter username:
+Jane Doe
+Enter password:
+1
+Incorrect username / password, please try again
+Enter username:
+4
+Enter password:
+5
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+JourneyUser
+Incorrect username / password, please try again
+Enter username:
+Journey@1
+Enter password:
+4
+Incorrect username / password, please try again
+Enter username:
+5
+Enter password:
+3
+Incorrect username / password, please try again
+Enter username:
+No input for username; returning to menu.

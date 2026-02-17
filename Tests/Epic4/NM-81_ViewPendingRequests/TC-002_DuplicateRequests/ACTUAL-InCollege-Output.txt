@@ -1,0 +1,68 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+LoginUser1
+Enter password:
+Login@11
+Incorrect username / password, please try again
+Enter username:
+2
+Enter password:
+Jose Gomez
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+5
+Incorrect username / password, please try again
+Enter username:
+1
+Enter password:
+SkillsUser
+Incorrect username / password, please try again
+Enter username:
+Skills@1
+Enter password:
+2
+Incorrect username / password, please try again
+Enter username:
+Jose Gomez
+Enter password:
+1
+Incorrect username / password, please try again
+Enter username:
+5
+Enter password:
+1
+Incorrect username / password, please try again
+Enter username:
+JobUser
+Enter password:
+JobUser@1
+Incorrect username / password, please try again
+Enter username:
+2
+Enter password:
+John Doe
+Incorrect username / password, please try again
+Enter username:
+2
+Enter password:
+John Doe
+Incorrect username / password, please try again
+Enter username:
+4
+Enter password:
+5
+Incorrect username / password, please try again
+Enter username:
+3
+Enter password:
+
+Incorrect username / password, please try again
+Enter username:
+No input for username; returning to menu.

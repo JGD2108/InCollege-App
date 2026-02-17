@@ -1,0 +1,25 @@
+1
+LoginUser1
+Login@11
+2
+Jose Gomez
+1
+5
+1
+SkillsUser
+Skills@1
+2
+Jose Gomez
+1
+5
+1
+JobUser
+JobUser@1
+2
+John Doe
+2
+John Doe
+4
+5
+3
+

@@ -5,7 +5,7 @@
 
 PROGRAM="/workspace/bin/InCollege"
 WORKSPACE="/workspace"
-TEST_DIRS=("/workspace/Tests/Epic2")
+TEST_DIRS=("/workspace/Tests/Epic4")
 BASELINE_USERS="$WORKSPACE/USERS.DAT.baseline"
 
 # Colors for output
@@ -57,7 +57,7 @@ needs_baseline_users() {
 
 # Function to blank profile/education/experience data files
 reset_extra_dat_files() {
-    for f in "PROFILES.DAT" "EDUCATION.DAT" "EXPERIENCE.DAT"; do
+    for f in "PROFILES.DAT" "EDUCATION.DAT" "EXPERIENCE.DAT" "CONNECTIONS.DAT"; do
         : > "$WORKSPACE/$f"
     done
 }
