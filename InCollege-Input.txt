@@ -1,10 +1,59 @@
+2
+LoginUser1
+Login1!A
+2
+JobUser
+JobUser1!
+2
+SkillsUser
+Skill1!A
 1
-JoseD
-Jose1234*
+SkillsUser
+Skill1!A
+4
+5
+1
+LoginUser1
+Login1!A
 2
 Jose Gomez
 1
 2
+Jose Gomez
+1
+2
+Jose Gomez
+2
+5
+1
+JobUser
+JobUser1!
+2
 John Doe
 1
+5
+1
+SkillsUser
+Skill1!A
+2
+John Doe
+1
+2
+Jose Gomez
+1
+5
+1
+LoginUser1
+Login1!A
 4
+2
+No Such User
+5
+1
+JoseD
+Jose1234*
+2
+John Doe
+1
+5
+3

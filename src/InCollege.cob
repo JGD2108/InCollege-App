@@ -353,47 +353,7 @@
             END-PERFORM
           END-IF.
 
-      HANDLE-VIEW-PENDING-REQUESTS.
-          MOVE "--- Pending Connection Requests ---" TO OUTPUT-RECORD
-          PERFORM PRINT-LINE
-          MOVE "N" TO WS-CONN-EOF
-          OPEN INPUT CONNECTIONS-FILE
-          IF WS-CONN-FILE-STATUS = "35" OR WS-CONN-FILE-STATUS NOT = "00"
-            MOVE "You have no pending connection requests at this time."
-              TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            IF WS-CONN-FILE-STATUS = "00"
-              CLOSE CONNECTIONS-FILE
-            END-IF
-            EXIT PARAGRAPH
-          END-IF
-          MOVE 0 TO WS-PENDING-COUNT
-          PERFORM UNTIL WS-CONN-EOF = "Y"
-            READ CONNECTIONS-FILE
-              AT END
-                MOVE "Y" TO WS-CONN-EOF
-              NOT AT END
-                IF FUNCTION TRIM(RECIPIENT-USERNAME) =
-                   FUNCTION TRIM(WS-USERNAME)
-                  AND (REQUEST-STATUS = "P" OR REQUEST-STATUS = " ")
-                  ADD 1 TO WS-PENDING-COUNT
-                  MOVE SPACES TO OUTPUT-RECORD
-                  STRING "  " DELIMITED BY SIZE
-                         FUNCTION TRIM(REQUESTER-USERNAME) DELIMITED BY SIZE
-                    INTO OUTPUT-RECORD
-                  END-STRING
-                  PERFORM PRINT-LINE
-                END-IF
-            END-READ
-          END-PERFORM
-          CLOSE CONNECTIONS-FILE
-          IF WS-PENDING-COUNT = 0
-            MOVE "You have no pending connection requests at this time."
-              TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-          END-IF
-          MOVE "-----------------------------------" TO OUTPUT-RECORD
-          PERFORM PRINT-LINE.
+       COPY "src/VIEWREQ_SRC.cpy".
 
       HANDLE-USER-SEARCH.
           MOVE "Enter the full name of the person you are looking for:" TO OUTPUT-RECORD
@@ -2134,4 +2094,7 @@
 
          GOBACK.
 
-      END PROGRAM POSTLOGINPROG.
+       END PROGRAM POSTLOGINPROG.
+
+      *> Include SENDREQUEST so building InCollege.cob alone remains runnable.
+       COPY "src/SENDREQ_SRC.cpy".

@@ -3,19 +3,86 @@ Please select an option:
 1. Log In
 2. Create a new account
 3. Logout
+2
+Enter desired username:
+LoginUser1
+Enter desired password:
+Login1!A
+Account created succesfully.
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+2
+Enter desired username:
+JobUser
+Enter desired password:
+JobUser1!
+Account created succesfully.
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+2
+Enter desired username:
+SkillsUser
+Enter desired password:
+Skill1!A
+Account created succesfully.
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
 1
 Enter username:
-JoseD
+SkillsUser
 Enter password:
-Jose1234*
+Skill1!A
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
 2. Find someone you know
 3. Learn a new skill
-4. Logout
-5. View My Profile
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+4
+--- Pending Connection Requests ---
+You have no pending connection requests at this time.
+-----------------------------------
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+5
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+LoginUser1
+Enter password:
+Login1!A
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
 Enter the full name of the person you are looking for:
 Jose Gomez
@@ -34,8 +101,223 @@ Connection request sent to JobUser.
 1. Search for a job
 2. Find someone you know
 3. Learn a new skill
-4. Logout
-5. View My Profile
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+2
+Enter the full name of the person you are looking for:
+Jose Gomez
+--- Found User Profile ---
+Name: Jose Gomez
+University: University of Testing
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
+1
+You have already sent a connection request to this user.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+2
+Enter the full name of the person you are looking for:
+Jose Gomez
+--- Found User Profile ---
+Name: Jose Gomez
+University: University of Testing
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
+2
+Returning to main menu.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+5
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+JobUser
+Enter password:
+JobUser1!
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+2
+Enter the full name of the person you are looking for:
+John Doe
+--- Found User Profile ---
+Name: John Doe
+University: Example University
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
+1
+This user has already sent you a connection request.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+5
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+SkillsUser
+Enter password:
+Skill1!A
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+2
+Enter the full name of the person you are looking for:
+John Doe
+--- Found User Profile ---
+Name: John Doe
+University: Example University
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
+1
+Connection request sent to LoginUser1.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+2
+Enter the full name of the person you are looking for:
+Jose Gomez
+--- Found User Profile ---
+Name: Jose Gomez
+University: University of Testing
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
+1
+You are already connected with this user.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+5
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+LoginUser1
+Enter password:
+Login1!A
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+4
+--- Pending Connection Requests ---
+  JoseD
+  SkillsUser
+-----------------------------------
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+2
+Enter the full name of the person you are looking for:
+No Such User
+User not found.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+5
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+JoseD
+Enter password:
+Jose1234*
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
 Enter the full name of the person you are looking for:
 John Doe
@@ -54,13 +336,15 @@ You have already sent a connection request to this user.
 1. Search for a job
 2. Find someone you know
 3. Learn a new skill
-4. Logout
-5. View My Profile
-4
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+5
 Logging out. Goodbye!
 Welcome to InCollege!
 Please select an option:
 1. Log In
 2. Create a new account
 3. Logout
-No input received.
+3
+Logging out. Goodbye!
