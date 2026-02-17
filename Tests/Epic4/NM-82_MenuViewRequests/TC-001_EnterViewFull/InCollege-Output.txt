@@ -29,7 +29,7 @@ Graduation Year: 2025
 1. Send Connection Request
 2. Back to Main Menu
 1
-You have already sent a connection request to this user.
+Connection request sent to JobUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -50,7 +50,7 @@ Graduation Year: 2025
 1. Send Connection Request
 2. Back to Main Menu
 1
-You have already sent a connection request to this user.
+Connection request sent to SkillsUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -71,7 +71,7 @@ Graduation Year: 2025
 1. Send Connection Request
 2. Back to Main Menu
 1
-You have already sent a connection request to this user.
+Connection request sent to JourneyUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -85,14 +85,14 @@ Enter the full name of the person you are looking for:
 Ben Grimm
 --- Found User Profile ---
 Name: Ben Grimm
-University: Université de Montréal
+University: Universite de Montreal
 Major: Computer Science & AI
 Graduation Year: 2025
 -------------------------
 1. Send Connection Request
 2. Back to Main Menu
 1
-You have already sent a connection request to this user.
+Connection request sent to WelcomeUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -125,6 +125,12 @@ You have successfully logged in
 2
 Enter the full name of the person you are looking for:
 John Doe
+Multiple users found. Select a user:
+01. John Doe [LoginUser1]
+02. John Doe [SkillsUser]
+0. Back to Main Menu
+Enter selection:
+1
 --- Found User Profile ---
 Name: John Doe
 University: Example University
@@ -155,7 +161,7 @@ Graduation Year: 2025
 1. Send Connection Request
 2. Back to Main Menu
 1
-You have already sent a connection request to this user.
+Connection request sent to JourneyUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -169,14 +175,14 @@ Enter the full name of the person you are looking for:
 Ben Grimm
 --- Found User Profile ---
 Name: Ben Grimm
-University: Université de Montréal
+University: Universite de Montreal
 Major: Computer Science & AI
 Graduation Year: 2025
 -------------------------
 1. Send Connection Request
 2. Back to Main Menu
 1
-You have already sent a connection request to this user.
+Connection request sent to WelcomeUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -218,7 +224,7 @@ Graduation Year: 2025
 1. Send Connection Request
 2. Back to Main Menu
 1
-You have already sent a connection request to this user.
+Connection request sent to JourneyUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -232,14 +238,14 @@ Enter the full name of the person you are looking for:
 Ben Grimm
 --- Found User Profile ---
 Name: Ben Grimm
-University: Université de Montréal
+University: Universite de Montreal
 Major: Computer Science & AI
 Graduation Year: 2025
 -------------------------
 1. Send Connection Request
 2. Back to Main Menu
 1
-You have already sent a connection request to this user.
+Connection request sent to WelcomeUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -281,7 +287,7 @@ Graduation Year: 2025
 1. Send Connection Request
 2. Back to Main Menu
 1
-You have already sent a connection request to this user.
+Connection request sent to JourneyUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job

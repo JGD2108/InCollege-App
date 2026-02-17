@@ -201,9 +201,20 @@
           77 WS-PENDING-COUNT         PIC 99 VALUE 0.
 
       *> User search variables
-          77 WS-SEARCH-USERNAME       PIC X(12).
-          77 WS-SEARCH-FULL-NAME      PIC X(41).
-          77 WS-TEMP-FULL-NAME        PIC X(41).
+           77 WS-SEARCH-USERNAME       PIC X(12).
+           77 WS-SEARCH-FULL-NAME      PIC X(41).
+           77 WS-TEMP-FULL-NAME        PIC X(41).
+           77 WS-SEARCH-MATCH-COUNT    PIC 99 VALUE 0.
+           77 WS-SEARCH-MATCH-IDX      PIC 99 VALUE 0.
+           77 WS-SEARCH-SELECTED-IDX   PIC 99 VALUE 0.
+           77 WS-SEARCH-MATCH-IDX-TEXT PIC X(2).
+           77 WS-SEARCH-CHOICE         PIC X VALUE SPACE.
+           77 WS-SEARCH-LIMIT-HIT      PIC X VALUE "N".
+           01 WS-SEARCH-MATCH-TABLE.
+              05 WS-SEARCH-MATCH-ENTRY OCCURS 25 TIMES.
+                 10 WS-SEARCH-MATCH-USERNAME PIC X(12).
+                 10 WS-SEARCH-MATCH-FIRST    PIC X(20).
+                 10 WS-SEARCH-MATCH-LAST     PIC X(20).
 
 
        PROCEDURE DIVISION.
@@ -355,73 +366,193 @@
 
        COPY "src/VIEWREQ_SRC.cpy".
 
-      HANDLE-USER-SEARCH.
-          MOVE "Enter the full name of the person you are looking for:" TO OUTPUT-RECORD
-          PERFORM PRINT-LINE
-          
+       HANDLE-USER-SEARCH.
+           MOVE "Enter the full name of the person you are looking for:" TO OUTPUT-RECORD
+           PERFORM PRINT-LINE
+           
           PERFORM READ-AND-LOG
           IF WS-EOF = "Y"
             MOVE "No input received." TO OUTPUT-RECORD
             PERFORM PRINT-LINE
             EXIT PARAGRAPH
           END-IF
-          
-          MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-SEARCH-FULL-NAME
-          
-          *> Call EDITPROFILE to initialize it
-          CALL "EDITPROFILE"
-          
-          MOVE "N" TO WS-PROFILE-FOUND
-          MOVE SPACES TO WS-SEARCH-USERNAME
-          
-          *> Try to find profile by iterating through possible usernames from PROFILES.DAT
-          *> We'll read the profiles file directly
-          MOVE 0 TO WS-COUNT
-          MOVE "N" TO WS-USER-EOF
-          OPEN INPUT PROFILES-FILE
-          IF WS-PROFILES-STATUS = "35"
-            CLOSE PROFILES-FILE
+           
+           MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-SEARCH-FULL-NAME
+           
+           *> Call EDITPROFILE to initialize it
+           CALL "EDITPROFILE"
+           
+           MOVE 0 TO WS-SEARCH-MATCH-COUNT
+           MOVE "N" TO WS-SEARCH-LIMIT-HIT
+           MOVE SPACES TO WS-SEARCH-USERNAME
+           MOVE SPACES TO WS-SEARCH-MATCH-TABLE
+           
+           *> Try to find profile by iterating through possible usernames from PROFILES.DAT
+           *> We'll read the profiles file directly
+           MOVE "N" TO WS-USER-EOF
+           OPEN INPUT PROFILES-FILE
+           IF WS-PROFILES-STATUS = "35"
+             CLOSE PROFILES-FILE
             MOVE "No profiles found." TO OUTPUT-RECORD
             PERFORM PRINT-LINE
-            EXIT PARAGRAPH
-          END-IF
-          
-          PERFORM UNTIL WS-USER-EOF = "Y" OR WS-PROFILE-FOUND = "Y"
-            READ PROFILES-FILE
-              AT END
-                MOVE "Y" TO WS-USER-EOF
-              NOT AT END
+             EXIT PARAGRAPH
+           END-IF
+           
+           PERFORM UNTIL WS-USER-EOF = "Y"
+             READ PROFILES-FILE
+               AT END
+                 MOVE "Y" TO WS-USER-EOF
+               NOT AT END
                 *> Check if this profile matches the search name
                 *> Build full name and compare
                 MOVE SPACES TO WS-TEMP-FULL-NAME
-                STRING FUNCTION TRIM(PROFILE-FIRST-NAME) DELIMITED BY SIZE
-                       " " DELIMITED BY SIZE
-                       FUNCTION TRIM(PROFILE-LAST-NAME) DELIMITED BY SIZE
-                  INTO WS-TEMP-FULL-NAME
-                END-STRING
-                
-                IF FUNCTION TRIM(WS-TEMP-FULL-NAME) = FUNCTION TRIM(WS-SEARCH-FULL-NAME)
-                   AND FUNCTION TRIM(PROFILE-USERNAME) NOT = WS-USERNAME
-                  *> Found matching profile
-                  MOVE "Y" TO WS-PROFILE-FOUND
-                  MOVE FUNCTION TRIM(PROFILE-USERNAME) TO WS-SEARCH-USERNAME
-                  *> Load this profile's details for display
-                  CALL "VIEWPROFILE" USING WS-SEARCH-USERNAME WS-VIEW-PROFILE-DATA
-                                       WS-VIEW-EXPERIENCE-LIST WS-VIEW-EDUCATION-LIST
-                                       WS-VIEW-EXP-COUNT WS-VIEW-EDU-COUNT
-                                       WS-PROFILE-FOUND WS-MESSAGE
-                END-IF
-            END-READ
-          END-PERFORM
-          
-          CLOSE PROFILES-FILE
-          
-          IF WS-PROFILE-FOUND = "N" OR WS-SEARCH-USERNAME = SPACES
-            MOVE "User not found." TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-          ELSE
-            PERFORM HANDLE-VIEW-OTHER-PROFILE
-          END-IF.
+                 STRING FUNCTION TRIM(PROFILE-FIRST-NAME) DELIMITED BY SIZE
+                        " " DELIMITED BY SIZE
+                        FUNCTION TRIM(PROFILE-LAST-NAME) DELIMITED BY SIZE
+                   INTO WS-TEMP-FULL-NAME
+                 END-STRING
+                 
+                 IF FUNCTION TRIM(WS-TEMP-FULL-NAME) = FUNCTION TRIM(WS-SEARCH-FULL-NAME)
+                    AND FUNCTION TRIM(PROFILE-USERNAME) NOT = FUNCTION TRIM(WS-USERNAME)
+                   IF WS-SEARCH-MATCH-COUNT < 25
+                     ADD 1 TO WS-SEARCH-MATCH-COUNT
+                     MOVE FUNCTION TRIM(PROFILE-USERNAME)
+                       TO WS-SEARCH-MATCH-USERNAME(WS-SEARCH-MATCH-COUNT)
+                     MOVE FUNCTION TRIM(PROFILE-FIRST-NAME)
+                       TO WS-SEARCH-MATCH-FIRST(WS-SEARCH-MATCH-COUNT)
+                     MOVE FUNCTION TRIM(PROFILE-LAST-NAME)
+                       TO WS-SEARCH-MATCH-LAST(WS-SEARCH-MATCH-COUNT)
+                   ELSE
+                     MOVE "Y" TO WS-SEARCH-LIMIT-HIT
+                   END-IF
+                 END-IF
+             END-READ
+           END-PERFORM
+           
+           CLOSE PROFILES-FILE
+           
+           IF WS-SEARCH-MATCH-COUNT = 0
+             MOVE "User not found." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+           ELSE
+             IF WS-SEARCH-MATCH-COUNT = 1
+               MOVE WS-SEARCH-MATCH-USERNAME(1) TO WS-SEARCH-USERNAME
+             ELSE
+               MOVE "Multiple users found. Select a user:" TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+
+               PERFORM VARYING WS-SEARCH-MATCH-IDX FROM 1 BY 1
+                 UNTIL WS-SEARCH-MATCH-IDX > WS-SEARCH-MATCH-COUNT
+                 MOVE SPACES TO OUTPUT-RECORD
+                  MOVE WS-SEARCH-MATCH-IDX TO WS-SEARCH-MATCH-IDX-TEXT
+                  STRING FUNCTION TRIM(WS-SEARCH-MATCH-IDX-TEXT)
+                           DELIMITED BY SIZE
+                         ". " DELIMITED BY SIZE
+                         FUNCTION TRIM(WS-SEARCH-MATCH-FIRST(WS-SEARCH-MATCH-IDX))
+                           DELIMITED BY SIZE
+                        " " DELIMITED BY SIZE
+                        FUNCTION TRIM(WS-SEARCH-MATCH-LAST(WS-SEARCH-MATCH-IDX))
+                          DELIMITED BY SIZE
+                        " [" DELIMITED BY SIZE
+                        FUNCTION TRIM(WS-SEARCH-MATCH-USERNAME(WS-SEARCH-MATCH-IDX))
+                          DELIMITED BY SIZE
+                        "]" DELIMITED BY SIZE
+                   INTO OUTPUT-RECORD
+                 END-STRING
+                 PERFORM PRINT-LINE
+               END-PERFORM
+
+               IF WS-SEARCH-LIMIT-HIT = "Y"
+                 MOVE "More matches exist. Refine your search for specific results."
+                   TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+               END-IF
+
+               MOVE "0. Back to Main Menu" TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+               MOVE "Enter selection:" TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+
+               PERFORM READ-AND-LOG
+               IF WS-EOF = "Y"
+                 MOVE "No input received; returning to menu." TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 EXIT PARAGRAPH
+               END-IF
+
+               MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+               MOVE FUNCTION LENGTH(FUNCTION TRIM(INPUT-RECORD)) TO WS-IN-LEN
+               MOVE WS-TRIMMED-IN(1:1) TO WS-SEARCH-CHOICE
+               MOVE 0 TO WS-SEARCH-SELECTED-IDX
+
+               IF WS-IN-LEN = 1 AND WS-SEARCH-CHOICE = "0"
+                 MOVE "Returning to main menu." TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 EXIT PARAGRAPH
+               END-IF
+
+               IF WS-IN-LEN = 1
+                 EVALUATE WS-SEARCH-CHOICE
+                   WHEN "1" MOVE 1 TO WS-SEARCH-SELECTED-IDX
+                   WHEN "2" MOVE 2 TO WS-SEARCH-SELECTED-IDX
+                   WHEN "3" MOVE 3 TO WS-SEARCH-SELECTED-IDX
+                   WHEN "4" MOVE 4 TO WS-SEARCH-SELECTED-IDX
+                   WHEN "5" MOVE 5 TO WS-SEARCH-SELECTED-IDX
+                   WHEN "6" MOVE 6 TO WS-SEARCH-SELECTED-IDX
+                   WHEN "7" MOVE 7 TO WS-SEARCH-SELECTED-IDX
+                   WHEN "8" MOVE 8 TO WS-SEARCH-SELECTED-IDX
+                   WHEN "9" MOVE 9 TO WS-SEARCH-SELECTED-IDX
+                   WHEN OTHER
+                     MOVE 0 TO WS-SEARCH-SELECTED-IDX
+                 END-EVALUATE
+               ELSE
+                 IF WS-IN-LEN = 2
+                   EVALUATE WS-TRIMMED-IN(1:2)
+                     WHEN "10" MOVE 10 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "11" MOVE 11 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "12" MOVE 12 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "13" MOVE 13 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "14" MOVE 14 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "15" MOVE 15 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "16" MOVE 16 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "17" MOVE 17 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "18" MOVE 18 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "19" MOVE 19 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "20" MOVE 20 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "21" MOVE 21 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "22" MOVE 22 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "23" MOVE 23 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "24" MOVE 24 TO WS-SEARCH-SELECTED-IDX
+                     WHEN "25" MOVE 25 TO WS-SEARCH-SELECTED-IDX
+                     WHEN OTHER
+                       MOVE 0 TO WS-SEARCH-SELECTED-IDX
+                   END-EVALUATE
+                 END-IF
+               END-IF
+
+               IF WS-SEARCH-SELECTED-IDX = 0
+                 OR WS-SEARCH-SELECTED-IDX > WS-SEARCH-MATCH-COUNT
+                 MOVE "Invalid selection." TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 EXIT PARAGRAPH
+               END-IF
+
+               MOVE WS-SEARCH-MATCH-USERNAME(WS-SEARCH-SELECTED-IDX)
+                 TO WS-SEARCH-USERNAME
+             END-IF
+
+             MOVE "N" TO WS-PROFILE-FOUND
+             CALL "VIEWPROFILE" USING WS-SEARCH-USERNAME WS-VIEW-PROFILE-DATA
+                                  WS-VIEW-EXPERIENCE-LIST WS-VIEW-EDUCATION-LIST
+                                  WS-VIEW-EXP-COUNT WS-VIEW-EDU-COUNT
+                                  WS-PROFILE-FOUND WS-MESSAGE
+             IF WS-PROFILE-FOUND = "N"
+               MOVE WS-MESSAGE TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+             ELSE
+               PERFORM HANDLE-VIEW-OTHER-PROFILE
+             END-IF
+           END-IF.
 
       HANDLE-VIEW-OTHER-PROFILE.
           *> Display found user's profile
@@ -459,40 +590,47 @@
           END-STRING
           PERFORM PRINT-LINE
 
-          MOVE "-------------------------" TO OUTPUT-RECORD
-          PERFORM PRINT-LINE
+           MOVE "-------------------------" TO OUTPUT-RECORD
+           PERFORM PRINT-LINE
 
-          *> Show connection request menu
-          MOVE "1. Send Connection Request" TO OUTPUT-RECORD
-          PERFORM PRINT-LINE
-          MOVE "2. Back to Main Menu" TO OUTPUT-RECORD
-          PERFORM PRINT-LINE
+           MOVE "N" TO WS-VALID-INPUT
+           PERFORM UNTIL WS-VALID-INPUT = "Y" OR WS-EOF = "Y"
+             *> Show connection request menu
+             MOVE "1. Send Connection Request" TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             MOVE "2. Back to Main Menu" TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
 
-          PERFORM READ-AND-LOG
-          IF WS-EOF = "Y"
-            MOVE "No input received; returning to menu." TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-            EXIT PARAGRAPH
-          END-IF
+             PERFORM READ-AND-LOG
+             IF WS-EOF = "Y"
+               MOVE "No input received; returning to menu." TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+               EXIT PERFORM
+             END-IF
 
-          MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
-          IF WS-TRIMMED-IN(1:1) = "1"
-            *> Send connection request
-            MOVE SPACES TO WS-STATUS
-            MOVE SPACES TO WS-MESSAGE
-            CALL "SENDREQUEST" USING WS-USERNAME WS-SEARCH-USERNAME 
-                                     WS-STATUS WS-MESSAGE
-            MOVE WS-MESSAGE TO OUTPUT-RECORD
-            PERFORM PRINT-LINE
-          ELSE
-            IF WS-TRIMMED-IN(1:1) = "2"
-              MOVE "Returning to main menu." TO OUTPUT-RECORD
-              PERFORM PRINT-LINE
-            ELSE
-              MOVE "Invalid selection." TO OUTPUT-RECORD
-              PERFORM PRINT-LINE
-            END-IF
-          END-IF.
+             MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+             IF WS-TRIMMED-IN(1:1) = "1"
+               *> Send connection request
+               MOVE SPACES TO WS-STATUS
+               MOVE SPACES TO WS-MESSAGE
+               CALL "SENDREQUEST" USING WS-USERNAME WS-SEARCH-USERNAME 
+                                        WS-STATUS WS-MESSAGE
+               MOVE WS-MESSAGE TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+               MOVE "Y" TO WS-VALID-INPUT
+             ELSE
+               IF WS-TRIMMED-IN(1:1) = "2"
+                 MOVE "Returning to main menu." TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 MOVE "Y" TO WS-VALID-INPUT
+               ELSE
+                 MOVE "Invalid selection." TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 MOVE "Please enter 1 or 2." TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+               END-IF
+             END-IF
+           END-PERFORM.
 
        READ-AND-LOG.
            READ INPUT-FILE

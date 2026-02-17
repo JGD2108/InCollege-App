@@ -8,18 +8,42 @@ Enter username:
 SkillsUser
 Enter password:
 Skills@1
-Incorrect username / password, please try again
-Enter username:
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
-Enter password:
+Enter the full name of the person you are looking for:
 Jose Gomez
-Incorrect username / password, please try again
-Enter username:
+--- Found User Profile ---
+Name: Jose Gomez
+University: University of Testing
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
 1
-Enter password:
+Connection request sent to JobUser.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 5
-Incorrect username / password, please try again
-Enter username:
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
 3
-Enter password:
-No input for password; returning to menu.
+Logging out. Goodbye!

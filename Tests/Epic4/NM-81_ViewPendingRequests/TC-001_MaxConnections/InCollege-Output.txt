@@ -59,6 +59,16 @@ Connection request sent to SkillsUser.
 4. View My Pending Connection Requests
 5. Logout
 6. View My Profile
+1
+Job search is under construction.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
 Enter the full name of the person you are looking for:
 Jane Doe
@@ -85,7 +95,7 @@ Enter the full name of the person you are looking for:
 Ben Grimm
 --- Found User Profile ---
 Name: Ben Grimm
-University: Université de Montréal
+University: Universite de Montreal
 Major: Computer Science & AI
 Graduation Year: 2025
 -------------------------
@@ -125,6 +135,12 @@ You have successfully logged in
 2
 Enter the full name of the person you are looking for:
 John Doe
+Multiple users found. Select a user:
+01. John Doe [LoginUser1]
+02. John Doe [SkillsUser]
+0. Back to Main Menu
+Enter selection:
+1
 --- Found User Profile ---
 Name: John Doe
 University: Example University
@@ -133,8 +149,8 @@ Graduation Year: 2025
 -------------------------
 1. Send Connection Request
 2. Back to Main Menu
-1
-This user has already sent you a connection request.
+2
+Returning to main menu.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -143,19 +159,18 @@ This user has already sent you a connection request.
 4. View My Pending Connection Requests
 5. Logout
 6. View My Profile
-2
-Enter the full name of the person you are looking for:
 Jane Doe
---- Found User Profile ---
-Name: Jane Doe
-University: Harvard University
-Major: Computer Science
-Graduation Year: 2025
--------------------------
-1. Send Connection Request
-2. Back to Main Menu
+Invalid Selection.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 1
-Connection request sent to JourneyUser.
+Job search is under construction.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -169,7 +184,7 @@ Enter the full name of the person you are looking for:
 Ben Grimm
 --- Found User Profile ---
 Name: Ben Grimm
-University: Université de Montréal
+University: Universite de Montreal
 Major: Computer Science & AI
 Graduation Year: 2025
 -------------------------
@@ -232,7 +247,7 @@ Enter the full name of the person you are looking for:
 Ben Grimm
 --- Found User Profile ---
 Name: Ben Grimm
-University: Université de Montréal
+University: Universite de Montreal
 Major: Computer Science & AI
 Graduation Year: 2025
 -------------------------
@@ -328,7 +343,6 @@ You have successfully logged in
 4
 --- Pending Connection Requests ---
   LoginUser1
-  JobUser
   SkillsUser
   WelcomeUser
 -----------------------------------

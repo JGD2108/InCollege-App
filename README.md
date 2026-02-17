@@ -1,34 +1,83 @@
 ## InCollege (COBOL)
 
-### Prereqs
-- VS Code with the **Dev Containers** extension (or GitHub Codespaces). The workspace is meant to be opened inside the provided Docker dev container so that `cobc` and tasks are already configured.
+### Overview
+InCollege is a menu-driven COBOL application that supports:
+- account creation and login
+- profile search by full name
+- sending connection requests
+- viewing pending connection requests
+- basic profile storage (plus education/experience backing files)
 
-### Open in the dev container
-1) Open the repo in VS Code.
-2) If prompted, select **Reopen in Container**. Otherwise: Command Palette → **Dev Containers: Reopen in Container**.
-3) Wait for the container to build; COBOL toolchain and tasks will be available inside it.
+The compiled executable is `/workspace/bin/InCollege` and is built from `src/InCollege.cob`.
 
-### Build and run (VS Code tasks)
-- Default build: press `Ctrl+Shift+B` (runs task **COBOL: Build InCollege**) to produce `/workspace/bin/InCollege`.
-- Run: Command Palette → **Run Task** → **COBOL: Run InCollege** to execute `/workspace/bin/InCollege`.
+### Prerequisites
+- Open the project in the provided dev container (or equivalent environment with `cobc` installed).
 
-### Using the program
-- Input is read from `INPUT.DAT`; output is written to `OUTPUT.DAT` and also displayed.
-- Top-level menu: Log In, Create a new account, Logout.
-- After successful login: options for job search, find someone, learn a new skill (all show "under construction"), plus Logout.
-- Account creation enforces: username 1–12 chars; password 8–12 chars with upper, digit, and special char.
+### Build
+Use either method:
+1. VS Code task: `COBOL: Build Single-file InCollege`
+2. Terminal:
+```bash
+mkdir -p bin
+cobc -x -free -o bin/InCollege src/InCollege.cob
+```
 
-### Important files
-- [src/InCollege.cob](src/InCollege.cob) — entry point, calls `INCOLLEGE-START`.
-- [src/menu/InitialMenu.cob](src/menu/InitialMenu.cob) — menus, login, post-login options, and inlined create-account logic.
-- [src/account/CREATEACCOUNT.cob](src/account/CREATEACCOUNT.cob) — standalone create-account program (kept for reuse/testing).
-- [USERS.DAT](USERS.DAT) — line-sequential user store; overwritten on account creation.
-- [INPUT.DAT](INPUT.DAT) / `INPUT_*.dat` — test inputs; the program consumes lines in order.
+### Run
+The program reads scripted input from:
+- `InCollege-Input.txt`
 
-### Troubleshooting
-- **EOF during menus**: If `INPUT.DAT` runs out, you will see messages like "No input received." or returns to previous menu. Add enough lines to drive the flow you want.
-- **Accounts not found / stale users**: `USERS.DAT` is rewritten on account creation. If tests expect a clean state, reset `USERS.DAT` to your baseline before rerunning, as the max number of accounts is limited.
-- **Password rejected**: Ensure length 8–12, includes at least one uppercase, one digit, one special (non-space, non-alphanumeric).
-- **Build errors**: Verify you are inside the dev container so `cobc` is on PATH. Reopen in container if needed. Then rerun the build task.
-- **Executable missing**: Rebuild with the task or run the terminal build command above to recreate `/workspace/bin/InCollege`.
+And writes output to:
+- `InCollege-Output.txt`
 
+Run:
+```bash
+/workspace/bin/InCollege
+```
+
+### Current Menus
+Top-level menu:
+- `1. Log In`
+- `2. Create a new account`
+- `3. Logout`
+
+Post-login menu:
+- `0. Create/Edit your profile`
+- `1. Search for a job`
+- `2. Find someone you know`
+- `3. Learn a new skill`
+- `4. View My Pending Connection Requests`
+- `5. Logout`
+- `6. View My Profile`
+
+### Data Files
+The program uses line-sequential `.DAT` files in the workspace root:
+- `USERS.DAT`
+- `PROFILES.DAT`
+- `CONNECTIONS.DAT`
+- `EDUCATION.DAT`
+- `EXPERIENCE.DAT`
+
+### Automated Tests
+Run all Epic 4 tests:
+```bash
+./run_tests.sh
+```
+
+Run a specific test root:
+```bash
+./run_tests.sh /workspace/Tests/Epic4
+```
+
+Test runner behavior:
+- discovers test cases by `InCollege-Input.txt` (or `INPUT.DAT`)
+- writes actual outputs into each case as `ACTUAL-InCollege-Output.txt`
+- reseeds `.DAT` fixtures per test for isolation
+- loads epic-level fixtures from files like `Tests/Epic4/USERS.DAT`, `Tests/Epic4/PROFILES.DAT`, etc.
+- supports per-test fixture overrides by placing `.DAT` files directly in a test case folder
+
+### Important Files
+- `src/InCollege.cob`: primary source (includes program units and copied source snippets)
+- `src/SendRequest.cob`: connection request validation/save logic
+- `src/VIEWREQ_SRC.cpy`: pending request display logic
+- `run_tests.sh`: automated test runner
+- `Tests/Epic4/`: Epic 4 test cases and fixture `.DAT` files

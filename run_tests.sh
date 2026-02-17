@@ -6,7 +6,12 @@
 PROGRAM="/workspace/bin/InCollege"
 WORKSPACE="/workspace"
 TEST_DIRS=("/workspace/Tests/Epic4")
-BASELINE_USERS="$WORKSPACE/USERS.DAT.baseline"
+CURRENT_TEST_ROOT=""
+
+# Allow overriding test root from command line
+if [ -n "$1" ]; then
+    TEST_DIRS=("$1")
+fi
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -34,12 +39,56 @@ reset_users_dat() {
     > "$WORKSPACE/USERS.DAT"
 }
 
-# Function to setup baseline users
-setup_baseline_users() {
-    if [ -f "$BASELINE_USERS" ]; then
-        cp "$BASELINE_USERS" "$WORKSPACE/USERS.DAT"
+# Resolve fixture path from test root.
+# Priority:
+# 1) <test_root>/<DAT name>
+resolve_fixture_file() {
+    local test_root="$1"
+    local dat_name="$2"
+    local fixture_file="$test_root/$dat_name"
+
+    if [ -f "$fixture_file" ]; then
+        echo "$fixture_file"
+        return
+    fi
+
+    echo ""
+}
+
+# Function to setup users fixture
+setup_users_dat() {
+    local users_fixture
+    users_fixture=$(resolve_fixture_file "$CURRENT_TEST_ROOT" "USERS.DAT")
+    if [ -n "$users_fixture" ]; then
+        cp "$users_fixture" "$WORKSPACE/USERS.DAT"
     else
         reset_users_dat
+    fi
+}
+
+# Function to seed or blank a DAT file from test-root fixtures
+seed_or_blank_dat() {
+    local dat_name="$1"
+    local fixture_file
+    fixture_file=$(resolve_fixture_file "$CURRENT_TEST_ROOT" "$dat_name")
+    if [ -n "$fixture_file" ]; then
+        cp "$fixture_file" "$WORKSPACE/$dat_name"
+    else
+        : > "$WORKSPACE/$dat_name"
+    fi
+}
+
+# Seed DAT file with per-test override support:
+# 1) <test_path>/<DAT name>
+# 2) <test_root>/<DAT name>
+# 3) blank file
+seed_dat_for_test() {
+    local test_path="$1"
+    local dat_name="$2"
+    if [ -f "$test_path/$dat_name" ]; then
+        cp "$test_path/$dat_name" "$WORKSPACE/$dat_name"
+    else
+        seed_or_blank_dat "$dat_name"
     fi
 }
 
@@ -47,7 +96,7 @@ setup_baseline_users() {
 needs_baseline_users() {
     local input_file="$1"
     # Check if first line is "1" (login option) - these tests expect users to exist
-    local first_line=$(head -n 1 "$input_file" 2>/dev/null)
+    local first_line=$(head -n 1 "$input_file" 2>/dev/null | tr -d '\r')
     if [ "$first_line" = "1" ]; then
         return 0  # true - needs baseline
     else
@@ -58,7 +107,7 @@ needs_baseline_users() {
 # Function to blank profile/education/experience data files
 reset_extra_dat_files() {
     for f in "PROFILES.DAT" "EDUCATION.DAT" "EXPERIENCE.DAT" "CONNECTIONS.DAT"; do
-        : > "$WORKSPACE/$f"
+        seed_or_blank_dat "$f"
     done
 }
 
@@ -104,9 +153,19 @@ run_test() {
         return
     fi
 
+    # Reset DAT fixtures for each test so tests stay isolated.
+    seed_dat_for_test "$test_path" "PROFILES.DAT"
+    seed_dat_for_test "$test_path" "EDUCATION.DAT"
+    seed_dat_for_test "$test_path" "EXPERIENCE.DAT"
+    seed_dat_for_test "$test_path" "CONNECTIONS.DAT"
+
     # Setup USERS.DAT based on test requirements
     if needs_baseline_users "$input_file"; then
-        setup_baseline_users
+        if [ -f "$test_path/USERS.DAT" ]; then
+            cp "$test_path/USERS.DAT" "$WORKSPACE/USERS.DAT"
+        else
+            setup_users_dat
+        fi
     else
         reset_users_dat
     fi
@@ -168,8 +227,16 @@ run_test() {
             if [ "$RUN2_RESULT" = "FAIL" ]; then
                 echo -e "${YELLOW}  Run 2 differences (first 10 lines):${NC}"
                 # Need to rerun to get fresh output
+                seed_dat_for_test "$test_path" "PROFILES.DAT"
+                seed_dat_for_test "$test_path" "EDUCATION.DAT"
+                seed_dat_for_test "$test_path" "EXPERIENCE.DAT"
+                seed_dat_for_test "$test_path" "CONNECTIONS.DAT"
                 if needs_baseline_users "$input_file"; then
-                    setup_baseline_users
+                    if [ -f "$test_path/USERS.DAT" ]; then
+                        cp "$test_path/USERS.DAT" "$WORKSPACE/USERS.DAT"
+                    else
+                        setup_users_dat
+                    fi
                 else
                     reset_users_dat
                 fi
@@ -205,19 +272,14 @@ echo "========================================"
 echo "InCollege Test Suite"
 echo "========================================"
 echo ""
-# Ensure USERS.DAT starts from baseline on every run
-# Blank profile/education/experience files at start
-reset_extra_dat_files
-echo "Blanked PROFILES.DAT, EDUCATION.DAT, EXPERIENCE.DAT."
-
-# Ensure USERS.DAT starts from baseline on every run
-setup_baseline_users
-echo "Users database reset from baseline."
-# Do not restore USERS.DAT on exit; leave DAT files as-is after run
-
 # Find all test directories (those containing input files) and sort them
 for test_root in "${TEST_DIRS[@]}"; do
     if [ -d "$test_root" ]; then
+        CURRENT_TEST_ROOT="$test_root"
+        reset_extra_dat_files
+        echo "Loaded DAT fixtures from: $CURRENT_TEST_ROOT"
+        setup_users_dat
+        echo "Users database reset from fixture file."
         find "$test_root" -type f \( -name "INPUT.DAT" -o -name "InCollege-Input.txt" \) | sort -u | while read input_file; do
             test_dir=$(dirname "$input_file")
             run_test "$test_dir"

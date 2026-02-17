@@ -8,131 +8,358 @@ Enter username:
 LoginUser1
 Enter password:
 Login@11
-Incorrect username / password, please try again
-Enter username:
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
-Enter password:
+Enter the full name of the person you are looking for:
 Jose Gomez
-Incorrect username / password, please try again
-Enter username:
+--- Found User Profile ---
+Name: Jose Gomez
+University: University of Testing
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
 1
-Enter password:
+Connection request sent to JobUser.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
-Incorrect username / password, please try again
-Enter username:
+Enter the full name of the person you are looking for:
 John Doe
-Enter password:
+--- Found User Profile ---
+Name: John Doe
+University: Harvard University
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
 1
-Incorrect username / password, please try again
-Enter username:
+Connection request sent to SkillsUser.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+1
+Job search is under construction.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
-Enter password:
+Enter the full name of the person you are looking for:
 Jane Doe
-Incorrect username / password, please try again
-Enter username:
+--- Found User Profile ---
+Name: Jane Doe
+University: Harvard University
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
 1
-Enter password:
+Connection request sent to JourneyUser.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
-Incorrect username / password, please try again
-Enter username:
+Enter the full name of the person you are looking for:
 Ben Grimm
-Enter password:
+--- Found User Profile ---
+Name: Ben Grimm
+University: Universite de Montreal
+Major: Computer Science & AI
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
 1
-Incorrect username / password, please try again
-Enter username:
+Connection request sent to WelcomeUser.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 5
-Enter password:
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
 1
-Incorrect username / password, please try again
 Enter username:
 JobUser
 Enter password:
 JobUser@1
-Incorrect username / password, please try again
-Enter username:
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
-Enter password:
+Enter the full name of the person you are looking for:
 John Doe
-Incorrect username / password, please try again
-Enter username:
+Multiple users found. Select a user:
+01. John Doe [LoginUser1]
+02. John Doe [SkillsUser]
+0. Back to Main Menu
+Enter selection:
 1
-Enter password:
+--- Found User Profile ---
+Name: John Doe
+University: Example University
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
 2
-Incorrect username / password, please try again
-Enter username:
+Returning to main menu.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 Jane Doe
-Enter password:
+Invalid Selection.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 1
-Incorrect username / password, please try again
-Enter username:
+Job search is under construction.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
-Enter password:
+Enter the full name of the person you are looking for:
 Ben Grimm
-Incorrect username / password, please try again
-Enter username:
+--- Found User Profile ---
+Name: Ben Grimm
+University: Universite de Montreal
+Major: Computer Science & AI
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
 1
-Enter password:
+Connection request sent to WelcomeUser.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 5
-Incorrect username / password, please try again
-Enter username:
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
 1
-Enter password:
+Enter username:
 SkillsUser
-Incorrect username / password, please try again
-Enter username:
+Enter password:
 Skills@1
-Enter password:
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
-Incorrect username / password, please try again
-Enter username:
+Enter the full name of the person you are looking for:
 Jane Doe
-Enter password:
+--- Found User Profile ---
+Name: Jane Doe
+University: Harvard University
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
 1
-Incorrect username / password, please try again
-Enter username:
+Connection request sent to JourneyUser.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
-Enter password:
+Enter the full name of the person you are looking for:
 Ben Grimm
-Incorrect username / password, please try again
-Enter username:
+--- Found User Profile ---
+Name: Ben Grimm
+University: Universite de Montreal
+Major: Computer Science & AI
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
 1
-Enter password:
+Connection request sent to WelcomeUser.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 5
-Incorrect username / password, please try again
-Enter username:
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
 1
-Enter password:
+Enter username:
 WelcomeUser
-Incorrect username / password, please try again
-Enter username:
+Enter password:
 Welcome@1
-Enter password:
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 2
-Incorrect username / password, please try again
-Enter username:
+Enter the full name of the person you are looking for:
 Jane Doe
-Enter password:
+--- Found User Profile ---
+Name: Jane Doe
+University: Harvard University
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
 1
-Incorrect username / password, please try again
-Enter username:
+Connection request sent to JourneyUser.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 4
-Enter password:
+--- Pending Connection Requests ---
+  LoginUser1
+  JobUser
+  SkillsUser
+-----------------------------------
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 5
-Incorrect username / password, please try again
-Enter username:
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
 1
-Enter password:
+Enter username:
 JourneyUser
-Incorrect username / password, please try again
-Enter username:
+Enter password:
 Journey@1
-Enter password:
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 4
-Incorrect username / password, please try again
-Enter username:
+--- Pending Connection Requests ---
+  LoginUser1
+  SkillsUser
+  WelcomeUser
+-----------------------------------
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
 5
-Enter password:
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
 3
-Incorrect username / password, please try again
-Enter username:
-No input for username; returning to menu.
+Logging out. Goodbye!
