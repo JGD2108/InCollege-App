@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-JobUser
+SkillsUser
 Enter password:
-JobUser@1
+Skills@1
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -19,23 +19,8 @@ You have successfully logged in
 6. View My Profile
 2
 Enter the full name of the person you are looking for:
-John Doe
-Multiple users found. Select a user:
-01. John Doe [LoginUser1]
-02. John Doe [SkillsUser]
-0. Back to Main Menu
-Enter selection:
-1
---- Found User Profile ---
-Name: John Doe
-University: Example University
-Major: Computer Science
-Graduation Year: 2025
--------------------------
-1. Send Connection Request
-2. Back to Main Menu
-1
-Connection request sent to LoginUser1.
+JoseGomez
+User not found.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
