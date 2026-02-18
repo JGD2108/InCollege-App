@@ -1,0 +1,49 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+LoginUser1
+Enter password:
+Login@11
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+2
+Enter the full name of the person you are looking for:
+Jose Gomez
+--- Found User Profile ---
+Name: Jose Gomez
+University: University of Testing
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
+1
+You are already connected with this user.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+5
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+3
+Logging out. Goodbye!
