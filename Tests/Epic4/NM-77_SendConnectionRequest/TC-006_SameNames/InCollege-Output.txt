@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-LoginUser1
+JobUser
 Enter password:
-Login@11
+JobUser@1
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -17,10 +17,25 @@ You have successfully logged in
 4. View My Pending Connection Requests
 5. Logout
 6. View My Profile
-4
---- Pending Connection Requests ---
-You have no pending connection requests at this time.
------------------------------------
+2
+Enter the full name of the person you are looking for:
+John Doe
+Multiple users found. Select a user:
+01. John Doe [LoginUser1]
+02. John Doe [SkillsUser]
+0. Back to Main Menu
+Enter selection:
+1
+--- Found User Profile ---
+Name: John Doe
+University: Example University
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
+1
+Connection request sent to LoginUser1.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job

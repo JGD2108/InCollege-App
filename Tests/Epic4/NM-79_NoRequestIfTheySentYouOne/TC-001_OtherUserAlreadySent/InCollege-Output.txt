@@ -17,10 +17,19 @@ You have successfully logged in
 4. View My Pending Connection Requests
 5. Logout
 6. View My Profile
-4
---- Pending Connection Requests ---
-You have no pending connection requests at this time.
------------------------------------
+2
+Enter the full name of the person you are looking for:
+Jose Gomez
+--- Found User Profile ---
+Name: Jose Gomez
+University: University of Testing
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
+1
+This user has already sent you a connection request.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job

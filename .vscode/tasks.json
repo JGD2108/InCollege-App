@@ -4,7 +4,10 @@
     {
       "label": "COBOL: Build active file",
       "type": "shell",
-      "command": "mkdir -p bin && cobc -x -free -o bin/${fileBasenameNoExtension} ${file}",
+      "command": "mkdir -p bin && cobc -x -free -o \"bin/${fileBasenameNoExtension}\" \"${file}\"",
+      "windows": {
+        "command": "if (!(Test-Path \"bin\")) { New-Item -ItemType Directory -Path \"bin\" | Out-Null }; cobc -x -free -o \"bin/${fileBasenameNoExtension}\" \"${file}\""
+      },
       "group": {
         "kind": "build",
         "isDefault": false
@@ -42,9 +45,12 @@
       }
     },
     {
-      "label": "COBOL: Build Modular InCollege",
+      "label": "COBOL: Build Single-file InCollege",
       "type": "shell",
-      "command": "mkdir -p /workspace/bin && cobc -x -free -o /workspace/bin/InCollegeModules /workspace/src/InCollegeModules.cob $(find /workspace/src -name '*.cob' -not -name 'InCollege.cob' -not -name 'InCollegeModules.cob') && cobc -x -free -o /workspace/bin/InCollege /workspace/src/InCollege.cob",
+      "command": "mkdir -p \"${workspaceFolder}/bin\" && cobc -x -free -o \"${workspaceFolder}/bin/InCollege\" \"${workspaceFolder}/src/InCollege.cob\"",
+      "windows": {
+        "command": "if (!(Test-Path \"${workspaceFolder}\\bin\")) { New-Item -ItemType Directory -Path \"${workspaceFolder}\\bin\" | Out-Null }; cobc -x -free -o \"${workspaceFolder}\\bin\\InCollege\" \"${workspaceFolder}\\src\\InCollege.cob\""
+      },
       "group": {
         "kind": "build",
         "isDefault": true
@@ -70,37 +76,12 @@
       ]
     },
     {
-      "label": "COBOL: Build Single-file InCollege",
-      "type": "shell",
-      "command": "mkdir -p /workspace/bin && cobc -x -free -o /workspace/bin/InCollegeSingle /workspace/src/InCollege.cob",
-      "group": {
-        "kind": "build",
-        "isDefault": false
-      },
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared",
-        "focus": true
-      },
-      "problemMatcher": [
-        {
-          "owner": "cobc",
-          "fileLocation": ["absolute"],
-          "pattern": {
-            "regexp": "^(.*):(\\d+): (warning|error): (.*)$",
-            "file": 1,
-            "line": 2,
-            "severity": 3,
-            "message": 4
-          }
-        }
-      ]
-    },
-    {
       "label": "COBOL: Run InCollege",
       "type": "process",
-      "command": "/workspace/bin/InCollege",
+      "command": "${workspaceFolder}/bin/InCollege",
+      "windows": {
+        "command": "${workspaceFolder}\\bin\\InCollege"
+      },
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -112,6 +93,9 @@
       "label": "COBOL: Build and Run active file",
       "type": "shell",
       "command": "mkdir -p \"${fileDirname}/bin\" && cobc -x -free -o \"${fileDirname}/bin/${fileBasenameNoExtension}\" \"${file}\"",
+      "windows": {
+        "command": "if (!(Test-Path \"${fileDirname}\\bin\")) { New-Item -ItemType Directory -Path \"${fileDirname}\\bin\" | Out-Null }; cobc -x -free -o \"${fileDirname}\\bin\\${fileBasenameNoExtension}\" \"${file}\""
+      },
       "group": {
         "kind": "build",
         "isDefault": false

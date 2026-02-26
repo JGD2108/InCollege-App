@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-LoginUser1
+SkillsUser
 Enter password:
-Login@11
+Skills@1
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -17,10 +17,10 @@ You have successfully logged in
 4. View My Pending Connection Requests
 5. Logout
 6. View My Profile
-4
---- Pending Connection Requests ---
-You have no pending connection requests at this time.
------------------------------------
+2
+Enter the full name of the person you are looking for:
+JoseGomez
+User not found.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job

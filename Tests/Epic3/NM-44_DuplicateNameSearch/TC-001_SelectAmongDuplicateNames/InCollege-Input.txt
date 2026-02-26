@@ -1,0 +1,44 @@
+2
+DupNameA1
+PassA@123
+2
+DupNameB1
+PassB@123
+2
+FinderUsr1
+PassF@123
+1
+DupNameA1
+PassA@123
+0
+John
+Smith
+Alpha University
+Computer Science
+2026
+N
+N
+N
+Y
+1
+DupNameB1
+PassB@123
+0
+John
+Smith
+Beta University
+Information Systems
+2025
+N
+N
+N
+Y
+1
+FinderUsr1
+PassF@123
+2
+John Smith
+2
+1
+5
+3

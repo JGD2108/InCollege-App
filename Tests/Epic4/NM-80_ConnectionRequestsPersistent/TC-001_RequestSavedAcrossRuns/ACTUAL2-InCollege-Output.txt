@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-LoginUser1
+JobUser
 Enter password:
-Login@11
+JobUser@1
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -19,7 +19,7 @@ You have successfully logged in
 6. View My Profile
 4
 --- Pending Connection Requests ---
-You have no pending connection requests at this time.
+  LoginUser1
 -----------------------------------
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
