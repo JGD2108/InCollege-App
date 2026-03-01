@@ -195,10 +195,19 @@
                 10 WS-CONN-REQUESTER     PIC X(12).
                 10 WS-CONN-RECIPIENT     PIC X(12).
                 10 WS-CONN-STATUS        PIC X.
+          01 WS-PENDING-INDEX-TABLE.
+             05 WS-PENDING-ENTRY OCCURS 25 TIMES PIC 99.
           77 WS-CONN-COUNT            PIC 99 VALUE 0.
           77 WS-CONN-IDX              PIC 99.
           77 WS-CONN-EOF              PIC X VALUE "N".
           77 WS-PENDING-COUNT         PIC 99 VALUE 0.
+          77 WS-PENDING-IDX           PIC 99 VALUE 0.
+          77 WS-SELECTED-CONN-IDX     PIC 99 VALUE 0.
+          77 WS-REQUEST-ACTION        PIC X VALUE SPACE.
+          77 WS-ACTION-VALID          PIC X VALUE "N".
+          77 WS-ACCEPTED-COUNT        PIC 99 VALUE 0.
+          77 WS-REJECTED-COUNT        PIC 99 VALUE 0.
+          77 WS-PROCESSED-COUNT       PIC 99 VALUE 0.
 
       *> User search variables
            77 WS-SEARCH-USERNAME       PIC X(12).
