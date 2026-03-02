@@ -1,72 +1,115 @@
-      *> VIEWNET_SRC.cpy - View My Network logic (established connections)
-      *> Copybook for: As a logged-in user, I want to view all users I am connected with.
-      *> Requires in main program: CONNECTED-FILE, WS-USERNAME, WS-CONNECTED-OTHER,
-      *>   WS-CONNECTED-STATUS, WS-CONN-EOF, WS-VIEW-PROFILE-DATA, VIEWPROFILE, PRINT-LINE.
-
       HANDLE-VIEW-NETWORK.
-          MOVE "--- Your Network ---" TO OUTPUT-RECORD
+          MOVE "--- My Network ---" TO OUTPUT-RECORD
           PERFORM PRINT-LINE
-          OPEN INPUT CONNECTED-FILE
-          IF WS-CONNECTED-STATUS = "35"
-            MOVE "You have no connections yet." TO OUTPUT-RECORD
+
+          MOVE 0 TO WS-NETWORK-COUNT
+          MOVE "N" TO WS-EST-EOF
+
+          OPEN INPUT ESTABLISHED-FILE
+          IF WS-EST-FILE-STATUS = "35"
+            MOVE "You have no established connections at this time."
+              TO OUTPUT-RECORD
             PERFORM PRINT-LINE
             MOVE "--------------------" TO OUTPUT-RECORD
             PERFORM PRINT-LINE
+            PERFORM PROMPT-RETURN-FROM-NETWORK
             EXIT PARAGRAPH
           END-IF
-          IF WS-CONNECTED-STATUS NOT = "00"
-            CLOSE CONNECTED-FILE
-            MOVE "You have no connections yet." TO OUTPUT-RECORD
+
+          IF WS-EST-FILE-STATUS NOT = "00"
+            MOVE "Unable to access connection data." TO OUTPUT-RECORD
             PERFORM PRINT-LINE
             MOVE "--------------------" TO OUTPUT-RECORD
             PERFORM PRINT-LINE
+            PERFORM PROMPT-RETURN-FROM-NETWORK
             EXIT PARAGRAPH
           END-IF
-          MOVE "N" TO WS-CONN-EOF
-          PERFORM UNTIL WS-CONN-EOF = "Y"
-            READ CONNECTED-FILE
+
+          PERFORM UNTIL WS-EST-EOF = "Y"
+            READ ESTABLISHED-FILE
               AT END
-                MOVE "Y" TO WS-CONN-EOF
+                MOVE "Y" TO WS-EST-EOF
               NOT AT END
-                IF FUNCTION TRIM(CONNECTED-USER1) =
-                   FUNCTION TRIM(WS-USERNAME)
-                  MOVE FUNCTION TRIM(CONNECTED-USER2) TO WS-CONNECTED-OTHER
+                IF FUNCTION TRIM(EST-USER1) = FUNCTION TRIM(WS-USERNAME)
+                  MOVE FUNCTION TRIM(EST-USER2) TO WS-CONNECTED-OTHER
+                  PERFORM DISPLAY-NETWORK-CONNECTION
                 ELSE
-                  IF FUNCTION TRIM(CONNECTED-USER2) =
-                     FUNCTION TRIM(WS-USERNAME)
-                    MOVE FUNCTION TRIM(CONNECTED-USER1) TO WS-CONNECTED-OTHER
+                  IF FUNCTION TRIM(EST-USER2) = FUNCTION TRIM(WS-USERNAME)
+                    MOVE FUNCTION TRIM(EST-USER1) TO WS-CONNECTED-OTHER
+                    PERFORM DISPLAY-NETWORK-CONNECTION
                   END-IF
-                END-IF
-                IF FUNCTION TRIM(CONNECTED-USER1) =
-                   FUNCTION TRIM(WS-USERNAME)
-                   OR FUNCTION TRIM(CONNECTED-USER2) =
-                      FUNCTION TRIM(WS-USERNAME)
-                  MOVE "N" TO WS-PROFILE-FOUND
-                  MOVE SPACES TO WS-VIEW-PROFILE-DATA
-                  MOVE SPACES TO WS-VIEW-EXPERIENCE-LIST
-                  MOVE SPACES TO WS-VIEW-EDUCATION-LIST
-                  MOVE 0 TO WS-VIEW-EXP-COUNT
-                  MOVE 0 TO WS-VIEW-EDU-COUNT
-                  CALL "VIEWPROFILE" USING WS-CONNECTED-OTHER
-                       WS-VIEW-PROFILE-DATA WS-VIEW-EXPERIENCE-LIST
-                       WS-VIEW-EDUCATION-LIST WS-VIEW-EXP-COUNT
-                       WS-VIEW-EDU-COUNT WS-PROFILE-FOUND WS-MESSAGE
-                  MOVE SPACES TO OUTPUT-RECORD
-                  STRING "Connected with: " DELIMITED BY SIZE
-                         FUNCTION TRIM(WS-VIEW-FIRST-NAME) DELIMITED BY SIZE
-                         " " DELIMITED BY SIZE
-                         FUNCTION TRIM(WS-VIEW-LAST-NAME) DELIMITED BY SIZE
-                         " (University: " DELIMITED BY SIZE
-                         FUNCTION TRIM(WS-VIEW-COLLEGE) DELIMITED BY SIZE
-                         ", Major: " DELIMITED BY SIZE
-                         FUNCTION TRIM(WS-VIEW-MAJOR) DELIMITED BY SIZE
-                         ")" DELIMITED BY SIZE
-                    INTO OUTPUT-RECORD
-                  END-STRING
-                  PERFORM PRINT-LINE
                 END-IF
             END-READ
           END-PERFORM
-          CLOSE CONNECTED-FILE
+
+          CLOSE ESTABLISHED-FILE
+
+          IF WS-NETWORK-COUNT = 0
+            MOVE "You have no established connections at this time."
+              TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+          END-IF
+
           MOVE "--------------------" TO OUTPUT-RECORD
-          PERFORM PRINT-LINE.
+          PERFORM PRINT-LINE
+
+          PERFORM PROMPT-RETURN-FROM-NETWORK.
+
+      DISPLAY-NETWORK-CONNECTION.
+          ADD 1 TO WS-NETWORK-COUNT
+          MOVE "N" TO WS-PROFILE-FOUND
+          MOVE SPACES TO WS-VIEW-PROFILE-DATA
+          MOVE SPACES TO WS-VIEW-EXPERIENCE-LIST
+          MOVE SPACES TO WS-VIEW-EDUCATION-LIST
+          MOVE 0 TO WS-VIEW-EXP-COUNT
+          MOVE 0 TO WS-VIEW-EDU-COUNT
+
+          CALL "VIEWPROFILE" USING WS-CONNECTED-OTHER WS-VIEW-PROFILE-DATA
+                               WS-VIEW-EXPERIENCE-LIST WS-VIEW-EDUCATION-LIST
+                               WS-VIEW-EXP-COUNT WS-VIEW-EDU-COUNT
+                               WS-PROFILE-FOUND WS-MESSAGE
+
+          IF WS-PROFILE-FOUND = "Y"
+            MOVE SPACES TO OUTPUT-RECORD
+            STRING "  " DELIMITED BY SIZE
+                   FUNCTION TRIM(WS-VIEW-FIRST-NAME) DELIMITED BY SIZE
+                   " " DELIMITED BY SIZE
+                   FUNCTION TRIM(WS-VIEW-LAST-NAME) DELIMITED BY SIZE
+                   " (University: " DELIMITED BY SIZE
+                   FUNCTION TRIM(WS-VIEW-COLLEGE) DELIMITED BY SIZE
+                   ", Major: " DELIMITED BY SIZE
+                   FUNCTION TRIM(WS-VIEW-MAJOR) DELIMITED BY SIZE
+                   ")" DELIMITED BY SIZE
+              INTO OUTPUT-RECORD
+            END-STRING
+            PERFORM PRINT-LINE
+          ELSE
+            MOVE SPACES TO OUTPUT-RECORD
+            STRING "  " DELIMITED BY SIZE
+                   FUNCTION TRIM(WS-CONNECTED-OTHER) DELIMITED BY SIZE
+              INTO OUTPUT-RECORD
+            END-STRING
+            PERFORM PRINT-LINE
+          END-IF.
+
+      PROMPT-RETURN-FROM-NETWORK.
+          MOVE "Enter 0 to return to post-login menu." TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
+
+          PERFORM UNTIL WS-EOF = "Y"
+            PERFORM READ-AND-LOG
+            IF WS-EOF = "Y"
+              MOVE "No input received; returning to post-login menu."
+                TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PERFORM
+            END-IF
+
+            MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+            IF WS-TRIMMED-IN = "0"
+              EXIT PERFORM
+            ELSE
+              MOVE "Invalid selection. Please enter 0." TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+            END-IF
+          END-PERFORM.

@@ -8,6 +8,10 @@
                ASSIGN TO "CONNECTIONS.DAT"
                ORGANIZATION IS LINE SEQUENTIAL
                FILE STATUS IS WS-CONN-FILE-STATUS.
+           SELECT OPTIONAL ESTABLISHED-FILE
+               ASSIGN TO "ESTABLISHED.DAT"
+               ORGANIZATION IS LINE SEQUENTIAL
+               FILE STATUS IS WS-EST-FILE-STATUS.
 
        DATA DIVISION.
        FILE SECTION.
@@ -16,17 +20,29 @@
           05 REQUESTER-USERNAME    PIC X(12).
           05 RECIPIENT-USERNAME    PIC X(12).
           05 REQUEST-STATUS        PIC X.
+       FD ESTABLISHED-FILE.
+       01 ESTABLISHED-RECORD.
+          05 EST-USER1             PIC X(12).
+          05 EST-USER2             PIC X(12).
 
        WORKING-STORAGE SECTION.
        77 WS-CONN-FILE-STATUS      PIC XX.
+       77 WS-EST-FILE-STATUS       PIC XX.
        01 WS-CONNECTION-TABLE.
           05 WS-CONN-ENTRY OCCURS 25 TIMES.
              10 WS-CONN-REQUESTER     PIC X(12).
              10 WS-CONN-RECIPIENT     PIC X(12).
              10 WS-CONN-STATUS        PIC X.
+       01 WS-ESTABLISHED-TABLE.
+          05 WS-EST-ENTRY OCCURS 25 TIMES.
+             10 WS-EST-USER1          PIC X(12).
+             10 WS-EST-USER2          PIC X(12).
        77 WS-CONN-COUNT            PIC 99 VALUE 0.
        77 WS-CONN-IDX              PIC 99.
        77 WS-CONN-EOF              PIC X VALUE "N".
+       77 WS-EST-COUNT             PIC 99 VALUE 0.
+       77 WS-EST-IDX               PIC 99.
+       77 WS-EST-EOF               PIC X VALUE "N".
        77 WS-VALID-REQUEST         PIC X VALUE "Y".
        77 WS-NORMALIZED-REQUESTER  PIC X(12).
        77 WS-NORMALIZED-RECIPIENT  PIC X(12).
@@ -62,6 +78,10 @@
            *> Load existing connections
            IF WS-VALID-REQUEST = "Y"
                PERFORM LOAD-CONNECTIONS
+           END-IF
+
+           IF WS-VALID-REQUEST = "Y"
+               PERFORM LOAD-ESTABLISHED-CONNECTIONS
            END-IF
 
            *> Validate the connection request
@@ -129,6 +149,37 @@
 
            CLOSE CONNECTIONS-FILE.
 
+       LOAD-ESTABLISHED-CONNECTIONS.
+           MOVE 0 TO WS-EST-COUNT
+           MOVE "N" TO WS-EST-EOF
+
+           OPEN INPUT ESTABLISHED-FILE
+
+           IF WS-EST-FILE-STATUS = "35"
+               EXIT PARAGRAPH
+           END-IF
+
+           IF WS-EST-FILE-STATUS NOT = "00"
+               MOVE "N" TO WS-VALID-REQUEST
+               MOVE "Unable to access connection data." TO LK-MESSAGE
+               EXIT PARAGRAPH
+           END-IF
+
+           PERFORM UNTIL WS-EST-EOF = "Y"
+               READ ESTABLISHED-FILE
+                   AT END
+                       MOVE "Y" TO WS-EST-EOF
+                   NOT AT END
+                       IF WS-EST-COUNT < 25
+                           ADD 1 TO WS-EST-COUNT
+                           MOVE EST-USER1 TO WS-EST-USER1(WS-EST-COUNT)
+                           MOVE EST-USER2 TO WS-EST-USER2(WS-EST-COUNT)
+                       END-IF
+               END-READ
+           END-PERFORM
+
+           CLOSE ESTABLISHED-FILE.
+
        VALIDATE-REQUEST.
            *> Check if already connected, or if duplicate pending request exists
            PERFORM VARYING WS-CONN-IDX FROM 1 BY 1
@@ -171,6 +222,23 @@
                    MOVE "You have already sent a connection request to this user." TO LK-MESSAGE
                END-IF
            END-PERFORM
+
+           IF WS-VALID-REQUEST = "Y"
+             PERFORM VARYING WS-EST-IDX FROM 1 BY 1
+               UNTIL WS-EST-IDX > WS-EST-COUNT OR WS-VALID-REQUEST = "N"
+               IF (FUNCTION TRIM(WS-EST-USER1(WS-EST-IDX)) =
+                     WS-NORMALIZED-REQUESTER
+                   AND FUNCTION TRIM(WS-EST-USER2(WS-EST-IDX)) =
+                     WS-NORMALIZED-RECIPIENT)
+                 OR (FUNCTION TRIM(WS-EST-USER1(WS-EST-IDX)) =
+                       WS-NORMALIZED-RECIPIENT
+                   AND FUNCTION TRIM(WS-EST-USER2(WS-EST-IDX)) =
+                       WS-NORMALIZED-REQUESTER)
+                 MOVE "N" TO WS-VALID-REQUEST
+                 MOVE "You are already connected with this user." TO LK-MESSAGE
+               END-IF
+             END-PERFORM
+           END-IF
 
            *> Check if table is full
            IF WS-CONN-COUNT >= 25 AND WS-VALID-REQUEST = "Y"
