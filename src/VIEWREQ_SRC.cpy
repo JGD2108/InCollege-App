@@ -11,6 +11,15 @@
             EXIT PARAGRAPH
           END-IF
 
+          PERFORM LOAD-ESTABLISHED-CONNECTIONS
+          IF WS-EST-FILE-STATUS NOT = "00" AND WS-EST-FILE-STATUS NOT = "35"
+            MOVE "Unable to access established connection data." TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "-----------------------------------" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            EXIT PARAGRAPH
+          END-IF
+
           PERFORM BUILD-PENDING-CONNECTION-LIST
           IF WS-PENDING-COUNT = 0
             MOVE "You have no pending connection requests at this time."
@@ -19,8 +28,11 @@
           ELSE
             PERFORM PROCESS-PENDING-CONNECTION-LIST
             PERFORM SAVE-CONNECTIONS-AFTER-PENDING
-
             IF WS-CONN-FILE-STATUS = "00"
+              PERFORM SAVE-ESTABLISHED-CONNECTIONS
+            END-IF
+
+            IF WS-CONN-FILE-STATUS = "00" AND WS-EST-FILE-STATUS = "00"
               MOVE SPACES TO OUTPUT-RECORD
               STRING "Processed " DELIMITED BY SIZE
                      WS-PROCESSED-COUNT DELIMITED BY SIZE
@@ -84,6 +96,36 @@
 
           CLOSE CONNECTIONS-FILE.
 
+      LOAD-ESTABLISHED-CONNECTIONS.
+          MOVE 0 TO WS-EST-COUNT
+          MOVE "N" TO WS-EST-EOF
+          MOVE SPACES TO WS-ESTABLISHED-TABLE
+
+          OPEN INPUT ESTABLISHED-FILE
+
+          IF WS-EST-FILE-STATUS = "35"
+            EXIT PARAGRAPH
+          END-IF
+
+          IF WS-EST-FILE-STATUS NOT = "00"
+            EXIT PARAGRAPH
+          END-IF
+
+          PERFORM UNTIL WS-EST-EOF = "Y"
+            READ ESTABLISHED-FILE
+              AT END
+                MOVE "Y" TO WS-EST-EOF
+              NOT AT END
+                IF WS-EST-COUNT < 25
+                  ADD 1 TO WS-EST-COUNT
+                  MOVE EST-USER1 TO WS-EST-USER1(WS-EST-COUNT)
+                  MOVE EST-USER2 TO WS-EST-USER2(WS-EST-COUNT)
+                END-IF
+            END-READ
+          END-PERFORM
+
+          CLOSE ESTABLISHED-FILE.
+
       BUILD-PENDING-CONNECTION-LIST.
           MOVE 0 TO WS-PENDING-COUNT
 
@@ -141,19 +183,27 @@
                 EVALUATE WS-REQUEST-ACTION
                   WHEN "A"
                   WHEN "a"
-                    MOVE "A" TO WS-CONN-STATUS(WS-SELECTED-CONN-IDX)
-                    ADD 1 TO WS-ACCEPTED-COUNT
-                    ADD 1 TO WS-PROCESSED-COUNT
-                    MOVE "Y" TO WS-ACTION-VALID
-                    MOVE SPACES TO OUTPUT-RECORD
-                    STRING "Connection request from " DELIMITED BY SIZE
-                           FUNCTION TRIM(
-                             WS-CONN-REQUESTER(WS-SELECTED-CONN-IDX))
-                             DELIMITED BY SIZE
-                           " accepted." DELIMITED BY SIZE
-                      INTO OUTPUT-RECORD
-                    END-STRING
-                    PERFORM PRINT-LINE
+                    PERFORM ADD-ESTABLISHED-IN-MEMORY
+                    IF WS-EST-ADD-OK = "Y"
+                      MOVE "D" TO WS-CONN-STATUS(WS-SELECTED-CONN-IDX)
+                      ADD 1 TO WS-ACCEPTED-COUNT
+                      ADD 1 TO WS-PROCESSED-COUNT
+                      MOVE "Y" TO WS-ACTION-VALID
+                      MOVE SPACES TO OUTPUT-RECORD
+                      STRING "Connection request from " DELIMITED BY SIZE
+                             FUNCTION TRIM(
+                               WS-CONN-REQUESTER(WS-SELECTED-CONN-IDX))
+                               DELIMITED BY SIZE
+                             " accepted." DELIMITED BY SIZE
+                        INTO OUTPUT-RECORD
+                      END-STRING
+                      PERFORM PRINT-LINE
+                    ELSE
+                      MOVE "Unable to establish connection; request left pending."
+                        TO OUTPUT-RECORD
+                      PERFORM PRINT-LINE
+                      MOVE "Y" TO WS-ACTION-VALID
+                    END-IF
                   WHEN "R"
                   WHEN "r"
                     MOVE "D" TO WS-CONN-STATUS(WS-SELECTED-CONN-IDX)
@@ -178,6 +228,34 @@
             END-PERFORM
           END-PERFORM.
 
+      ADD-ESTABLISHED-IN-MEMORY.
+          MOVE "N" TO WS-EST-ADD-OK
+
+          PERFORM VARYING WS-EST-IDX FROM 1 BY 1
+            UNTIL WS-EST-IDX > WS-EST-COUNT OR WS-EST-ADD-OK = "Y"
+            IF (FUNCTION TRIM(WS-EST-USER1(WS-EST-IDX)) =
+                  FUNCTION TRIM(WS-CONN-REQUESTER(WS-SELECTED-CONN-IDX))
+                AND FUNCTION TRIM(WS-EST-USER2(WS-EST-IDX)) =
+                  FUNCTION TRIM(WS-CONN-RECIPIENT(WS-SELECTED-CONN-IDX)))
+              OR (FUNCTION TRIM(WS-EST-USER1(WS-EST-IDX)) =
+                    FUNCTION TRIM(WS-CONN-RECIPIENT(WS-SELECTED-CONN-IDX))
+                AND FUNCTION TRIM(WS-EST-USER2(WS-EST-IDX)) =
+                    FUNCTION TRIM(WS-CONN-REQUESTER(WS-SELECTED-CONN-IDX)))
+              MOVE "Y" TO WS-EST-ADD-OK
+            END-IF
+          END-PERFORM
+
+          IF WS-EST-ADD-OK = "N"
+            IF WS-EST-COUNT < 25
+              ADD 1 TO WS-EST-COUNT
+              MOVE WS-CONN-REQUESTER(WS-SELECTED-CONN-IDX)
+                TO WS-EST-USER1(WS-EST-COUNT)
+              MOVE WS-CONN-RECIPIENT(WS-SELECTED-CONN-IDX)
+                TO WS-EST-USER2(WS-EST-COUNT)
+              MOVE "Y" TO WS-EST-ADD-OK
+            END-IF
+          END-IF.
+
       SAVE-CONNECTIONS-AFTER-PENDING.
           OPEN OUTPUT CONNECTIONS-FILE
           IF WS-CONN-FILE-STATUS NOT = "00"
@@ -195,3 +273,18 @@
           END-PERFORM
 
           CLOSE CONNECTIONS-FILE.
+
+      SAVE-ESTABLISHED-CONNECTIONS.
+          OPEN OUTPUT ESTABLISHED-FILE
+          IF WS-EST-FILE-STATUS NOT = "00"
+            EXIT PARAGRAPH
+          END-IF
+
+          PERFORM VARYING WS-EST-IDX FROM 1 BY 1
+            UNTIL WS-EST-IDX > WS-EST-COUNT
+            MOVE WS-EST-USER1(WS-EST-IDX) TO EST-USER1
+            MOVE WS-EST-USER2(WS-EST-IDX) TO EST-USER2
+            WRITE ESTABLISHED-RECORD
+          END-PERFORM
+
+          CLOSE ESTABLISHED-FILE.

@@ -32,6 +32,11 @@
                   ORGANIZATION IS LINE SEQUENTIAL
                   FILE STATUS IS WS-CONN-FILE-STATUS.
 
+              SELECT OPTIONAL ESTABLISHED-FILE
+                ASSIGN TO "ESTABLISHED.DAT"
+                  ORGANIZATION IS LINE SEQUENTIAL
+                  FILE STATUS IS WS-EST-FILE-STATUS.
+
               SELECT OPTIONAL PROFILES-FILE
                 ASSIGN TO "PROFILES.DAT"
                   ORGANIZATION IS LINE SEQUENTIAL
@@ -56,6 +61,11 @@
              05 REQUESTER-USERNAME    PIC X(12).
              05 RECIPIENT-USERNAME    PIC X(12).
              05 REQUEST-STATUS        PIC X.
+
+         FD ESTABLISHED-FILE.
+           01 ESTABLISHED-RECORD.
+             05 EST-USER1             PIC X(12).
+             05 EST-USER2             PIC X(12).
 
          FD PROFILES-FILE.
            01 PROFILE-RECORD.
@@ -189,6 +199,7 @@
 
       *> Connection request management
           77 WS-CONN-FILE-STATUS      PIC XX.
+          77 WS-EST-FILE-STATUS       PIC XX.
           77 WS-PROFILES-STATUS       PIC XX.
           01 WS-CONNECTION-TABLE.
              05 WS-CONN-ENTRY OCCURS 25 TIMES.
@@ -208,6 +219,16 @@
           77 WS-ACCEPTED-COUNT        PIC 99 VALUE 0.
           77 WS-REJECTED-COUNT        PIC 99 VALUE 0.
           77 WS-PROCESSED-COUNT       PIC 99 VALUE 0.
+          77 WS-NETWORK-COUNT         PIC 99 VALUE 0.
+          77 WS-CONNECTED-OTHER       PIC X(12).
+          01 WS-ESTABLISHED-TABLE.
+             05 WS-EST-ENTRY OCCURS 25 TIMES.
+                10 WS-EST-USER1       PIC X(12).
+                10 WS-EST-USER2       PIC X(12).
+          77 WS-EST-COUNT             PIC 99 VALUE 0.
+          77 WS-EST-IDX               PIC 99.
+          77 WS-EST-EOF               PIC X VALUE "N".
+          77 WS-EST-ADD-OK            PIC X VALUE "N".
 
       *> User search variables
            77 WS-SEARCH-USERNAME       PIC X(12).
@@ -374,6 +395,7 @@
           END-IF.
 
        COPY "src/VIEWREQ_SRC.cpy".
+       COPY "src/VIEWNET_SRC.cpy".
 
        HANDLE-USER-SEARCH.
            MOVE "Enter the full name of the person you are looking for:" TO OUTPUT-RECORD
@@ -731,6 +753,8 @@
                  MOVE "5. Logout" TO OUTPUT-RECORD
                  PERFORM PRINT-LINE
                  MOVE "6. View My Profile" TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 MOVE "7. View My Network" TO OUTPUT-RECORD
                  PERFORM PRINT-LINE
 
                  PERFORM READ-AND-LOG
@@ -1261,6 +1285,8 @@
                     PERFORM HANDLE-USER-SEARCH
                  WHEN 7
                     PERFORM HANDLE-VIEW-PENDING-REQUESTS
+                 WHEN 8
+                    PERFORM HANDLE-VIEW-NETWORK
                  END-EVALUATE
                END-PERFORM
                EXIT PERFORM
@@ -2200,6 +2226,7 @@
          *> 5 = view profile
          *> 6 = user search
          *> 7 = view pending connection requests
+         *> 8 = view established network
 
          EVALUATE LK-POST-CHOICE
           WHEN "0"
@@ -2213,11 +2240,13 @@
              MOVE 2 TO LK-ACTION
            WHEN "4"
              MOVE 7 TO LK-ACTION
-           WHEN "5"
+          WHEN "5"
              MOVE "Logging out. Goodbye!" TO LK-MESSAGE
              MOVE 3 TO LK-ACTION
           WHEN "6"
             MOVE 5 TO LK-ACTION
+          WHEN "7"
+            MOVE 8 TO LK-ACTION
            WHEN OTHER
              MOVE "Invalid Selection." TO LK-MESSAGE
              MOVE 1 TO LK-ACTION
