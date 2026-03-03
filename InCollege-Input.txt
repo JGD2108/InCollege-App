@@ -1,30 +1,15 @@
 1
-LoginUser1
-Login@11
-2
-Jose Gomez
-1
+WelcomeUser
+Welcome@1
 2
 Jane Doe
 1
 5
 1
-JobUser
-JobUser@1
-4
-A
-4
-7
-0
-5
-1
 JourneyUser
 Journey@1
 4
-R
-4
-7
-0
+A
 5
 1
 LoginUser1
@@ -35,13 +20,48 @@ Jose Gomez
 2
 Jane Doe
 1
+2
+Ben Grimm
+1
+2
+John Doe
+1
 5
 1
-JourneyUser
-Journey@1
-4
-A
-7
+SkillsUser
+Skills@1
+2
+Jose Gomez
+1
+2
+Jane Doe
+1
+2
+Ben Grimm
+1
+2
+John Doe
+1
 0
+John
+Doe
+Harvard University
+Computer Science
+2025
+I enjoy researching AI ethics.
+Y
+Lead Developer
+Tech Corp
+January 2024
+June 2025
+Test Description
+N
+Y
+Masters in Business
+University of California
+2016
+2020
+N
+N
 5
 3

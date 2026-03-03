@@ -5,6 +5,91 @@ Please select an option:
 3. Logout
 1
 Enter username:
+WelcomeUser
+Enter password:
+Welcome@1
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
+2
+Enter the full name of the person you are looking for:
+Jane Doe
+--- Found User Profile ---
+Name: Jane Doe
+University: Harvard University
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
+1
+Connection request sent to JourneyUser.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
+5
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+JourneyUser
+Enter password:
+Journey@1
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
+4
+--- Pending Connection Requests ---
+  WelcomeUser
+Request from WelcomeUser:
+Enter A to accept or R to reject:
+A
+Connection request from WelcomeUser accepted.
+Processed 01 pending request(s).
+01 accepted, 00 rejected.
+-----------------------------------
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
+5
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
 LoginUser1
 Enter password:
 Login@11
@@ -62,19 +147,19 @@ Connection request sent to JourneyUser.
 5. Logout
 6. View My Profile
 7. View My Network
-5
-Logging out. Goodbye!
-Welcome to InCollege!
-Please select an option:
-1. Log In
-2. Create a new account
-3. Logout
+2
+Enter the full name of the person you are looking for:
+Ben Grimm
+--- Found User Profile ---
+Name: Ben Grimm
+University: Universite de Montreal
+Major: Computer Science & AI
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
 1
-Enter username:
-JobUser
-Enter password:
-JobUser@1
-You have successfully logged in
+Connection request sent to WelcomeUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -84,44 +169,19 @@ You have successfully logged in
 5. Logout
 6. View My Profile
 7. View My Network
-4
---- Pending Connection Requests ---
-  LoginUser1
-Request from LoginUser1:
-Enter A to accept or R to reject:
-A
-Connection request from LoginUser1 accepted.
-Processed 01 pending request(s).
-01 accepted, 00 rejected.
------------------------------------
---- Welcome to InCollege, select an option ---
-0. Create/Edit your profile
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. View My Pending Connection Requests
-5. Logout
-6. View My Profile
-7. View My Network
-4
---- Pending Connection Requests ---
-You have no pending connection requests at this time.
------------------------------------
---- Welcome to InCollege, select an option ---
-0. Create/Edit your profile
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. View My Pending Connection Requests
-5. Logout
-6. View My Profile
-7. View My Network
-7
---- My Network ---
-  John Doe (University: Example University, Major: Computer Science)
---------------------
-Enter 0 to return to post-login menu.
-0
+2
+Enter the full name of the person you are looking for:
+John Doe
+--- Found User Profile ---
+Name: John Doe
+University: Harvard University
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
+1
+Connection request sent to SkillsUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -140,78 +200,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-JourneyUser
+SkillsUser
 Enter password:
-Journey@1
-You have successfully logged in
---- Welcome to InCollege, select an option ---
-0. Create/Edit your profile
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. View My Pending Connection Requests
-5. Logout
-6. View My Profile
-7. View My Network
-4
---- Pending Connection Requests ---
-  LoginUser1
-Request from LoginUser1:
-Enter A to accept or R to reject:
-R
-Connection request from LoginUser1 rejected.
-Processed 01 pending request(s).
-00 accepted, 01 rejected.
------------------------------------
---- Welcome to InCollege, select an option ---
-0. Create/Edit your profile
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. View My Pending Connection Requests
-5. Logout
-6. View My Profile
-7. View My Network
-4
---- Pending Connection Requests ---
-You have no pending connection requests at this time.
------------------------------------
---- Welcome to InCollege, select an option ---
-0. Create/Edit your profile
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. View My Pending Connection Requests
-5. Logout
-6. View My Profile
-7. View My Network
-7
---- My Network ---
-You have no established connections at this time.
---------------------
-Enter 0 to return to post-login menu.
-0
---- Welcome to InCollege, select an option ---
-0. Create/Edit your profile
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. View My Pending Connection Requests
-5. Logout
-6. View My Profile
-7. View My Network
-5
-Logging out. Goodbye!
-Welcome to InCollege!
-Please select an option:
-1. Log In
-2. Create a new account
-3. Logout
-1
-Enter username:
-LoginUser1
-Enter password:
-Login@11
+Skills@1
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -234,7 +225,7 @@ Graduation Year: 2025
 1. Send Connection Request
 2. Back to Main Menu
 1
-You are already connected with this user.
+Connection request sent to JobUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -266,19 +257,19 @@ Connection request sent to JourneyUser.
 5. Logout
 6. View My Profile
 7. View My Network
-5
-Logging out. Goodbye!
-Welcome to InCollege!
-Please select an option:
-1. Log In
-2. Create a new account
-3. Logout
+2
+Enter the full name of the person you are looking for:
+Ben Grimm
+--- Found User Profile ---
+Name: Ben Grimm
+University: Universite de Montreal
+Major: Computer Science & AI
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
 1
-Enter username:
-JourneyUser
-Enter password:
-Journey@1
-You have successfully logged in
+Connection request sent to WelcomeUser.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -288,16 +279,19 @@ You have successfully logged in
 5. Logout
 6. View My Profile
 7. View My Network
-4
---- Pending Connection Requests ---
-  LoginUser1
-Request from LoginUser1:
-Enter A to accept or R to reject:
-A
-Connection request from LoginUser1 accepted.
-Processed 01 pending request(s).
-01 accepted, 00 rejected.
------------------------------------
+2
+Enter the full name of the person you are looking for:
+John Doe
+--- Found User Profile ---
+Name: John Doe
+University: Example University
+Major: Computer Science
+Graduation Year: 2025
+-------------------------
+1. Send Connection Request
+2. Back to Main Menu
+1
+This user has already sent you a connection request.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
@@ -307,12 +301,50 @@ Processed 01 pending request(s).
 5. Logout
 6. View My Profile
 7. View My Network
-7
---- My Network ---
-  John Doe (University: Example University, Major: Computer Science)
---------------------
-Enter 0 to return to post-login menu.
 0
+Enter your First Name:
+John
+Enter your Last Name:
+Doe
+Enter your College's Name:
+Harvard University
+Enter your Major:
+Computer Science
+Enter your Graduation Year:
+2025
+About Me (Optional, type N to skip):
+I enjoy researching AI ethics.
+Profile updated.
+Would you like to add experience? (Y/N)
+Y
+Your Title:
+Lead Developer
+Company Name:
+Tech Corp
+Start Date:
+January 2024
+End Date:
+June 2025
+Description (Optional, type N to skip):
+Test Description
+Experience saved.
+Would you like to add experience? (Y/N)
+N
+Would you like to add education? (Y/N)
+Y
+Degree:
+Masters in Business
+University Name:
+University of California
+Start Year:
+2016
+End Year:
+2020
+Education saved.
+Would you like to add education? (Y/N)
+N
+Return to the top-level menu? (Y/N)
+N
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
