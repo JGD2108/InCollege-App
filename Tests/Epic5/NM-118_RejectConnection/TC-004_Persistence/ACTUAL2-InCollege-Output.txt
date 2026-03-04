@@ -18,10 +18,22 @@ You have successfully logged in
 5. Logout
 6. View My Profile
 7. View My Network
+4
+--- Pending Connection Requests ---
+You have no pending connection requests at this time.
+-----------------------------------
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
 7
 --- My Network ---
-  John Doe (University: Example University, Major: Computer Science)
-  John Doe (University: Harvard University, Major: Computer Science)
+You have no established connections at this time.
 --------------------
 Enter 0 to return to post-login menu.
 0
