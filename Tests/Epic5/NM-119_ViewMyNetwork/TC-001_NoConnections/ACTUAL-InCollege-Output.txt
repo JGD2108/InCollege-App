@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-JobUser
+LoginUser1
 Enter password:
-JobUser@1
+Login@11
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -20,8 +20,7 @@ You have successfully logged in
 7. View My Network
 7
 --- My Network ---
-  John Doe (University: Example University, Major: Computer Science)
-  John Doe (University: Harvard University, Major: Computer Science)
+You have no established connections at this time.
 --------------------
 Enter 0 to return to post-login menu.
 0
