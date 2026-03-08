@@ -160,6 +160,19 @@
            05 WS-EDU-UNI PIC X(30).
            05 WS-EDU-START-YEAR PIC 9(4).
            05 WS-EDU-END-YEAR PIC 9(4).
+      *> Job posting entry values
+         01 WS-JOB-DATA.
+           05 WS-JOB-TITLE PIC X(30).
+           05 WS-JOB-DESCRIPTION PIC X(100).
+           05 WS-JOB-EMPLOYER PIC X(30).
+           05 WS-JOB-LOCATION PIC X(30).
+           05 WS-JOB-SALARY PIC X(20).
+         77 WS-JOB-CANCEL PIC X VALUE "N".
+         77 WS-SALARY-SLASH-POS PIC 99 VALUE 0.
+         77 WS-SALARY-IDX PIC 99 VALUE 0.
+         77 WS-SALARY-HAS-DIGIT PIC X VALUE "N".
+         77 WS-SALARY-CHARS-OK PIC X VALUE "Y".
+         77 WS-SALARY-RATE PIC X(10).
 
       *> WS-TRIMMED-IN: holds trimmed input
       *> WS-IN-LEN: length trimmed input
@@ -187,8 +200,9 @@
           *> Post-login menu choice and skill selection choice
           77 WS-POST-CHOICE PIC X(1).
           77 WS-SKILL-CHOICE PIC X(1).
+          77 WS-JOB-CHOICE PIC X(1).
         77 WS-POST-EXIT PIC X VALUE "N".
-          *> Action code set by POSTLOGINPROG: 1=print message,2=skill submenu,3=logout
+          *> Action code set by POSTLOGINPROG
           77 WS-POST-ACTION PIC 9.
           *> Simple list of 5 skills; populated when needed
           01 WS-SKILL-LIST.
@@ -392,6 +406,277 @@
               END-STRING
               PERFORM PRINT-LINE
             END-PERFORM
+          END-IF.
+
+       HANDLE-JOB-MENU.
+          PERFORM UNTIL WS-EOF = "Y"
+            MOVE "--- Job Search/Internship Menu ---" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "1. Post a Job/Internship" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "2. Browse Jobs/Internships" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "3. Back to Main Menu" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+
+            PERFORM READ-AND-LOG
+            IF WS-EOF = "Y"
+              MOVE "No input received; returning to post-login menu."
+                TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PERFORM
+            END-IF
+
+            MOVE INPUT-RECORD(1:1) TO WS-JOB-CHOICE
+            EVALUATE WS-JOB-CHOICE
+              WHEN "1"
+                PERFORM HANDLE-JOB-POST
+              WHEN "2"
+                MOVE "Under Construction" TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+              WHEN "3"
+                MOVE "Returning to post-login menu." TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+                EXIT PERFORM
+              WHEN OTHER
+                MOVE "Invalid Selection." TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+            END-EVALUATE
+          END-PERFORM.
+
+       HANDLE-JOB-POST.
+          MOVE SPACES TO WS-JOB-DATA
+          MOVE "N" TO WS-JOB-CANCEL
+
+          MOVE "N" TO WS-VALID-INPUT
+          PERFORM UNTIL WS-VALID-INPUT = "Y"
+            MOVE "Job Title (Required):" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            PERFORM READ-AND-LOG
+            IF WS-EOF = "Y"
+              MOVE "No input for job title; returning to job menu."
+                TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              MOVE "Y" TO WS-JOB-CANCEL
+              EXIT PERFORM
+            END-IF
+            MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+            MOVE FUNCTION LENGTH(FUNCTION TRIM(INPUT-RECORD))
+              TO WS-IN-LEN
+            IF WS-IN-LEN = 0
+              MOVE "Job Title is required." TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+            ELSE
+              IF WS-IN-LEN > 30
+                MOVE "Job Title must be 30 characters or fewer."
+                  TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+              ELSE
+                MOVE WS-TRIMMED-IN TO WS-JOB-TITLE
+                MOVE "Y" TO WS-VALID-INPUT
+              END-IF
+            END-IF
+          END-PERFORM
+          IF WS-JOB-CANCEL = "Y"
+            EXIT PARAGRAPH
+          END-IF
+
+          MOVE "N" TO WS-VALID-INPUT
+          PERFORM UNTIL WS-VALID-INPUT = "Y"
+            MOVE "Description (Required):" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            PERFORM READ-AND-LOG
+            IF WS-EOF = "Y"
+              MOVE "No input for description; returning to job menu."
+                TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              MOVE "Y" TO WS-JOB-CANCEL
+              EXIT PERFORM
+            END-IF
+            MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+            MOVE FUNCTION LENGTH(FUNCTION TRIM(INPUT-RECORD))
+              TO WS-IN-LEN
+            IF WS-IN-LEN = 0
+              MOVE "Description is required." TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+            ELSE
+              IF WS-IN-LEN > 100
+                MOVE "Description must be 100 characters or fewer."
+                  TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+              ELSE
+                MOVE WS-TRIMMED-IN TO WS-JOB-DESCRIPTION
+                MOVE "Y" TO WS-VALID-INPUT
+              END-IF
+            END-IF
+          END-PERFORM
+          IF WS-JOB-CANCEL = "Y"
+            EXIT PARAGRAPH
+          END-IF
+
+          MOVE "N" TO WS-VALID-INPUT
+          PERFORM UNTIL WS-VALID-INPUT = "Y"
+            MOVE "Employer (Required):" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            PERFORM READ-AND-LOG
+            IF WS-EOF = "Y"
+              MOVE "No input for employer; returning to job menu."
+                TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              MOVE "Y" TO WS-JOB-CANCEL
+              EXIT PERFORM
+            END-IF
+            MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+            MOVE FUNCTION LENGTH(FUNCTION TRIM(INPUT-RECORD))
+              TO WS-IN-LEN
+            IF WS-IN-LEN = 0
+              MOVE "Employer is required." TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+            ELSE
+              IF WS-IN-LEN > 30
+                MOVE "Employer must be 30 characters or fewer."
+                  TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+              ELSE
+                MOVE WS-TRIMMED-IN TO WS-JOB-EMPLOYER
+                MOVE "Y" TO WS-VALID-INPUT
+              END-IF
+            END-IF
+          END-PERFORM
+          IF WS-JOB-CANCEL = "Y"
+            EXIT PARAGRAPH
+          END-IF
+
+          MOVE "N" TO WS-VALID-INPUT
+          PERFORM UNTIL WS-VALID-INPUT = "Y"
+            MOVE "Location (Required):" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            PERFORM READ-AND-LOG
+            IF WS-EOF = "Y"
+              MOVE "No input for location; returning to job menu."
+                TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              MOVE "Y" TO WS-JOB-CANCEL
+              EXIT PERFORM
+            END-IF
+            MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+            MOVE FUNCTION LENGTH(FUNCTION TRIM(INPUT-RECORD))
+              TO WS-IN-LEN
+            IF WS-IN-LEN = 0
+              MOVE "Location is required." TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+            ELSE
+              IF WS-IN-LEN > 30
+                MOVE "Location must be 30 characters or fewer."
+                  TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+              ELSE
+                MOVE WS-TRIMMED-IN TO WS-JOB-LOCATION
+                MOVE "Y" TO WS-VALID-INPUT
+              END-IF
+            END-IF
+          END-PERFORM
+          IF WS-JOB-CANCEL = "Y"
+            EXIT PARAGRAPH
+          END-IF
+
+          MOVE "N" TO WS-VALID-INPUT
+          PERFORM UNTIL WS-VALID-INPUT = "Y"
+            MOVE "Salary (Optional, format $50,000/year or $25/hour, N to skip):"
+              TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            PERFORM READ-AND-LOG
+            IF WS-EOF = "Y"
+              MOVE "No input for salary; returning to job menu."
+                TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              MOVE "Y" TO WS-JOB-CANCEL
+              EXIT PERFORM
+            END-IF
+            MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+            MOVE FUNCTION LENGTH(FUNCTION TRIM(INPUT-RECORD))
+              TO WS-IN-LEN
+            IF WS-IN-LEN = 0
+              MOVE SPACES TO WS-JOB-SALARY
+              MOVE "Y" TO WS-VALID-INPUT
+            ELSE
+              IF WS-TRIMMED-IN(1:1) = "N" OR WS-TRIMMED-IN(1:1) = "n"
+                MOVE SPACES TO WS-JOB-SALARY
+                MOVE "Y" TO WS-VALID-INPUT
+              ELSE
+                PERFORM VALIDATE-SALARY-FORMAT
+                IF WS-VALID-INPUT = "Y"
+                  MOVE WS-TRIMMED-IN TO WS-JOB-SALARY
+                ELSE
+                  MOVE "Salary format must look like $50,000/year or $25/hour."
+                    TO OUTPUT-RECORD
+                  PERFORM PRINT-LINE
+                END-IF
+              END-IF
+            END-IF
+          END-PERFORM
+          IF WS-JOB-CANCEL = "Y"
+            EXIT PARAGRAPH
+          END-IF
+
+          MOVE SPACES TO WS-MESSAGE
+          CALL "JOBPOSTPROG" USING WS-JOB-DATA WS-STATUS WS-MESSAGE
+          MOVE WS-MESSAGE TO OUTPUT-RECORD
+          PERFORM PRINT-LINE.
+
+       VALIDATE-SALARY-FORMAT.
+          MOVE "N" TO WS-VALID-INPUT
+          IF WS-IN-LEN < 8
+            EXIT PARAGRAPH
+          END-IF
+          IF WS-TRIMMED-IN(1:1) NOT = "$"
+            EXIT PARAGRAPH
+          END-IF
+
+          MOVE 0 TO WS-SALARY-SLASH-POS
+          PERFORM VARYING WS-SALARY-IDX FROM 1 BY 1
+            UNTIL WS-SALARY-IDX > WS-IN-LEN OR WS-SALARY-SLASH-POS > 0
+            IF WS-TRIMMED-IN(WS-SALARY-IDX:1) = "/"
+              MOVE WS-SALARY-IDX TO WS-SALARY-SLASH-POS
+            END-IF
+          END-PERFORM
+          IF WS-SALARY-SLASH-POS = 0
+            EXIT PARAGRAPH
+          END-IF
+          IF WS-SALARY-SLASH-POS < 4
+            EXIT PARAGRAPH
+          END-IF
+
+          MOVE "N" TO WS-SALARY-HAS-DIGIT
+          MOVE "Y" TO WS-SALARY-CHARS-OK
+          PERFORM VARYING WS-SALARY-IDX FROM 2 BY 1
+            UNTIL WS-SALARY-IDX >= WS-SALARY-SLASH-POS
+            IF WS-TRIMMED-IN(WS-SALARY-IDX:1) IS NUMERIC
+              MOVE "Y" TO WS-SALARY-HAS-DIGIT
+            ELSE
+              IF WS-TRIMMED-IN(WS-SALARY-IDX:1) NOT = ","
+                MOVE "N" TO WS-SALARY-CHARS-OK
+                EXIT PERFORM
+              END-IF
+            END-IF
+          END-PERFORM
+          IF WS-SALARY-CHARS-OK NOT = "Y"
+            EXIT PARAGRAPH
+          END-IF
+          IF WS-SALARY-HAS-DIGIT NOT = "Y"
+            EXIT PARAGRAPH
+          END-IF
+
+          MOVE SPACES TO WS-SALARY-RATE
+          MOVE FUNCTION LOWER-CASE(
+            FUNCTION TRIM(
+              WS-TRIMMED-IN(WS-SALARY-SLASH-POS + 1:
+                WS-IN-LEN - WS-SALARY-SLASH-POS)
+            )
+          ) TO WS-SALARY-RATE
+          IF FUNCTION TRIM(WS-SALARY-RATE) = "year"
+             OR FUNCTION TRIM(WS-SALARY-RATE) = "hour"
+            MOVE "Y" TO WS-VALID-INPUT
           END-IF.
 
        COPY "src/VIEWREQ_SRC.cpy".
@@ -1287,6 +1572,8 @@
                     PERFORM HANDLE-VIEW-PENDING-REQUESTS
                  WHEN 8
                     PERFORM HANDLE-VIEW-NETWORK
+                 WHEN 9
+                    PERFORM HANDLE-JOB-MENU
                  END-EVALUATE
                END-PERFORM
                EXIT PERFORM
@@ -2204,6 +2491,36 @@
        END PROGRAM LOGINPROG.
 
        IDENTIFICATION DIVISION.
+       PROGRAM-ID. JOBPOSTPROG.
+
+       DATA DIVISION.
+       LINKAGE SECTION.
+         01 LK-JOB-DATA.
+           05 LK-JOB-TITLE PIC X(30).
+           05 LK-JOB-DESCRIPTION PIC X(100).
+           05 LK-JOB-EMPLOYER PIC X(30).
+           05 LK-JOB-LOCATION PIC X(30).
+           05 LK-JOB-SALARY PIC X(20).
+         77 LK-STATUS PIC X(1).
+         77 LK-MESSAGE PIC X(100).
+
+       PROCEDURE DIVISION USING LK-JOB-DATA LK-STATUS LK-MESSAGE.
+         MOVE "N" TO LK-STATUS
+         IF FUNCTION LENGTH(FUNCTION TRIM(LK-JOB-TITLE)) = 0
+            OR FUNCTION LENGTH(FUNCTION TRIM(LK-JOB-DESCRIPTION)) = 0
+            OR FUNCTION LENGTH(FUNCTION TRIM(LK-JOB-EMPLOYER)) = 0
+            OR FUNCTION LENGTH(FUNCTION TRIM(LK-JOB-LOCATION)) = 0
+           MOVE "Missing required job fields." TO LK-MESSAGE
+           GOBACK
+         END-IF
+
+         MOVE "Y" TO LK-STATUS
+         MOVE "Job/Internship details captured." TO LK-MESSAGE
+         GOBACK.
+
+       END PROGRAM JOBPOSTPROG.
+
+       IDENTIFICATION DIVISION.
        PROGRAM-ID. POSTLOGINPROG.
 
        DATA DIVISION.
@@ -2227,13 +2544,13 @@
          *> 6 = user search
          *> 7 = view pending connection requests
          *> 8 = view established network
+         *> 9 = job search submenu
 
          EVALUATE LK-POST-CHOICE
           WHEN "0"
              MOVE 4 TO LK-ACTION
            WHEN "1"
-             MOVE "Job search is under construction." TO LK-MESSAGE
-             MOVE 1 TO LK-ACTION
+             MOVE 9 TO LK-ACTION
            WHEN "2"
              MOVE 6 TO LK-ACTION
            WHEN "3"
