@@ -1,5 +1,1 @@
-LoginUser1  JourneyUser P
-LoginUser1  WelcomeUser P
-LoginUser1  SkillsUser  P
-SkillsUser  JourneyUser P
-SkillsUser  WelcomeUser P
+SkillsUser  JobUser     P
