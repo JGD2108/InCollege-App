@@ -42,6 +42,11 @@
                   ORGANIZATION IS LINE SEQUENTIAL
                   FILE STATUS IS WS-PROFILES-STATUS.
 
+              SELECT OPTIONAL JOBS-FILE
+                ASSIGN TO "JOBS.DAT"
+                  ORGANIZATION IS LINE SEQUENTIAL
+                  FILE STATUS IS WS-JOBS-STATUS.
+
        DATA DIVISION.
        FILE SECTION.
 
@@ -76,6 +81,15 @@
              05 PROFILE-MAJOR         PIC X(30).
              05 PROFILE-GRAD-YEAR     PIC 9(4).
              05 PROFILE-ABOUT-ME      PIC X(100).
+
+         FD JOBS-FILE.
+           01 JOB-RECORD.
+             05 JOB-TITLE             PIC X(30).
+             05 JOB-DESCRIPTION       PIC X(100).
+             05 JOB-EMPLOYER          PIC X(30).
+             05 JOB-LOCATION          PIC X(30).
+             05 JOB-SALARY            PIC X(20).
+             05 JOB-POSTED-BY         PIC X(12).
 
        WORKING-STORAGE SECTION.
 
@@ -173,6 +187,8 @@
          77 WS-SALARY-HAS-DIGIT PIC X VALUE "N".
          77 WS-SALARY-CHARS-OK PIC X VALUE "Y".
          77 WS-SALARY-RATE PIC X(10).
+         77 WS-JOBS-EOF PIC X VALUE "N".
+         77 WS-JOBS-FOUND PIC X VALUE "N".
 
       *> WS-TRIMMED-IN: holds trimmed input
       *> WS-IN-LEN: length trimmed input
@@ -215,6 +231,7 @@
           77 WS-CONN-FILE-STATUS      PIC XX.
           77 WS-EST-FILE-STATUS       PIC XX.
           77 WS-PROFILES-STATUS       PIC XX.
+          77 WS-JOBS-STATUS           PIC XX.
           01 WS-CONNECTION-TABLE.
              05 WS-CONN-ENTRY OCCURS 25 TIMES.
                 10 WS-CONN-REQUESTER     PIC X(12).
@@ -417,24 +434,24 @@
        HANDLE-USER-SEARCH.
            MOVE "Enter the full name of the person you are looking for:" TO OUTPUT-RECORD
            PERFORM PRINT-LINE
-           
+
           PERFORM READ-AND-LOG
           IF WS-EOF = "Y"
             MOVE "No input received." TO OUTPUT-RECORD
             PERFORM PRINT-LINE
             EXIT PARAGRAPH
           END-IF
-           
+
            MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-SEARCH-FULL-NAME
-           
+
            *> Call EDITPROFILE to initialize it
            CALL "EDITPROFILE"
-           
+
            MOVE 0 TO WS-SEARCH-MATCH-COUNT
            MOVE "N" TO WS-SEARCH-LIMIT-HIT
            MOVE SPACES TO WS-SEARCH-USERNAME
            MOVE SPACES TO WS-SEARCH-MATCH-TABLE
-           
+
            *> Try to find profile by iterating through possible usernames from PROFILES.DAT
            *> We'll read the profiles file directly
            MOVE "N" TO WS-USER-EOF
@@ -445,7 +462,7 @@
             PERFORM PRINT-LINE
              EXIT PARAGRAPH
            END-IF
-           
+
            PERFORM UNTIL WS-USER-EOF = "Y"
              READ PROFILES-FILE
                AT END
@@ -459,7 +476,7 @@
                         FUNCTION TRIM(PROFILE-LAST-NAME) DELIMITED BY SIZE
                    INTO WS-TEMP-FULL-NAME
                  END-STRING
-                 
+
                  IF FUNCTION TRIM(WS-TEMP-FULL-NAME) = FUNCTION TRIM(WS-SEARCH-FULL-NAME)
                     AND FUNCTION TRIM(PROFILE-USERNAME) NOT = FUNCTION TRIM(WS-USERNAME)
                    IF WS-SEARCH-MATCH-COUNT < 25
@@ -476,9 +493,9 @@
                  END-IF
              END-READ
            END-PERFORM
-           
+
            CLOSE PROFILES-FILE
-           
+
            IF WS-SEARCH-MATCH-COUNT = 0
              MOVE "User not found." TO OUTPUT-RECORD
              PERFORM PRINT-LINE
@@ -661,7 +678,7 @@
                *> Send connection request
                MOVE SPACES TO WS-STATUS
                MOVE SPACES TO WS-MESSAGE
-               CALL "SENDREQUEST" USING WS-USERNAME WS-SEARCH-USERNAME 
+               CALL "SENDREQUEST" USING WS-USERNAME WS-SEARCH-USERNAME
                                         WS-STATUS WS-MESSAGE
                MOVE WS-MESSAGE TO OUTPUT-RECORD
                PERFORM PRINT-LINE
@@ -2225,7 +2242,28 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. JOBPOSTPROG.
 
+       ENVIRONMENT DIVISION.
+         INPUT-OUTPUT SECTION.
+         FILE-CONTROL.
+           SELECT OPTIONAL JOBS-FILE
+                  ASSIGN TO "JOBS.DAT"
+                  ORGANIZATION IS LINE SEQUENTIAL
+                  FILE STATUS IS WS-JOBS-STATUS.
+
        DATA DIVISION.
+       FILE SECTION.
+         FD JOBS-FILE.
+           01 JOB-RECORD.
+             05 JOB-TITLE             PIC X(30).
+             05 JOB-DESCRIPTION       PIC X(100).
+             05 JOB-EMPLOYER          PIC X(30).
+             05 JOB-LOCATION          PIC X(30).
+             05 JOB-SALARY            PIC X(20).
+             05 JOB-POSTED-BY         PIC X(12).
+
+       WORKING-STORAGE SECTION.
+         77 WS-JOBS-STATUS PIC XX.
+
        LINKAGE SECTION.
          01 LK-JOB-DATA.
            05 LK-JOB-TITLE PIC X(30).
@@ -2233,10 +2271,11 @@
            05 LK-JOB-EMPLOYER PIC X(30).
            05 LK-JOB-LOCATION PIC X(30).
            05 LK-JOB-SALARY PIC X(20).
+         77 LK-USERNAME PIC X(12).
          77 LK-STATUS PIC X(1).
          77 LK-MESSAGE PIC X(100).
 
-       PROCEDURE DIVISION USING LK-JOB-DATA LK-STATUS LK-MESSAGE.
+       PROCEDURE DIVISION USING LK-JOB-DATA LK-USERNAME LK-STATUS LK-MESSAGE.
          MOVE "N" TO LK-STATUS
          IF FUNCTION LENGTH(FUNCTION TRIM(LK-JOB-TITLE)) = 0
             OR FUNCTION LENGTH(FUNCTION TRIM(LK-JOB-DESCRIPTION)) = 0
@@ -2246,8 +2285,32 @@
            GOBACK
          END-IF
 
+         *> Open file in EXTEND mode to append the job
+         OPEN EXTEND JOBS-FILE
+         IF WS-JOBS-STATUS = "35"
+           *> File doesn't exist, create it
+           OPEN OUTPUT JOBS-FILE
+           CLOSE JOBS-FILE
+           OPEN EXTEND JOBS-FILE
+         END-IF
+         IF WS-JOBS-STATUS NOT = "00"
+           MOVE "Unable to save job posting." TO LK-MESSAGE
+           CLOSE JOBS-FILE
+           GOBACK
+         END-IF
+
+         *> Write the job record
+         MOVE LK-JOB-TITLE TO JOB-TITLE
+         MOVE LK-JOB-DESCRIPTION TO JOB-DESCRIPTION
+         MOVE LK-JOB-EMPLOYER TO JOB-EMPLOYER
+         MOVE LK-JOB-LOCATION TO JOB-LOCATION
+         MOVE LK-JOB-SALARY TO JOB-SALARY
+         MOVE LK-USERNAME TO JOB-POSTED-BY
+         WRITE JOB-RECORD
+         CLOSE JOBS-FILE
+
          MOVE "Y" TO LK-STATUS
-         MOVE "Job/Internship details captured." TO LK-MESSAGE
+         MOVE "Job/Internship posted successfully." TO LK-MESSAGE
          GOBACK.
 
        END PROGRAM JOBPOSTPROG.
