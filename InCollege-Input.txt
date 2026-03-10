@@ -2,6 +2,12 @@
 JobUser
 JobUser@1
 1
+1
+Software Intern
+Assist with backend services and testing
+Acme Labs
+Remote
+$25/hour
 2
 3
 5
