@@ -90,6 +90,7 @@
              05 JOB-LOCATION          PIC X(30).
              05 JOB-SALARY            PIC X(20).
              05 JOB-POSTED-BY         PIC X(12).
+             05 JOB-ID                PIC X(6).
 
        WORKING-STORAGE SECTION.
 
@@ -2260,9 +2261,15 @@
              05 JOB-LOCATION          PIC X(30).
              05 JOB-SALARY            PIC X(20).
              05 JOB-POSTED-BY         PIC X(12).
+             05 JOB-ID                PIC X(6).
 
        WORKING-STORAGE SECTION.
          77 WS-JOBS-STATUS PIC XX.
+         77 WS-JOBS-EOF PIC X VALUE "N".
+         77 WS-JOB-COUNT PIC 9(6) VALUE 0.
+         77 WS-MAX-JOB-ID PIC 9(6) VALUE 0.
+         77 WS-CURRENT-JOB-ID PIC 9(6) VALUE 0.
+         77 WS-NEXT-JOB-ID PIC 9(6) VALUE 1.
 
        LINKAGE SECTION.
          01 LK-JOB-DATA.
@@ -2285,28 +2292,71 @@
            GOBACK
          END-IF
 
-         *> Open file in EXTEND mode to append the job
-         OPEN EXTEND JOBS-FILE
-         IF WS-JOBS-STATUS = "35"
-           *> File doesn't exist, create it
-           OPEN OUTPUT JOBS-FILE
+         MOVE "N" TO WS-JOBS-EOF
+         MOVE 0 TO WS-JOB-COUNT
+         MOVE 0 TO WS-MAX-JOB-ID
+         MOVE 1 TO WS-NEXT-JOB-ID
+
+         OPEN INPUT JOBS-FILE
+         IF WS-JOBS-STATUS = "00"
+           PERFORM UNTIL WS-JOBS-EOF = "Y"
+             READ JOBS-FILE
+               AT END
+                 MOVE "Y" TO WS-JOBS-EOF
+               NOT AT END
+                 ADD 1 TO WS-JOB-COUNT
+                 IF JOB-ID IS NUMERIC
+                   MOVE JOB-ID TO WS-CURRENT-JOB-ID
+                   IF WS-CURRENT-JOB-ID > WS-MAX-JOB-ID
+                     MOVE WS-CURRENT-JOB-ID TO WS-MAX-JOB-ID
+                   END-IF
+                 END-IF
+             END-READ
+           END-PERFORM
            CLOSE JOBS-FILE
+         ELSE
+           IF WS-JOBS-STATUS NOT = "35"
+              AND WS-JOBS-STATUS NOT = "05"
+             MOVE "Unable to save job posting." TO LK-MESSAGE
+             GOBACK
+           ELSE
+             CLOSE JOBS-FILE
+           END-IF
+         END-IF
+
+         IF WS-JOB-COUNT >= WS-MAX-JOB-ID
+           COMPUTE WS-NEXT-JOB-ID = WS-JOB-COUNT + 1
+         ELSE
+           COMPUTE WS-NEXT-JOB-ID = WS-MAX-JOB-ID + 1
+         END-IF
+
+         IF WS-JOB-COUNT = 0 AND WS-MAX-JOB-ID = 0
+           OPEN OUTPUT JOBS-FILE
+         ELSE
            OPEN EXTEND JOBS-FILE
          END-IF
          IF WS-JOBS-STATUS NOT = "00"
+            AND WS-JOBS-STATUS NOT = "05"
            MOVE "Unable to save job posting." TO LK-MESSAGE
            CLOSE JOBS-FILE
            GOBACK
          END-IF
 
          *> Write the job record
+         MOVE SPACES TO JOB-RECORD
          MOVE LK-JOB-TITLE TO JOB-TITLE
          MOVE LK-JOB-DESCRIPTION TO JOB-DESCRIPTION
          MOVE LK-JOB-EMPLOYER TO JOB-EMPLOYER
          MOVE LK-JOB-LOCATION TO JOB-LOCATION
          MOVE LK-JOB-SALARY TO JOB-SALARY
          MOVE LK-USERNAME TO JOB-POSTED-BY
+         MOVE WS-NEXT-JOB-ID TO JOB-ID
          WRITE JOB-RECORD
+         IF WS-JOBS-STATUS NOT = "00"
+           MOVE "Unable to save job posting." TO LK-MESSAGE
+           CLOSE JOBS-FILE
+           GOBACK
+         END-IF
          CLOSE JOBS-FILE
 
          MOVE "Y" TO LK-STATUS
