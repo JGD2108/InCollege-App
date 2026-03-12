@@ -1,0 +1,13 @@
+1
+JobUser
+JobUser@1
+1
+1
+Software Intern
+Assist with backend services and testing
+Acme Labs
+Remote
+N
+3
+5
+3
