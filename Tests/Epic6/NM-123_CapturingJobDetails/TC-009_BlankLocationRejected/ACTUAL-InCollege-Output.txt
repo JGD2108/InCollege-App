@@ -31,9 +31,12 @@ Assist with backend development
 Employer (Required):
 Acme Labs
 Location (Required):
+
+Location is required.
+Location (Required):
 Remote
 Salary (Optional, format $50,000/year or $25/hour, N to skip):
-
+N
 Job/Internship posted successfully.
 --- Job Search/Internship Menu ---
 1. Post a Job/Internship
