@@ -1,0 +1,14 @@
+1
+JobUser
+JobUser@1
+1
+1
+Software Intern
+This is a very long description that exceeds the one hundred character maximum limit set by the system.
+Assist with backend development
+Acme Labs
+Remote
+N
+3
+5
+3

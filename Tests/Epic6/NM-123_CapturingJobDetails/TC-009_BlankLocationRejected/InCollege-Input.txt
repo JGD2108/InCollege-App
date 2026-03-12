@@ -6,8 +6,9 @@ JobUser@1
 Software Intern
 Assist with backend development
 Acme Labs
-Remote
 
+Remote
+N
 3
 5
 3
