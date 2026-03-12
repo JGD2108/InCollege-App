@@ -1,0 +1,20 @@
+1
+JobUser
+JobUser@1
+1
+1
+Software Intern
+Assist with backend services and testing
+Acme Labs
+Remote
+N
+3
+1
+Data Analyst
+Entry-level data analyst role
+DataCorp
+New York, NY
+$50,000/year
+3
+5
+3
