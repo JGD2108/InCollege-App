@@ -104,9 +104,9 @@ needs_baseline_users() {
     fi
 }
 
-# Function to blank profile/education/experience data files
+# Function to blank profile/education/experience/jobs data files
 reset_extra_dat_files() {
-    for f in "PROFILES.DAT" "EDUCATION.DAT" "EXPERIENCE.DAT" "CONNECTIONS.DAT" "ESTABLISHED.DAT"; do
+    for f in "PROFILES.DAT" "EDUCATION.DAT" "EXPERIENCE.DAT" "CONNECTIONS.DAT" "ESTABLISHED.DAT" "JOBS.DAT"; do
         seed_or_blank_dat "$f"
     done
 }
@@ -159,6 +159,7 @@ run_test() {
     seed_dat_for_test "$test_path" "EXPERIENCE.DAT"
     seed_dat_for_test "$test_path" "CONNECTIONS.DAT"
     seed_dat_for_test "$test_path" "ESTABLISHED.DAT"
+    seed_dat_for_test "$test_path" "JOBS.DAT"
 
     # Setup USERS.DAT based on test requirements
     if needs_baseline_users "$input_file"; then
