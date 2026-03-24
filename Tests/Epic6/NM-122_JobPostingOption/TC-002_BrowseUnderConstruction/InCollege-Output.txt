@@ -24,7 +24,11 @@ You have successfully logged in
 2. Browse Jobs/Internships
 3. Back to Main Menu
 2
-Browse Jobs/Internships is under construction.
+--- Available Job Listings ---
+No job/internship postings are currently available.
+-----------------------------
+Enter 0 to return to the job menu:
+0
 --- Job Search/Internship Menu ---
 1. Post a Job/Internship
 2. Browse Jobs/Internships

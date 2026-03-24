@@ -193,13 +193,14 @@
          77 WS-JOBS-FOUND PIC X VALUE "N".
       *> Job browsing variables
          77 WS-TOTAL-JOBS PIC 99 VALUE 0.
-         77 WS-JOBS-COUNT PIC 99 VALUE 0.
+         77 WS-JOBS-COUNT PIC 9(6) VALUE 0.
          77 WS-JOBS-FILE-STATUS PIC XX.
          77 WS-JOBS-PER-PAGE PIC 9 VALUE 5.
          77 WS-JOB-INDEX PIC 9(6) VALUE 0.
          77 WS-PAGE-COUNT PIC 9 VALUE 0.
          77 WS-SELECTED-JOB-ID PIC X(6) VALUE SPACES.
          77 WS-SAVED-JOB-ID PIC X(6) VALUE SPACES.
+         77 WS-JOB-NUMBER-TEXT PIC Z(6).
 
       *> WS-TRIMMED-IN: holds trimmed input
       *> WS-IN-LEN: length trimmed input

@@ -1,0 +1,23 @@
+1
+JobUser
+JobUser@1
+1
+1
+Software Intern
+Develop tools for testing and automation
+TechCorp
+New York, NY
+$25/hour
+1
+Data Analyst
+Analyze business data and build dashboards
+DataSolutions
+Remote
+N
+2
+2
+0
+0
+3
+5
+3

@@ -1,205 +1,261 @@
        HANDLE-BROWSE-JOBS.
-       *> Still under work, not functional
-          MOVE "--- Available Jobs/Internships ---" TO OUTPUT-RECORD
+          PERFORM UNTIL WS-EOF = "Y"
+             PERFORM DISPLAY-JOB-LIST
+
+             IF WS-EOF = "Y" OR WS-JOBS-FOUND = "E"
+                EXIT PERFORM
+             END-IF
+
+             IF WS-JOBS-FOUND = "N"
+                MOVE "Enter 0 to return to the job menu:"
+                  TO OUTPUT-RECORD
+             ELSE
+                MOVE "Enter job number to view details, or 0 to go back:"
+                  TO OUTPUT-RECORD
+             END-IF
+             PERFORM PRINT-LINE
+
+             PERFORM READ-AND-LOG
+             IF WS-EOF = "Y"
+                MOVE "No input received; returning to the job menu."
+                  TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+                EXIT PERFORM
+             END-IF
+
+             MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+             MOVE FUNCTION LENGTH(FUNCTION TRIM(INPUT-RECORD))
+               TO WS-IN-LEN
+
+             IF WS-IN-LEN = 0
+                MOVE "Invalid job number." TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+             ELSE
+                IF WS-TRIMMED-IN(1:WS-IN-LEN) IS NUMERIC
+                   COMPUTE WS-JOB-INDEX =
+                     FUNCTION NUMVAL(WS-TRIMMED-IN(1:WS-IN-LEN))
+
+                   IF WS-JOBS-FOUND = "N"
+                      IF WS-JOB-INDEX = 0
+                         EXIT PERFORM
+                      ELSE
+                         MOVE "Invalid job number." TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                      END-IF
+                   ELSE
+                      IF WS-JOB-INDEX = 0
+                         EXIT PERFORM
+                      ELSE
+                         IF WS-JOB-INDEX > WS-JOBS-COUNT
+                            MOVE "Invalid job number." TO OUTPUT-RECORD
+                            PERFORM PRINT-LINE
+                         ELSE
+                            PERFORM VIEW-JOB-DETAILS
+                         END-IF
+                      END-IF
+                   END-IF
+                ELSE
+                   MOVE "Invalid job number." TO OUTPUT-RECORD
+                   PERFORM PRINT-LINE
+                END-IF
+             END-IF
+          END-PERFORM.
+
+       DISPLAY-JOB-LIST.
+          MOVE 0 TO WS-JOBS-COUNT
+          MOVE "N" TO WS-JOBS-EOF
+          MOVE "N" TO WS-JOBS-FOUND
+
+          MOVE "--- Available Job Listings ---" TO OUTPUT-RECORD
           PERFORM PRINT-LINE
 
-          PERFORM VIEW-JOB.
-          GOBACK.
-
-
-       VIEW-JOB.
-           MOVE "N" TO WS-JOBS-EOF
-           MOVE 0 TO WS-PAGE-COUNT
-           MOVE SPACES TO WS-SELECTED-JOB-ID
-
-           OPEN INPUT JOBS-FILE
-           IF WS-JOBS-STATUS NOT = "00"
-               MOVE "Unable to open jobs file." TO OUTPUT-RECORD
-               PERFORM PRINT-LINE
-               GOBACK
-           END-IF
-
-           PERFORM UNTIL WS-JOBS-EOF = "Y"
-               READ JOBS-FILE
-                   AT END
-                       MOVE "Y" TO WS-JOBS-EOF
-
-                   NOT AT END
-                       ADD 1 TO WS-PAGE-COUNT
-
-                       STRING
-                           "ID: "
-                           FUNCTION TRIM(JOB-ID)
-                           " | "
-                           FUNCTION TRIM(JOB-TITLE)
-                           " | "
-                           FUNCTION TRIM(JOB-EMPLOYER)
-                           " | "
-                           FUNCTION TRIM(JOB-LOCATION)
-                           INTO OUTPUT-RECORD
-                       END-STRING
-                       PERFORM PRINT-LINE
-
-                       *> FULL PAGE HANDLING
-                       IF WS-PAGE-COUNT >= WS-JOBS-PER-PAGE
-                           MOVE "Enter a Job ID to view details, Q to quit, or any key for next page:"
-                               TO OUTPUT-RECORD
-                           PERFORM PRINT-LINE
-
-                           PERFORM READ-AND-LOG
-                           IF WS-EOF = "Y"
-                               MOVE "No input received; returning to menu." TO OUTPUT-RECORD
-                               PERFORM PRINT-LINE
-                               CLOSE JOBS-FILE
-                               EXIT PERFORM
-                           END-IF
-
-                           MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
-
-                           IF WS-TRIMMED-IN(1:1) = "Q" OR WS-TRIMMED-IN(1:1) = "q"
-                               CLOSE JOBS-FILE
-                               EXIT PERFORM
-
-                           ELSE
-                               MOVE WS-TRIMMED-IN TO WS-SELECTED-JOB-ID
-
-                               CLOSE JOBS-FILE
-                               PERFORM VIEW-JOB-DETAILS
-                               EXIT PERFORM
-                           END-IF
-
-                           MOVE 0 TO WS-PAGE-COUNT
-                       END-IF
-               END-READ
-           END-PERFORM
-
-           *> FINAL (PARTIAL PAGE) HANDLING
-           IF WS-PAGE-COUNT > 0 AND NOT (WS-TRIMMED-IN(1:1) = "Q" OR WS-TRIMMED-IN(1:1) = "q")
-               MOVE "Enter a Job ID to view details, Q to quit:"
-                   TO OUTPUT-RECORD
-               PERFORM PRINT-LINE
-
-               PERFORM READ-AND-LOG
-               IF WS-EOF = "Y"
-                   MOVE "No input received; returning to menu." TO OUTPUT-RECORD
-                   PERFORM PRINT-LINE
-               ELSE
-                   MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
-
-                   IF WS-TRIMMED-IN(1:1) NOT = "Q"
-                      AND WS-TRIMMED-IN(1:1) NOT = "q"
-
-                       MOVE WS-TRIMMED-IN TO WS-SELECTED-JOB-ID
-
-                       CLOSE JOBS-FILE
-                       PERFORM VIEW-JOB-DETAILS
-                       GOBACK
-                   END-IF
-               END-IF
-           END-IF
-
-           MOVE "--- End of Available Jobs/Internships ---"
+          OPEN INPUT JOBS-FILE
+          IF WS-JOBS-STATUS = "35" OR WS-JOBS-STATUS = "05"
+             MOVE "No job/internship postings are currently available."
                TO OUTPUT-RECORD
-           PERFORM PRINT-LINE
+             PERFORM PRINT-LINE
+             MOVE "-----------------------------" TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             EXIT PARAGRAPH
+          END-IF
 
-           CLOSE JOBS-FILE
-           GOBACK.
+          IF WS-JOBS-STATUS NOT = "00"
+             MOVE "Unable to open jobs file." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             MOVE "E" TO WS-JOBS-FOUND
+             EXIT PARAGRAPH
+          END-IF
+
+          PERFORM UNTIL WS-JOBS-EOF = "Y"
+             READ JOBS-FILE
+                AT END
+                   MOVE "Y" TO WS-JOBS-EOF
+                NOT AT END
+                   ADD 1 TO WS-JOBS-COUNT
+                   MOVE "Y" TO WS-JOBS-FOUND
+
+                   MOVE WS-JOBS-COUNT TO WS-JOB-NUMBER-TEXT
+                   MOVE SPACES TO OUTPUT-RECORD
+                   STRING
+                      FUNCTION TRIM(WS-JOB-NUMBER-TEXT) DELIMITED BY SIZE
+                      ". " DELIMITED BY SIZE
+                      FUNCTION TRIM(JOB-TITLE) DELIMITED BY SIZE
+                      " at " DELIMITED BY SIZE
+                      FUNCTION TRIM(JOB-EMPLOYER) DELIMITED BY SIZE
+                      INTO OUTPUT-RECORD
+                   END-STRING
+                   PERFORM PRINT-LINE
+
+                   MOVE SPACES TO OUTPUT-RECORD
+                   STRING
+                      "   (" DELIMITED BY SIZE
+                      FUNCTION TRIM(JOB-LOCATION) DELIMITED BY SIZE
+                      ")" DELIMITED BY SIZE
+                      INTO OUTPUT-RECORD
+                   END-STRING
+                   PERFORM PRINT-LINE
+             END-READ
+          END-PERFORM
+
+          CLOSE JOBS-FILE
+
+          IF WS-JOBS-FOUND = "N"
+             MOVE "No job/internship postings are currently available."
+               TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+          END-IF
+
+          MOVE "-----------------------------" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE.
 
        VIEW-JOB-DETAILS.
-           MOVE "N" TO WS-JOBS-EOF
+          MOVE 0 TO WS-JOBS-COUNT
+          MOVE "N" TO WS-JOBS-EOF
+          MOVE "N" TO WS-JOBS-FOUND
 
-           OPEN INPUT JOBS-FILE
-           IF WS-JOBS-STATUS NOT = "00"
-               MOVE "Unable to open jobs file." TO OUTPUT-RECORD
-               PERFORM PRINT-LINE
-               GOBACK
-           END-IF
+          OPEN INPUT JOBS-FILE
+          IF WS-JOBS-STATUS NOT = "00"
+             MOVE "Unable to open jobs file." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             EXIT PARAGRAPH
+          END-IF
 
-           PERFORM UNTIL WS-JOBS-EOF = "Y"
-               READ JOBS-FILE
-                   AT END
-                       MOVE "Y" TO WS-JOBS-EOF
-                       MOVE "Job ID not found." TO OUTPUT-RECORD
-                       PERFORM PRINT-LINE
+          PERFORM UNTIL WS-JOBS-EOF = "Y"
+             READ JOBS-FILE
+                AT END
+                   MOVE "Y" TO WS-JOBS-EOF
+                NOT AT END
+                   ADD 1 TO WS-JOBS-COUNT
+                   IF WS-JOBS-COUNT = WS-JOB-INDEX
+                      MOVE "Y" TO WS-JOBS-FOUND
+                      PERFORM DISPLAY-JOB-FULL
+                      EXIT PERFORM
+                   END-IF
+             END-READ
+          END-PERFORM
 
-                   NOT AT END
-                       IF FUNCTION TRIM(JOB-ID) = FUNCTION TRIM(WS-SELECTED-JOB-ID)
-                           PERFORM DISPLAY-JOB-FULL
-                           EXIT PERFORM
-                       END-IF
-               END-READ
-           END-PERFORM
+          CLOSE JOBS-FILE
 
-           CLOSE JOBS-FILE
-           GOBACK.
+          IF WS-JOBS-FOUND NOT = "Y"
+             MOVE "Invalid job number." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+          END-IF.
 
        DISPLAY-JOB-FULL.
+          MOVE "--- Job Details ---" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
 
-              MOVE "----------------------------------------" TO OUTPUT-RECORD
-              PERFORM PRINT-LINE
+          MOVE SPACES TO OUTPUT-RECORD
+          STRING
+             "Title: " DELIMITED BY SIZE
+             FUNCTION TRIM(JOB-TITLE) DELIMITED BY SIZE
+             INTO OUTPUT-RECORD
+          END-STRING
+          PERFORM PRINT-LINE
 
-              STRING
-                  "Job ID: " FUNCTION TRIM(JOB-ID)
-                  INTO OUTPUT-RECORD
-              END-STRING
-              PERFORM PRINT-LINE
+          MOVE FUNCTION TRIM(JOB-DESCRIPTION) TO WS-DESC-TEMP
+          MOVE FUNCTION LENGTH(FUNCTION TRIM(JOB-DESCRIPTION))
+            TO WS-IN-LEN-3
 
-              STRING
-                  "Title: " FUNCTION TRIM(JOB-TITLE)
-                  INTO OUTPUT-RECORD
-              END-STRING
-              PERFORM PRINT-LINE
+          IF WS-IN-LEN-3 <= 67
+             MOVE SPACES TO OUTPUT-RECORD
+             STRING
+                "Description: " DELIMITED BY SIZE
+                WS-DESC-TEMP(1:WS-IN-LEN-3) DELIMITED BY SIZE
+                INTO OUTPUT-RECORD
+             END-STRING
+             PERFORM PRINT-LINE
+          ELSE
+             MOVE SPACES TO OUTPUT-RECORD
+             STRING
+                "Description: " DELIMITED BY SIZE
+                WS-DESC-TEMP(1:67) DELIMITED BY SIZE
+                INTO OUTPUT-RECORD
+             END-STRING
+             PERFORM PRINT-LINE
 
-              STRING
-                  "Description: " FUNCTION TRIM(JOB-DESCRIPTION)
-                  INTO OUTPUT-RECORD
-              END-STRING
-              PERFORM PRINT-LINE
+             MOVE SPACES TO OUTPUT-RECORD
+             STRING
+                "             " DELIMITED BY SIZE
+                WS-DESC-TEMP(68:WS-IN-LEN-3 - 67) DELIMITED BY SIZE
+                INTO OUTPUT-RECORD
+             END-STRING
+             PERFORM PRINT-LINE
+          END-IF
 
-              STRING
-                  "Employer: " FUNCTION TRIM(JOB-EMPLOYER)
-                  INTO OUTPUT-RECORD
-              END-STRING
-              PERFORM PRINT-LINE
+          MOVE SPACES TO OUTPUT-RECORD
+          STRING
+             "Employer: " DELIMITED BY SIZE
+             FUNCTION TRIM(JOB-EMPLOYER) DELIMITED BY SIZE
+             INTO OUTPUT-RECORD
+          END-STRING
+          PERFORM PRINT-LINE
 
-              STRING
-                  "Location: " FUNCTION TRIM(JOB-LOCATION)
-                  INTO OUTPUT-RECORD
-              END-STRING
-              PERFORM PRINT-LINE
+          MOVE SPACES TO OUTPUT-RECORD
+          STRING
+             "Location: " DELIMITED BY SIZE
+             FUNCTION TRIM(JOB-LOCATION) DELIMITED BY SIZE
+             INTO OUTPUT-RECORD
+          END-STRING
+          PERFORM PRINT-LINE
 
-              STRING
-                  "Salary: " FUNCTION TRIM(JOB-SALARY)
-                  INTO OUTPUT-RECORD
-              END-STRING
-              PERFORM PRINT-LINE
+          MOVE SPACES TO OUTPUT-RECORD
+          IF FUNCTION LENGTH(FUNCTION TRIM(JOB-SALARY)) = 0
+             MOVE "Salary: Not provided" TO OUTPUT-RECORD
+          ELSE
+             STRING
+                "Salary: " DELIMITED BY SIZE
+                FUNCTION TRIM(JOB-SALARY) DELIMITED BY SIZE
+                INTO OUTPUT-RECORD
+             END-STRING
+          END-IF
+          PERFORM PRINT-LINE
 
-              MOVE "----------------------------------------" TO OUTPUT-RECORD
-              PERFORM PRINT-LINE
+          MOVE "-------------------" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
 
-              *> Prompt user to save job
-              MOVE "Would you like to apply for this job/internship? (Y/N): "
+          MOVE "N" TO WS-VALID-INPUT
+          PERFORM UNTIL WS-EOF = "Y" OR WS-VALID-INPUT = "Y"
+             MOVE "0. Back to Job List" TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             MOVE "Enter your choice:" TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+
+             PERFORM READ-AND-LOG
+             IF WS-EOF = "Y"
+                MOVE "No input received; returning to the job list."
                   TO OUTPUT-RECORD
-              PERFORM PRINT-LINE
+                PERFORM PRINT-LINE
+             ELSE
+                MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+                MOVE FUNCTION LENGTH(FUNCTION TRIM(INPUT-RECORD))
+                  TO WS-IN-LEN
 
-              PERFORM READ-AND-LOG
-
-              IF WS-EOF = "Y"
-                  MOVE "No input received. Returning to job list."
-                      TO OUTPUT-RECORD
-                  PERFORM PRINT-LINE
-                  EXIT PARAGRAPH
-              END-IF
-
-              MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
-
-              IF WS-TRIMMED-IN(1:1) = "Y" OR WS-TRIMMED-IN(1:1) = "y"
-                  MOVE JOB-ID TO WS-SAVED-JOB-ID
-                  *> Here is where we would actually record the application.
-                  MOVE "Successfully applied!" TO OUTPUT-RECORD
-                  PERFORM PRINT-LINE
-              ELSE
-                  MOVE "Returning to job menu." TO OUTPUT-RECORD
-                  PERFORM PRINT-LINE
-              END-IF
-              GOBACK.
+                IF WS-IN-LEN = 1 AND WS-TRIMMED-IN(1:1) = "0"
+                   MOVE "Y" TO WS-VALID-INPUT
+                ELSE
+                   MOVE "Invalid selection." TO OUTPUT-RECORD
+                   PERFORM PRINT-LINE
+                END-IF
+             END-IF
+          END-PERFORM.
