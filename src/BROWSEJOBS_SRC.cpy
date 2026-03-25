@@ -238,6 +238,8 @@
           PERFORM UNTIL WS-EOF = "Y" OR WS-VALID-INPUT = "Y"
              MOVE "0. Back to Job List" TO OUTPUT-RECORD
              PERFORM PRINT-LINE
+             MOVE "1. Apply for this job" TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
              MOVE "Enter your choice:" TO OUTPUT-RECORD
              PERFORM PRINT-LINE
 
@@ -254,8 +256,14 @@
                 IF WS-IN-LEN = 1 AND WS-TRIMMED-IN(1:1) = "0"
                    MOVE "Y" TO WS-VALID-INPUT
                 ELSE
-                   MOVE "Invalid selection." TO OUTPUT-RECORD
-                   PERFORM PRINT-LINE
+                   IF WS-IN-LEN = 1 AND WS-TRIMMED-IN(1:1) = "1"
+                      MOVE "Applying to job!" TO OUTPUT-RECORD
+                      PERFORM PRINT-LINE
+                      *> This is where you would call the application handling code
+                      MOVE "Y" TO WS-VALID-INPUT
+                   ELSE
+                       MOVE "Invalid selection." TO OUTPUT-RECORD
+                       PERFORM PRINT-LINE
                 END-IF
              END-IF
           END-PERFORM.
