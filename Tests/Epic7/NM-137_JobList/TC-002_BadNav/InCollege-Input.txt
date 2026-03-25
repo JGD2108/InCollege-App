@@ -2,15 +2,10 @@
 LoginUser1
 Login@11
 1
-2
-View Job Details
-View Details
-
+View Jobs
+Browse Jobs
 999999999999999999999999999999999999999999999999999999999999999999999999999
-%*)"&^;%$#@'!()_+
-exit
-EXIT
-0
+%*)"&^%$#@'!()_+
 0
 3
 5
