@@ -5,6 +5,76 @@ Please select an option:
 3. Logout
 1
 Enter username:
+JobUser
+Enter password:
+JobUser@1
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
+1
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. Back to Main Menu
+1
+Job Title (Required):
+Software Intern
+Description (Required):
+Assist with backend development
+Employer (Required):
+Acme Labs
+Location (Required):
+Remote
+Salary (Optional, format $50,000/year or $25/hour, N to skip):
+$100,000/year
+Job/Internship posted successfully.
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. Back to Main Menu
+1
+Job Title (Required):
+Test Title
+Description (Required):
+Test Description
+Employer (Required):
+Test Employer
+Location (Required):
+Test Location
+Salary (Optional, format $50,000/year or $25/hour, N to skip):
+$50,000/year
+Job/Internship posted successfully.
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. Back to Main Menu
+3
+Returning to post-login menu.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
+5
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
 LoginUser1
 Enter password:
 Login@11
@@ -29,12 +99,6 @@ You have successfully logged in
    (Remote)
 2. Test Title at Test Employer
    (Test Location)
-3. Software Maintainer at Microsoft
-   (Remote)
-4. Software Designer at Discord
-   (Silicon Valley, CA)
-5. Game Tester at Activision
-   (Remote)
 -----------------------------
 Enter job number to view details, or 0 to go back:
 0

@@ -93,26 +93,96 @@ You have successfully logged in
 1. Post a Job/Internship
 2. Browse Jobs/Internships
 3. Back to Main Menu
-View Jobs
-Invalid Selection.
---- Job Search/Internship Menu ---
-1. Post a Job/Internship
-2. Browse Jobs/Internships
-3. Back to Main Menu
-Browse Jobs
-Invalid Selection.
---- Job Search/Internship Menu ---
-1. Post a Job/Internship
-2. Browse Jobs/Internships
-3. Back to Main Menu
+2
+--- Available Job Listings ---
+1. Software Intern at Acme Labs
+   (Remote)
+2. Test Title at Test Employer
+   (Test Location)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+View Job Details
+Invalid job number.
+--- Available Job Listings ---
+1. Software Intern at Acme Labs
+   (Remote)
+2. Test Title at Test Employer
+   (Test Location)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+View Details
+Invalid job number.
+--- Available Job Listings ---
+1. Software Intern at Acme Labs
+   (Remote)
+2. Test Title at Test Employer
+   (Test Location)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+9
+Invalid job number.
+--- Available Job Listings ---
+1. Software Intern at Acme Labs
+   (Remote)
+2. Test Title at Test Employer
+   (Test Location)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+999999999999999999999999999999999999999999999999999999999999
+Invalid job number.
+--- Available Job Listings ---
+1. Software Intern at Acme Labs
+   (Remote)
+2. Test Title at Test Employer
+   (Test Location)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+
+Invalid job number.
+--- Available Job Listings ---
+1. Software Intern at Acme Labs
+   (Remote)
+2. Test Title at Test Employer
+   (Test Location)
+-----------------------------
+Enter job number to view details, or 0 to go back:
 999999999999999999999999999999999999999999999999999999999999999999999999999
-Invalid Selection.
---- Job Search/Internship Menu ---
-1. Post a Job/Internship
-2. Browse Jobs/Internships
-3. Back to Main Menu
-%*)"&^%$#@'!()_+
-Invalid Selection.
+Invalid job number.
+--- Available Job Listings ---
+1. Software Intern at Acme Labs
+   (Remote)
+2. Test Title at Test Employer
+   (Test Location)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+%*)"&^;%$#@'!()_+
+Invalid job number.
+--- Available Job Listings ---
+1. Software Intern at Acme Labs
+   (Remote)
+2. Test Title at Test Employer
+   (Test Location)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+exit
+Invalid job number.
+--- Available Job Listings ---
+1. Software Intern at Acme Labs
+   (Remote)
+2. Test Title at Test Employer
+   (Test Location)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+EXIT
+Invalid job number.
+--- Available Job Listings ---
+1. Software Intern at Acme Labs
+   (Remote)
+2. Test Title at Test Employer
+   (Test Location)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+0
 --- Job Search/Internship Menu ---
 1. Post a Job/Internship
 2. Browse Jobs/Internships

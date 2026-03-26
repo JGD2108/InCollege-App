@@ -27,7 +27,7 @@
              MOVE FUNCTION LENGTH(FUNCTION TRIM(INPUT-RECORD))
                TO WS-IN-LEN
 
-             IF WS-IN-LEN = 0
+             IF WS-IN-LEN = 0 OR WS-IN-LEN > LENGTH OF WS-JOB-INDEX
                 MOVE "Invalid job number." TO OUTPUT-RECORD
                 PERFORM PRINT-LINE
              ELSE

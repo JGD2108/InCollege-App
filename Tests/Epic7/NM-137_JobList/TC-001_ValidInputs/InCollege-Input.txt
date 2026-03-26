@@ -1,4 +1,22 @@
 1
+JobUser
+JobUser@1
+1
+1
+Software Intern
+Assist with backend development
+Acme Labs
+Remote
+$100,000/year
+1
+Test Title
+Test Description
+Test Employer
+Test Location
+$50,000/year
+3
+5
+1
 LoginUser1
 Login@11
 1
