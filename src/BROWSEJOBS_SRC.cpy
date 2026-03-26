@@ -234,11 +234,22 @@
           MOVE "-------------------" TO OUTPUT-RECORD
           PERFORM PRINT-LINE
 
+          *> Store the job ID for this job posting
+          MOVE JOB-ID TO WS-CURRENT-JOB-ID
+
+          *> Check if user has already applied to this job
+          MOVE "N" TO WS-APP-ALREADY-APPLIED
+          PERFORM CHECK-ALREADY-APPLIED
+
           MOVE "N" TO WS-VALID-INPUT
           PERFORM UNTIL WS-EOF = "Y" OR WS-VALID-INPUT = "Y"
-             MOVE "0. Back to Job List" TO OUTPUT-RECORD
-             PERFORM PRINT-LINE
-             MOVE "1. Apply for this job" TO OUTPUT-RECORD
+             IF WS-APP-ALREADY-APPLIED = "Y"
+                MOVE "0. Back to Job List" TO OUTPUT-RECORD
+             ELSE
+                MOVE "0. Back to Job List" TO OUTPUT-RECORD
+                PERFORM PRINT-LINE
+                MOVE "1. Apply to this job" TO OUTPUT-RECORD
+             END-IF
              PERFORM PRINT-LINE
              MOVE "Enter your choice:" TO OUTPUT-RECORD
              PERFORM PRINT-LINE
@@ -257,13 +268,114 @@
                    MOVE "Y" TO WS-VALID-INPUT
                 ELSE
                    IF WS-IN-LEN = 1 AND WS-TRIMMED-IN(1:1) = "1"
-                      MOVE "Applying to job!" TO OUTPUT-RECORD
-                      PERFORM PRINT-LINE
-                      *> This is where you would call the application handling code
-                      MOVE "Y" TO WS-VALID-INPUT
+                      IF WS-APP-ALREADY-APPLIED = "N"
+                         PERFORM APPLY-FOR-JOB
+                         MOVE "Y" TO WS-VALID-INPUT
+                      ELSE
+                         MOVE "You have already applied to this job."
+                           TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                      END-IF
                    ELSE
-                       MOVE "Invalid selection." TO OUTPUT-RECORD
-                       PERFORM PRINT-LINE
+                      MOVE "Invalid selection." TO OUTPUT-RECORD
+                      PERFORM PRINT-LINE
+                   END-IF
                 END-IF
              END-IF
           END-PERFORM.
+
+       CHECK-ALREADY-APPLIED.
+          *> Load applications into memory to check if user applied
+          MOVE 0 TO WS-APPLICATION-COUNT
+          MOVE "N" TO WS-APPLICATIONS-EOF
+          MOVE "N" TO WS-APP-FOUND
+
+          OPEN INPUT APPLICATIONS-FILE
+          IF WS-APPLICATIONS-STATUS = "35" OR WS-APPLICATIONS-STATUS = "05"
+             *> File does not exist, so no applications yet
+             IF WS-APPLICATIONS-STATUS = "05"
+                CLOSE APPLICATIONS-FILE
+             END-IF
+             MOVE "N" TO WS-APP-ALREADY-APPLIED
+             EXIT PARAGRAPH
+          END-IF
+
+          PERFORM UNTIL WS-APPLICATIONS-EOF = "Y"
+             READ APPLICATIONS-FILE
+                AT END
+                   MOVE "Y" TO WS-APPLICATIONS-EOF
+                NOT AT END
+                   ADD 1 TO WS-APPLICATION-COUNT
+                   IF WS-APPLICATION-COUNT <= 50
+                      MOVE APP-USERNAME TO WS-APP-USERNAME(WS-APPLICATION-COUNT)
+                      MOVE APP-JOB-ID TO WS-APP-JOB-ID(WS-APPLICATION-COUNT)
+
+                      *> Check if this is a match
+                      IF FUNCTION TRIM(APP-USERNAME) = FUNCTION TRIM(WS-USERNAME)
+                         AND FUNCTION TRIM(APP-JOB-ID) = FUNCTION TRIM(WS-CURRENT-JOB-ID)
+                         MOVE "Y" TO WS-APP-ALREADY-APPLIED
+                         MOVE "Y" TO WS-APP-FOUND
+                         EXIT PERFORM
+                      END-IF
+                   END-IF
+             END-READ
+          END-PERFORM
+
+          CLOSE APPLICATIONS-FILE.
+
+       APPLY-FOR-JOB.
+          *> Record the application
+          MOVE "N" TO WS-VALID-INPUT
+          MOVE "Are you sure you want to apply for this job? (Y/N):"
+            TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
+
+          PERFORM READ-AND-LOG
+          IF WS-EOF = "Y"
+             MOVE "Application cancelled." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             EXIT PARAGRAPH
+          END-IF
+
+          MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+          IF WS-TRIMMED-IN(1:1) = "Y" OR WS-TRIMMED-IN(1:1) = "y"
+             PERFORM SAVE-APPLICATION
+          ELSE
+             MOVE "Application cancelled." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+          END-IF.
+
+       SAVE-APPLICATION.
+          *> Open applications file in append mode
+          OPEN EXTEND APPLICATIONS-FILE
+          IF WS-APPLICATIONS-STATUS = "35" OR WS-APPLICATIONS-STATUS = "05"
+             OPEN OUTPUT APPLICATIONS-FILE
+             IF WS-APPLICATIONS-STATUS = "00"
+                CLOSE APPLICATIONS-FILE
+             END-IF
+
+             OPEN EXTEND APPLICATIONS-FILE
+          END-IF
+
+          IF WS-APPLICATIONS-STATUS NOT = "00"
+             MOVE "Unable to save application." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             EXIT PARAGRAPH
+          END-IF
+
+          MOVE WS-USERNAME TO APP-USERNAME
+          MOVE WS-CURRENT-JOB-ID TO APP-JOB-ID
+
+          WRITE APPLICATION-RECORD
+          IF WS-APPLICATIONS-STATUS NOT = "00"
+             MOVE "Error saving application." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             CLOSE APPLICATIONS-FILE
+             EXIT PARAGRAPH
+          END-IF
+
+          CLOSE APPLICATIONS-FILE
+
+          MOVE "Application submitted successfully!" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
+          MOVE "Y" TO WS-APP-ALREADY-APPLIED.

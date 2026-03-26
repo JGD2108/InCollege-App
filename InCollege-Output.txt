@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-LoginUser1
+WelcomeUser
 Enter password:
-Login@11
+Welcome@1
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -22,24 +22,157 @@ You have successfully logged in
 --- Job Search/Internship Menu ---
 1. Post a Job/Internship
 2. Browse Jobs/Internships
-3. Back to Main Menu
+3. View My Job Applications
+4. Back to Main Menu
+1
+Job Title (Required):
+Software Developer Internship
+Description (Required):
+Build and maintain backend APIs and services
+Employer (Required):
+TechCorp
+Location (Required):
+San Francisco
+Salary (Optional, format $50,000/year or $25/hour, N to skip):
+$25/hour
+Job/Internship posted successfully.
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Job Applications
+4. Back to Main Menu
+1
+Job Title (Required):
+Data Analyst Internship
+Description (Required):
+Analyze customer data and trends
+Employer (Required):
+DataSys
+Location (Required):
+New York
+Salary (Optional, format $50,000/year or $25/hour, N to skip):
+$22/hour
+Job/Internship posted successfully.
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Job Applications
+4. Back to Main Menu
+4
+Returning to post-login menu.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
+5
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+JourneyUser
+Enter password:
+Journey@1
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
+1
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Job Applications
+4. Back to Main Menu
 2
 --- Available Job Listings ---
-No job/internship postings are currently available.
+1. Software Developer Internship at TechCorp
+   (San Francisco)
+2. Data Analyst Internship at DataSys
+   (New York)
 -----------------------------
-Enter 0 to return to the job menu:
-2
-Invalid job number.
+Enter job number to view details, or 0 to go back:
+1
+--- Job Details ---
+Title: Software Developer Internship
+Description: Build and maintain backend APIs and services
+Employer: TechCorp
+Location: San Francisco
+Salary: $25/hour
+-------------------
+0. Back to Job List
+1. Apply to this job
+Enter your choice:
+1
+Are you sure you want to apply for this job? (Y/N):
+Y
+Application submitted successfully!
 --- Available Job Listings ---
-No job/internship postings are currently available.
+1. Software Developer Internship at TechCorp
+   (San Francisco)
+2. Data Analyst Internship at DataSys
+   (New York)
 -----------------------------
-Enter 0 to return to the job menu:
+Enter job number to view details, or 0 to go back:
+2
+--- Job Details ---
+Title: Data Analyst Internship
+Description: Analyze customer data and trends
+Employer: DataSys
+Location: New York
+Salary: $22/hour
+-------------------
+0. Back to Job List
+1. Apply to this job
+Enter your choice:
+1
+Are you sure you want to apply for this job? (Y/N):
+Y
+Application submitted successfully!
+--- Available Job Listings ---
+1. Software Developer Internship at TechCorp
+   (San Francisco)
+2. Data Analyst Internship at DataSys
+   (New York)
+-----------------------------
+Enter job number to view details, or 0 to go back:
 0
 --- Job Search/Internship Menu ---
 1. Post a Job/Internship
 2. Browse Jobs/Internships
-3. Back to Main Menu
+3. View My Job Applications
+4. Back to Main Menu
 3
+--- My Job Applications ---
+Software Developer Internship - TechCorp
+Location: San Francisco
+---
+Data Analyst Internship - DataSys
+Location: New York
+---
+---
+Total applications: 02
+Enter 0 to return to job menu:
+0
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Job Applications
+4. Back to Main Menu
+4
 Returning to post-login menu.
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile

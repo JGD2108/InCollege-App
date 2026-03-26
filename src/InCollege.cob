@@ -47,6 +47,11 @@
                   ORGANIZATION IS LINE SEQUENTIAL
                   FILE STATUS IS WS-JOBS-STATUS.
 
+              SELECT OPTIONAL APPLICATIONS-FILE
+                ASSIGN TO "APPLICATIONS.DAT"
+                  ORGANIZATION IS LINE SEQUENTIAL
+                  FILE STATUS IS WS-APPLICATIONS-STATUS.
+
        DATA DIVISION.
        FILE SECTION.
 
@@ -91,6 +96,11 @@
              05 JOB-SALARY            PIC X(20).
              05 JOB-POSTED-BY         PIC X(12).
              05 JOB-ID                PIC X(6).
+
+         FD APPLICATIONS-FILE.
+           01 APPLICATION-RECORD.
+             05 APP-USERNAME          PIC X(12).
+             05 APP-JOB-ID            PIC X(6).
 
        WORKING-STORAGE SECTION.
 
@@ -244,6 +254,7 @@
           77 WS-EST-FILE-STATUS       PIC XX.
           77 WS-PROFILES-STATUS       PIC XX.
           77 WS-JOBS-STATUS           PIC XX.
+          77 WS-APPLICATIONS-STATUS   PIC XX.
           01 WS-CONNECTION-TABLE.
              05 WS-CONN-ENTRY OCCURS 25 TIMES.
                 10 WS-CONN-REQUESTER     PIC X(12).
@@ -272,6 +283,19 @@
           77 WS-EST-IDX               PIC 99.
           77 WS-EST-EOF               PIC X VALUE "N".
           77 WS-EST-ADD-OK            PIC X VALUE "N".
+
+      *> Job application management
+          01 WS-APPLICATION-TABLE.
+             05 WS-APP-ENTRY OCCURS 50 TIMES.
+                10 WS-APP-USERNAME       PIC X(12).
+                10 WS-APP-JOB-ID         PIC X(6).
+          77 WS-APPLICATION-COUNT      PIC 99 VALUE 0.
+          77 WS-APPLICATION-IDX        PIC 99 VALUE 0.
+          77 WS-APPLICATIONS-EOF       PIC X VALUE "N".
+          77 WS-APP-ALREADY-APPLIED    PIC X VALUE "N".
+          77 WS-APP-FOUND              PIC X VALUE "N".
+          77 WS-CURRENT-JOB-ID         PIC X(6).
+          77 WS-APP-CHOICE             PIC X(1).
 
       *> User search variables
            77 WS-SEARCH-USERNAME       PIC X(12).

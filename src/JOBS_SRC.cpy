@@ -6,7 +6,9 @@
             PERFORM PRINT-LINE
             MOVE "2. Browse Jobs/Internships" TO OUTPUT-RECORD
             PERFORM PRINT-LINE
-            MOVE "3. Back to Main Menu" TO OUTPUT-RECORD
+            MOVE "3. View My Job Applications" TO OUTPUT-RECORD
+            PERFORM PRINT-LINE
+            MOVE "4. Back to Main Menu" TO OUTPUT-RECORD
             PERFORM PRINT-LINE
 
             PERFORM READ-AND-LOG
@@ -24,6 +26,8 @@
               WHEN "2"
                 PERFORM HANDLE-BROWSE-JOBS
               WHEN "3"
+                PERFORM HANDLE-VIEW-APPLICATIONS
+              WHEN "4"
                 MOVE "Returning to post-login menu." TO OUTPUT-RECORD
                 PERFORM PRINT-LINE
                 EXIT PERFORM
@@ -267,3 +271,119 @@
              OR FUNCTION TRIM(WS-SALARY-RATE) = "hour"
             MOVE "Y" TO WS-VALID-INPUT
           END-IF.
+
+       HANDLE-VIEW-APPLICATIONS.
+          MOVE 0 TO WS-APPLICATION-COUNT
+          MOVE "N" TO WS-APPLICATIONS-EOF
+          MOVE "N" TO WS-APP-FOUND
+
+          MOVE "--- My Job Applications ---" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
+
+          OPEN INPUT APPLICATIONS-FILE
+          IF WS-APPLICATIONS-STATUS = "35" OR WS-APPLICATIONS-STATUS = "05"
+             IF WS-APPLICATIONS-STATUS = "05"
+               CLOSE APPLICATIONS-FILE
+             END-IF
+             MOVE "You have not applied to any jobs yet."
+               TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             MOVE "-----------------------------" TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             EXIT PARAGRAPH
+          END-IF
+
+          IF WS-APPLICATIONS-STATUS NOT = "00"
+             MOVE "Unable to read applications." TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             EXIT PARAGRAPH
+          END-IF
+
+          PERFORM UNTIL WS-APPLICATIONS-EOF = "Y"
+             READ APPLICATIONS-FILE
+                AT END
+                   MOVE "Y" TO WS-APPLICATIONS-EOF
+                NOT AT END
+                   *> Only display applications for the logged-in user
+                   IF FUNCTION TRIM(APP-USERNAME) = FUNCTION TRIM(WS-USERNAME)
+                      ADD 1 TO WS-APPLICATION-COUNT
+                      MOVE "Y" TO WS-APP-FOUND
+
+                      *> Look up job details
+                      PERFORM FIND-JOB-BY-ID
+                      IF WS-JOBS-FOUND = "Y"
+                         MOVE SPACES TO OUTPUT-RECORD
+                         STRING
+                            FUNCTION TRIM(WS-JOB-TITLE) DELIMITED BY SIZE
+                            " - " DELIMITED BY SIZE
+                            FUNCTION TRIM(WS-JOB-EMPLOYER) DELIMITED BY SIZE
+                            INTO OUTPUT-RECORD
+                         END-STRING
+                         PERFORM PRINT-LINE
+
+                         MOVE SPACES TO OUTPUT-RECORD
+                         STRING
+                            "Location: " DELIMITED BY SIZE
+                            FUNCTION TRIM(WS-JOB-LOCATION) DELIMITED BY SIZE
+                            INTO OUTPUT-RECORD
+                         END-STRING
+                         PERFORM PRINT-LINE
+                         MOVE "---" TO OUTPUT-RECORD
+                         PERFORM PRINT-LINE
+                      END-IF
+                   END-IF
+             END-READ
+          END-PERFORM
+
+          CLOSE APPLICATIONS-FILE
+
+          IF WS-APP-FOUND = "N"
+             MOVE "You have not applied to any jobs yet."
+               TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+          ELSE
+             MOVE "---" TO OUTPUT-RECORD
+             PERFORM PRINT-LINE
+             MOVE SPACES TO OUTPUT-RECORD
+             STRING
+                "Total applications: " DELIMITED BY SIZE
+                WS-APPLICATION-COUNT DELIMITED BY SIZE
+                INTO OUTPUT-RECORD
+             END-STRING
+             PERFORM PRINT-LINE
+          END-IF
+
+          MOVE "Enter 0 to return to job menu:" TO OUTPUT-RECORD
+          PERFORM PRINT-LINE
+          PERFORM READ-AND-LOG.
+
+       FIND-JOB-BY-ID.
+          *> Find job details by the job ID in APP-JOB-ID
+          MOVE 0 TO WS-JOBS-COUNT
+          MOVE "N" TO WS-JOBS-EOF
+          MOVE "N" TO WS-JOBS-FOUND
+
+          OPEN INPUT JOBS-FILE
+          IF WS-JOBS-STATUS NOT = "00"
+             EXIT PARAGRAPH
+          END-IF
+
+          PERFORM UNTIL WS-JOBS-EOF = "Y"
+             READ JOBS-FILE
+                AT END
+                   MOVE "Y" TO WS-JOBS-EOF
+                NOT AT END
+                   IF FUNCTION TRIM(JOB-ID) = FUNCTION TRIM(APP-JOB-ID)
+                      MOVE "Y" TO WS-JOBS-FOUND
+                      *> Store job details in working storage
+                      MOVE JOB-TITLE TO WS-JOB-TITLE
+                      MOVE JOB-EMPLOYER TO WS-JOB-EMPLOYER
+                      MOVE JOB-LOCATION TO WS-JOB-LOCATION
+                      MOVE JOB-DESCRIPTION TO WS-JOB-DESCRIPTION
+                      MOVE JOB-SALARY TO WS-JOB-SALARY
+                      EXIT PERFORM
+                   END-IF
+             END-READ
+          END-PERFORM
+
+          CLOSE JOBS-FILE.
