@@ -376,6 +376,14 @@
 
           CLOSE APPLICATIONS-FILE
 
-          MOVE "Application submitted successfully!" TO OUTPUT-RECORD
+          MOVE SPACES TO OUTPUT-RECORD
+          STRING
+             "Applied to " DELIMITED BY SIZE
+             FUNCTION TRIM(JOB-TITLE) DELIMITED BY SIZE
+             " at " DELIMITED BY SIZE
+             FUNCTION TRIM(JOB-EMPLOYER) DELIMITED BY SIZE
+             "." DELIMITED BY SIZE
+             INTO OUTPUT-RECORD
+          END-STRING
           PERFORM PRINT-LINE
           MOVE "Y" TO WS-APP-ALREADY-APPLIED.

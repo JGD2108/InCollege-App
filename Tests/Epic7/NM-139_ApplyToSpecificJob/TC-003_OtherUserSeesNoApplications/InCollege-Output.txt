@@ -119,7 +119,7 @@ Enter your choice:
 1
 Are you sure you want to apply for this job? (Y/N):
 Y
-Application submitted successfully!
+Applied to Test Title at Test Employer.
 --- Available Job Listings ---
 1. Software Intern at Acme Labs
    (Remote)
