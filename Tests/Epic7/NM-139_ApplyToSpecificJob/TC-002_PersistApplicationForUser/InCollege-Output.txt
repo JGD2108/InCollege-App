@@ -105,87 +105,6 @@ You have successfully logged in
    (Test Location)
 -----------------------------
 Enter job number to view details, or 0 to go back:
-View Job Details
-Invalid job number.
---- Available Job Listings ---
-1. Software Intern at Acme Labs
-   (Remote)
-2. Test Title at Test Employer
-   (Test Location)
------------------------------
-Enter job number to view details, or 0 to go back:
-View Details
-Invalid job number.
---- Available Job Listings ---
-1. Software Intern at Acme Labs
-   (Remote)
-2. Test Title at Test Employer
-   (Test Location)
------------------------------
-Enter job number to view details, or 0 to go back:
-9
-Invalid job number.
---- Available Job Listings ---
-1. Software Intern at Acme Labs
-   (Remote)
-2. Test Title at Test Employer
-   (Test Location)
------------------------------
-Enter job number to view details, or 0 to go back:
-999999999999999999999999999999999999999999999999999999999999
-Invalid job number.
---- Available Job Listings ---
-1. Software Intern at Acme Labs
-   (Remote)
-2. Test Title at Test Employer
-   (Test Location)
------------------------------
-Enter job number to view details, or 0 to go back:
-
-Invalid job number.
---- Available Job Listings ---
-1. Software Intern at Acme Labs
-   (Remote)
-2. Test Title at Test Employer
-   (Test Location)
------------------------------
-Enter job number to view details, or 0 to go back:
-999999999999999999999999999999999999999999999999999999999999999999999999999
-Invalid job number.
---- Available Job Listings ---
-1. Software Intern at Acme Labs
-   (Remote)
-2. Test Title at Test Employer
-   (Test Location)
------------------------------
-Enter job number to view details, or 0 to go back:
-%*)"&^;%$#@'!()_+
-Invalid job number.
---- Available Job Listings ---
-1. Software Intern at Acme Labs
-   (Remote)
-2. Test Title at Test Employer
-   (Test Location)
------------------------------
-Enter job number to view details, or 0 to go back:
-exit
-Invalid job number.
---- Available Job Listings ---
-1. Software Intern at Acme Labs
-   (Remote)
-2. Test Title at Test Employer
-   (Test Location)
------------------------------
-Enter job number to view details, or 0 to go back:
-EXIT
-Invalid job number.
---- Available Job Listings ---
-1. Software Intern at Acme Labs
-   (Remote)
-2. Test Title at Test Employer
-   (Test Location)
------------------------------
-Enter job number to view details, or 0 to go back:
 2
 --- Job Details ---
 Title: Test Title
@@ -197,32 +116,10 @@ Salary: $50,000/year
 0. Back to Job List
 1. Apply to this job
 Enter your choice:
-%*)"&^;%$#@'!()_+
-Invalid selection.
-0. Back to Job List
-1. Apply to this job
-Enter your choice:
-9
-Invalid selection.
-0. Back to Job List
-1. Apply to this job
-Enter your choice:
-999999999999999999999999
-Invalid selection.
-0. Back to Job List
-1. Apply to this job
-Enter your choice:
-
-Invalid selection.
-0. Back to Job List
-1. Apply to this job
-Enter your choice:
-exit
-Invalid selection.
-0. Back to Job List
-1. Apply to this job
-Enter your choice:
-0
+1
+Are you sure you want to apply for this job? (Y/N):
+Y
+Application submitted successfully!
 --- Available Job Listings ---
 1. Software Intern at Acme Labs
    (Remote)

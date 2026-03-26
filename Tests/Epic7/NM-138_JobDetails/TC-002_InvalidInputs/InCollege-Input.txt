@@ -14,7 +14,7 @@ Test Description
 Test Employer
 Test Location
 $50,000/year
-3
+4
 5
 1
 LoginUser1
@@ -38,6 +38,6 @@ EXIT
 exit
 0
 0
-3
+4
 5
 3
