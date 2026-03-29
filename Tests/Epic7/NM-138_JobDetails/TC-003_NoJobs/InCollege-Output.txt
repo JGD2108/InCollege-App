@@ -5,21 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-<<<<<<< HEAD
-<<<<<<<< HEAD:Tests/Epic6/NM-122_JobPostingOption/TC-002_BrowseUnderConstruction/InCollege-Output.txt
-JobUser
+LoginUser1
 Enter password:
-JobUser@1
-========
-WelcomeUser
-Enter password:
-Welcome@1
->>>>>>>> Epic-7-Developer:Tests/Epic5/NM-119_ViewMyNetwork/TC-004_InvalidReturnInput/InCollege-Output.txt
-=======
-JobUser
-Enter password:
-JobUser@1
->>>>>>> Epic-7-Developer
+Login@11
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -30,50 +18,29 @@ You have successfully logged in
 5. Logout
 6. View My Profile
 7. View My Network
-<<<<<<< HEAD
-<<<<<<<< HEAD:Tests/Epic6/NM-122_JobPostingOption/TC-002_BrowseUnderConstruction/InCollege-Output.txt
-=======
->>>>>>> Epic-7-Developer
 1
 --- Job Search/Internship Menu ---
 1. Post a Job/Internship
 2. Browse Jobs/Internships
 3. Back to Main Menu
 2
-<<<<<<< HEAD
-Browse Jobs/Internships is under construction.
-=======
+--- Available Job Listings ---
+No job/internship postings are currently available.
+-----------------------------
+Enter 0 to return to the job menu:
+2
+Invalid job number.
 --- Available Job Listings ---
 No job/internship postings are currently available.
 -----------------------------
 Enter 0 to return to the job menu:
 0
->>>>>>> Epic-7-Developer
 --- Job Search/Internship Menu ---
 1. Post a Job/Internship
 2. Browse Jobs/Internships
 3. Back to Main Menu
 3
 Returning to post-login menu.
-<<<<<<< HEAD
-========
-7
---- My Network ---
-  Jane Doe (University: Harvard University, Major: Computer Science)
---------------------
-Enter 0 to return to post-login menu.
-1
-Invalid selection. Please enter 0.
-X
-Invalid selection. Please enter 0.
-return
-Invalid selection. Please enter 0.
-QUIT
-Invalid selection. Please enter 0.
-0
->>>>>>>> Epic-7-Developer:Tests/Epic5/NM-119_ViewMyNetwork/TC-004_InvalidReturnInput/InCollege-Output.txt
-=======
->>>>>>> Epic-7-Developer
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
 1. Search for a job
