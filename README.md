@@ -12,6 +12,12 @@ Current implemented flows include:
 - full job detail viewing
 - applying to jobs/internships
 - viewing a per-user application report
+- profile search by full name
+- sending connection requests
+- viewing pending connection requests
+- accepting/rejecting pending requests
+- viewing established network connections
+- basic profile storage (plus education/experience backing files)
 
 The compiled executable is `/workspace/bin/InCollege`.
 
@@ -116,6 +122,15 @@ The program uses line-sequential `.DAT` files in the workspace root.
 - All user input is read from `InCollege-Input.txt`.
 - Every printed line is displayed on screen and also written to `InCollege-Output.txt`.
 - The shared print routine for this behavior is in `src/InCollege.cob`.
+
+Connection file roles:
+- `CONNECTIONS.DAT`: pending requests only (`requester`, `recipient`, status field used as pending workflow input)
+- `ESTABLISHED.DAT`: established permanent connections (`user1`, `user2`)
+
+### I/O Rules
+- Input is read from `InCollege-Input.txt` via file reads (no interactive keyboard input required).
+- Every line printed to the screen is also written to `InCollege-Output.txt` through shared print logic.
+- This applies to all Week 5 flows (pending request actions and network display).
 
 ### Automated Tests
 Run all Epic 7 tests:
