@@ -1,4 +1,4 @@
-      HANDLE-MESSAGE-MENU.
+      HANDLE-MESSAGING-MENU.
           MOVE "N" TO WS-MESSAGE-EXIT
 
           PERFORM UNTIL WS-MESSAGE-EXIT = "Y" OR WS-EOF = "Y"
@@ -8,7 +8,7 @@
               PERFORM PRINT-LINE
               MOVE "2. View My Messages" TO OUTPUT-RECORD
               PERFORM PRINT-LINE
-              MOVE "0. Return to Previous Menu" TO OUTPUT-RECORD
+              MOVE "3. Back to Main Menu" TO OUTPUT-RECORD
               PERFORM PRINT-LINE
 
               PERFORM READ-AND-LOG
@@ -24,11 +24,11 @@
                  WHEN "1"
                     PERFORM SEND-MESSAGE
                  WHEN "2"
-                    MOVE "Review Messages is under construction." TO OUTPUT-RECORD
+                    MOVE "View My Messages is under construction." TO OUTPUT-RECORD
                     PERFORM PRINT-LINE
                     *> Later:
                     *> CALL "REVIEWMESSAGES" USING ...
-                 WHEN "0"
+                 WHEN "3"
                     MOVE "Returning to post-login menu." TO OUTPUT-RECORD
                     PERFORM PRINT-LINE
                     MOVE "Y" TO WS-MESSAGE-EXIT
@@ -45,7 +45,8 @@
 
            MOVE "N" TO WS-VALID-INPUT
            PERFORM UNTIL WS-VALID-INPUT = "Y" OR WS-EOF = "Y"
-              MOVE "Enter the username of the recipient:" TO OUTPUT-RECORD
+              MOVE "Enter recipient's username (must be a connection):"
+                TO OUTPUT-RECORD
               PERFORM PRINT-LINE
 
               PERFORM READ-AND-LOG
@@ -95,7 +96,7 @@
 
            MOVE "N" TO WS-VALID-INPUT
            PERFORM UNTIL WS-VALID-INPUT = "Y" OR WS-EOF = "Y"
-              MOVE "Enter your message:" TO OUTPUT-RECORD
+              MOVE "Enter your message (max 200 chars):" TO OUTPUT-RECORD
               PERFORM PRINT-LINE
 
               PERFORM READ-AND-LOG
@@ -114,8 +115,14 @@
                   MOVE "Message cannot be blank." TO OUTPUT-RECORD
                   PERFORM PRINT-LINE
               ELSE
-                  MOVE INPUT-RECORD TO WS-MSG-TEXT
-                  MOVE "Y" TO WS-VALID-INPUT
+                  IF WS-IN-LEN > 200
+                      MOVE "Message too long. Max 200 characters."
+                        TO OUTPUT-RECORD
+                      PERFORM PRINT-LINE
+                  ELSE
+                      MOVE INPUT-RECORD TO WS-MSG-TEXT
+                      MOVE "Y" TO WS-VALID-INPUT
+                  END-IF
               END-IF
            END-PERFORM
 
@@ -123,10 +130,18 @@
               EXIT PARAGRAPH
            END-IF
 
-          *> Later: write WS-USERNAME, WS-MSG-RECIPIENT, and WS-MSG-TEXT
-          *> to your messages data file here
+           MOVE FUNCTION CURRENT-DATE(1:14) TO WS-MSG-TIMESTAMP
+           MOVE WS-USERNAME      TO MSG-SENDER
+           MOVE WS-MSG-RECIPIENT TO MSG-RECIPIENT
+           MOVE WS-MSG-TEXT      TO MSG-CONTENT
+           OPEN EXTEND MESSAGES-FILE
+           WRITE MESSAGE-RECORD
+           CLOSE MESSAGES-FILE
 
-           MOVE "Message sent successfully." TO OUTPUT-RECORD
+           STRING "Message sent to " DELIMITED BY SIZE
+                  FUNCTION TRIM(WS-MSG-RECIPIENT) DELIMITED BY SPACE
+                  " successfully!" DELIMITED BY SIZE
+             INTO OUTPUT-RECORD
            PERFORM PRINT-LINE.
 
       VERIFY-MESSAGE-NETWORK.

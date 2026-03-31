@@ -47,6 +47,11 @@
                   ORGANIZATION IS LINE SEQUENTIAL
                   FILE STATUS IS WS-JOBS-STATUS.
 
+              SELECT OPTIONAL MESSAGES-FILE
+                ASSIGN TO "MESSAGES.DAT"
+                  ORGANIZATION IS LINE SEQUENTIAL
+                  FILE STATUS IS WS-MESSAGES-STATUS.
+
        DATA DIVISION.
        FILE SECTION.
 
@@ -71,6 +76,13 @@
            01 ESTABLISHED-RECORD.
              05 EST-USER1             PIC X(12).
              05 EST-USER2             PIC X(12).
+
+         FD MESSAGES-FILE.
+           01 MESSAGE-RECORD.
+             05 MSG-SENDER            PIC X(12).
+             05 MSG-RECIPIENT         PIC X(12).
+             05 MSG-CONTENT           PIC X(200).
+             05 MSG-TIMESTAMP         PIC X(20).
 
          FD PROFILES-FILE.
            01 PROFILE-RECORD.
@@ -209,6 +221,9 @@
          77 WS-CAN-MESSAGE PIC X VALUE "N".
          77 WS-MSG-RECIPIENT PIC X(12).
          77 WS-MSG-TEXT PIC X(200).
+        *> Messages file status and timestamp
+         01 WS-MESSAGES-STATUS PIC XX.
+         77 WS-MSG-TIMESTAMP   PIC X(20).
 
       *> WS-TRIMMED-IN: holds trimmed input
       *> WS-IN-LEN: length trimmed input
