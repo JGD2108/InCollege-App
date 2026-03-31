@@ -202,6 +202,10 @@
          77 WS-SAVED-JOB-ID PIC X(6) VALUE SPACES.
          77 WS-JOB-NUMBER-TEXT PIC Z(6).
 
+        *> Messaging menu variables
+         77 WS-MESSAGE-CHOICE PIC X(1).
+         77 WS-MESSAGE-EXIT PIC X VALUE "N".
+
       *> WS-TRIMMED-IN: holds trimmed input
       *> WS-IN-LEN: length trimmed input
       *> WS-OK:'N' if the username of password is too long
@@ -231,7 +235,7 @@
           77 WS-JOB-CHOICE PIC X(1).
         77 WS-POST-EXIT PIC X VALUE "N".
           *> Action code set by POSTLOGINPROG
-          77 WS-POST-ACTION PIC 9.
+          77 WS-POST-ACTION PIC 99.
           *> Simple list of 5 skills; populated when needed
           01 WS-SKILL-LIST.
              05 WS-SKILL PIC X(30) OCCURS 5 TIMES.
@@ -439,6 +443,7 @@
 
        COPY "src/JOBS_SRC.cpy".
        COPY "src/BROWSEJOBS_SRC.cpy".
+       COPY "src/MESSAGING_SRC.cpy".
 
        COPY "src/VIEWREQ_SRC.cpy".
        COPY "src/VIEWNET_SRC.cpy".
@@ -801,6 +806,8 @@
                  MOVE "6. View My Profile" TO OUTPUT-RECORD
                  PERFORM PRINT-LINE
                  MOVE "7. View My Network" TO OUTPUT-RECORD
+                 PERFORM PRINT-LINE
+                 MOVE "8. Messaging" TO OUTPUT-RECORD
                  PERFORM PRINT-LINE
 
                  PERFORM READ-AND-LOG
@@ -1335,6 +1342,8 @@
                     PERFORM HANDLE-VIEW-NETWORK
                  WHEN 9
                     PERFORM HANDLE-JOB-MENU
+                 WHEN 10
+                    PERFORM HANDLE-MESSAGING-MENU
                  END-EVALUATE
                END-PERFORM
                EXIT PERFORM
@@ -2389,7 +2398,7 @@
        LINKAGE SECTION.
          77 LK-POST-CHOICE PIC X(1).
          77 LK-SKILL-CHOICE PIC X(1).
-         77 LK-ACTION PIC 9.
+         77 LK-ACTION PIC 99.
          77 LK-MESSAGE PIC X(100).
 
        PROCEDURE DIVISION USING LK-POST-CHOICE LK-SKILL-CHOICE LK-ACTION LK-MESSAGE.
@@ -2422,6 +2431,8 @@
             MOVE 5 TO LK-ACTION
           WHEN "7"
             MOVE 8 TO LK-ACTION
+          WHEN "8"
+            MOVE 10 TO LK-ACTION
            WHEN OTHER
              MOVE "Invalid Selection." TO LK-MESSAGE
              MOVE 1 TO LK-ACTION
