@@ -205,6 +205,10 @@
         *> Messaging menu variables
          77 WS-MESSAGE-CHOICE PIC X(1).
          77 WS-MESSAGE-EXIT PIC X VALUE "N".
+        *> Message verification variables
+         77 WS-CAN-MESSAGE PIC X VALUE "N".
+         77 WS-MSG-RECIPIENT PIC X(12).
+         77 WS-MSG-TEXT PIC X(200).
 
       *> WS-TRIMMED-IN: holds trimmed input
       *> WS-IN-LEN: length trimmed input

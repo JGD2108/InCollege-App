@@ -4,9 +4,9 @@
           PERFORM UNTIL WS-MESSAGE-EXIT = "Y" OR WS-EOF = "Y"
               MOVE "--- Messages Menu ---" TO OUTPUT-RECORD
               PERFORM PRINT-LINE
-              MOVE "1. Send a Message" TO OUTPUT-RECORD
+              MOVE "1. Send a New Message" TO OUTPUT-RECORD
               PERFORM PRINT-LINE
-              MOVE "2. Review My Messages" TO OUTPUT-RECORD
+              MOVE "2. View My Messages" TO OUTPUT-RECORD
               PERFORM PRINT-LINE
               MOVE "0. Return to Previous Menu" TO OUTPUT-RECORD
               PERFORM PRINT-LINE
@@ -22,10 +22,7 @@
 
               EVALUATE WS-MESSAGE-CHOICE
                  WHEN "1"
-                    MOVE "Send Message is under construction." TO OUTPUT-RECORD
-                    PERFORM PRINT-LINE
-                    *> Later:
-                    *> CALL "SENDMESSAGE" USING ...
+                    PERFORM SEND-MESSAGE
                  WHEN "2"
                     MOVE "Review Messages is under construction." TO OUTPUT-RECORD
                     PERFORM PRINT-LINE
@@ -40,4 +37,141 @@
                     PERFORM PRINT-LINE
               END-EVALUATE
           END-PERFORM.
-          
+
+      SEND-MESSAGE.
+           MOVE SPACES TO WS-MSG-RECIPIENT
+           MOVE SPACES TO WS-MSG-TEXT
+           MOVE "N" TO WS-CAN-MESSAGE
+
+           MOVE "N" TO WS-VALID-INPUT
+           PERFORM UNTIL WS-VALID-INPUT = "Y" OR WS-EOF = "Y"
+              MOVE "Enter the username of the recipient:" TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+
+              PERFORM READ-AND-LOG
+              IF WS-EOF = "Y"
+                  MOVE "No input received. Returning to menu."
+                    TO OUTPUT-RECORD
+                  PERFORM PRINT-LINE
+                  EXIT PERFORM
+              END-IF
+
+              MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+              MOVE FUNCTION LENGTH(FUNCTION TRIM(INPUT-RECORD))
+                TO WS-IN-LEN
+
+              IF WS-IN-LEN = 0
+                  MOVE "Recipient cannot be blank." TO OUTPUT-RECORD
+                  PERFORM PRINT-LINE
+              ELSE
+                  IF WS-IN-LEN > 12
+                      MOVE "Recipient username must be 1 to 12 characters."
+                        TO OUTPUT-RECORD
+                      PERFORM PRINT-LINE
+                  ELSE
+                      MOVE WS-TRIMMED-IN(1:12) TO WS-MSG-RECIPIENT
+
+                      IF FUNCTION TRIM(WS-MSG-RECIPIENT) =
+                         FUNCTION TRIM(WS-USERNAME)
+                          MOVE "You cannot send a message to yourself."
+                            TO OUTPUT-RECORD
+                          PERFORM PRINT-LINE
+                      ELSE
+                          MOVE "Y" TO WS-VALID-INPUT
+                      END-IF
+                  END-IF
+              END-IF
+           END-PERFORM
+
+           IF WS-EOF = "Y"
+              EXIT PARAGRAPH
+           END-IF
+
+           PERFORM VERIFY-MESSAGE-NETWORK
+
+           IF WS-CAN-MESSAGE NOT = "Y"
+              EXIT PARAGRAPH
+           END-IF
+
+           MOVE "N" TO WS-VALID-INPUT
+           PERFORM UNTIL WS-VALID-INPUT = "Y" OR WS-EOF = "Y"
+              MOVE "Enter your message:" TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+
+              PERFORM READ-AND-LOG
+              IF WS-EOF = "Y"
+                  MOVE "No message entered. Returning to menu."
+                    TO OUTPUT-RECORD
+                  PERFORM PRINT-LINE
+                  EXIT PERFORM
+              END-IF
+
+              MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-TRIMMED-IN
+              MOVE FUNCTION LENGTH(FUNCTION TRIM(INPUT-RECORD))
+                TO WS-IN-LEN
+
+              IF WS-IN-LEN = 0
+                  MOVE "Message cannot be blank." TO OUTPUT-RECORD
+                  PERFORM PRINT-LINE
+              ELSE
+                  MOVE INPUT-RECORD TO WS-MSG-TEXT
+                  MOVE "Y" TO WS-VALID-INPUT
+              END-IF
+           END-PERFORM
+
+           IF WS-EOF = "Y"
+              EXIT PARAGRAPH
+           END-IF
+
+          *> Later: write WS-USERNAME, WS-MSG-RECIPIENT, and WS-MSG-TEXT
+          *> to your messages data file here
+
+           MOVE "Message sent successfully." TO OUTPUT-RECORD
+           PERFORM PRINT-LINE.
+
+      VERIFY-MESSAGE-NETWORK.
+           MOVE "N" TO WS-CAN-MESSAGE
+           MOVE "N" TO WS-EST-EOF
+
+           OPEN INPUT ESTABLISHED-FILE
+
+           IF WS-EST-FILE-STATUS = "35"
+              MOVE "You can only message users in your network."
+                TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PARAGRAPH
+           END-IF
+
+           IF WS-EST-FILE-STATUS NOT = "00"
+              MOVE "Error opening established connections file."
+                TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PARAGRAPH
+           END-IF
+
+           PERFORM UNTIL WS-EST-EOF = "Y" OR WS-CAN-MESSAGE = "Y"
+              READ ESTABLISHED-FILE
+                  AT END
+                      MOVE "Y" TO WS-EST-EOF
+                  NOT AT END
+                      IF (FUNCTION TRIM(EST-USER1) =
+                            FUNCTION TRIM(WS-USERNAME)
+                          AND FUNCTION TRIM(EST-USER2) =
+                            FUNCTION TRIM(WS-MSG-RECIPIENT))
+                         OR
+                         (FUNCTION TRIM(EST-USER2) =
+                            FUNCTION TRIM(WS-USERNAME)
+                          AND FUNCTION TRIM(EST-USER1) =
+                            FUNCTION TRIM(WS-MSG-RECIPIENT))
+                          MOVE "Y" TO WS-CAN-MESSAGE
+                      END-IF
+              END-READ
+           END-PERFORM
+
+           CLOSE ESTABLISHED-FILE
+
+           IF WS-CAN-MESSAGE NOT = "Y"
+              MOVE "You may only send messages to users in your network."
+                TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+           END-IF.
