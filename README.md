@@ -8,6 +8,8 @@ InCollege is a menu-driven COBOL application that supports:
 - viewing pending connection requests
 - accepting/rejecting pending requests
 - viewing established network connections
+- sending private messages to established connections
+- placeholder "View My Messages" menu flow for Week 8
 - basic profile storage (plus education/experience backing files)
 
 The compiled executable is `/workspace/bin/InCollege` and is built from `src/InCollege.cob`.
@@ -51,6 +53,12 @@ Post-login menu:
 - `5. Logout`
 - `6. View My Profile`
 - `7. View My Network`
+- `8. Messages`
+
+Messages submenu:
+- `1. Send a New Message`
+- `2. View My Messages`
+- `3. Back to Main Menu`
 
 ### Week 5 Connection Behavior
 Pending request management (`4. View My Pending Connection Requests`):
@@ -79,25 +87,27 @@ The program uses line-sequential `.DAT` files in the workspace root:
 - `ESTABLISHED.DAT`
 - `EDUCATION.DAT`
 - `EXPERIENCE.DAT`
+- `MESSAGES.DAT`
 
 Connection file roles:
 - `CONNECTIONS.DAT`: pending requests only (`requester`, `recipient`, status field used as pending workflow input)
 - `ESTABLISHED.DAT`: established permanent connections (`user1`, `user2`)
+- `MESSAGES.DAT`: private message storage (`sender`, `recipient`, `content`, `timestamp`)
 
 ### I/O Rules
 - Input is read from `InCollege-Input.txt` via file reads (no interactive keyboard input required).
 - Every line printed to the screen is also written to `InCollege-Output.txt` through shared print logic.
-- This applies to all Week 5 flows (pending request actions and network display).
+- This applies to Week 8 messaging flows as well, including recipient prompts, message prompts, confirmations, and validation errors.
 
 ### Automated Tests
-Run all Epic 4 tests:
+Run all Epic 8 tests:
 ```bash
-./run_tests.sh
+./run_tests.sh /workspace/Tests/Epic8
 ```
 
 Run a specific test root:
 ```bash
-./run_tests.sh /workspace/Tests/Epic4
+./run_tests.sh /workspace/Tests/Epic8/NM-154_SendMessage
 ```
 
 Test runner behavior:
@@ -110,26 +120,29 @@ Test runner behavior:
 ### Important Files
 - `src/InCollege.cob`: primary source (includes program units and copied source snippets)
 - `src/SendRequest.cob`: connection request validation/save logic
+- `src/MESSAGING_SRC.cpy`: messages submenu, send-message flow, and recipient validation
 - `src/VIEWREQ_SRC.cpy`: pending request view + accept/reject processing
 - `src/VIEWNET_SRC.cpy`: established network display logic
 - `run_tests.sh`: automated test runner
-- `Tests/Epic4/`: Epic 4 test cases and fixture `.DAT` files
+- `Tests/Epic8/`: Epic 8 test cases and isolated fixture `.DAT` files
 
-### Build And Try Week 5 Flow
+### Build And Try Week 8 Messaging Flow
 1. Build:
 ```bash
 mkdir -p bin
 cobc -x -free -o bin/InCollege src/InCollege.cob
 ```
 
-2. Optional fixture setup for sample Week 5 run:
+2. Optional fixture setup for a sample Week 8 run:
 ```bash
-cp Tests/Epic4/USERS.DAT USERS.DAT
-cp Tests/Epic4/PROFILES.DAT PROFILES.DAT
+cp Tests/Epic8/USERS.DAT USERS.DAT
+: > PROFILES.DAT
 : > CONNECTIONS.DAT
 : > ESTABLISHED.DAT
 : > EDUCATION.DAT
 : > EXPERIENCE.DAT
+: > JOBS.DAT
+: > MESSAGES.DAT
 ```
 
 3. Use the provided `/workspace/InCollege-Input.txt` sample and run:
@@ -140,3 +153,4 @@ cp Tests/Epic4/PROFILES.DAT PROFILES.DAT
 4. Review output:
 - screen output
 - `/workspace/InCollege-Output.txt` (should match screen output line-for-line)
+- `/workspace/MESSAGES.DAT` for persisted sender/recipient/content/timestamp records

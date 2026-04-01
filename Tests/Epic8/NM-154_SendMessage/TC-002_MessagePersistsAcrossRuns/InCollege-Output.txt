@@ -27,7 +27,9 @@ You have successfully logged in
 1
 Enter recipient's username (must be a connection):
 JobUser
-You can only message users you are connected with
+Enter your message (max 200 chars):
+Persistent hello for Epic 8.
+Message sent to JobUser successfully!
 --- Messages Menu ---
 1. Send a New Message
 2. View My Messages

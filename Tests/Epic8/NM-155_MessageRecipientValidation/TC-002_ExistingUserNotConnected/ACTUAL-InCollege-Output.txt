@@ -26,7 +26,7 @@ You have successfully logged in
 3. Back to Main Menu
 1
 Enter recipient's username (must be a connection):
-JobUser
+SkillsUser
 You can only message users you are connected with
 --- Messages Menu ---
 1. Send a New Message

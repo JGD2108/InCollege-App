@@ -26,8 +26,8 @@ You have successfully logged in
 3. Back to Main Menu
 1
 Enter recipient's username (must be a connection):
-JobUser
-You can only message users you are connected with
+GhostUser
+User not found in your network
 --- Messages Menu ---
 1. Send a New Message
 2. View My Messages
