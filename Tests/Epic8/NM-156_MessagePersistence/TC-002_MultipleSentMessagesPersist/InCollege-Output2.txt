@@ -19,28 +19,6 @@ You have successfully logged in
 6. View My Profile
 7. View My Network
 8. Messages
-8
---- Messages Menu ---
-1. Send a New Message
-2. View My Messages
-3. Back to Main Menu
-2
-View My Messages is under construction.
---- Messages Menu ---
-1. Send a New Message
-2. View My Messages
-3. Back to Main Menu
-3
---- Welcome to InCollege, select an option ---
-0. Create/Edit your profile
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. View My Pending Connection Requests
-5. Logout
-6. View My Profile
-7. View My Network
-8. Messages
 5
 Logging out. Goodbye!
 Welcome to InCollege!
