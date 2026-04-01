@@ -24,14 +24,6 @@ You have successfully logged in
 1. Send a New Message
 2. View My Messages
 3. Back to Main Menu
-1
-Enter recipient's username (must be a connection):
-JobUser
-You can only message users you are connected with
---- Messages Menu ---
-1. Send a New Message
-2. View My Messages
-3. Back to Main Menu
 3
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile

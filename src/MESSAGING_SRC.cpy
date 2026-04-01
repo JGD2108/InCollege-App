@@ -29,8 +29,6 @@
                     *> Later:
                     *> CALL "REVIEWMESSAGES" USING ...
                  WHEN "3"
-                    MOVE "Returning to post-login menu." TO OUTPUT-RECORD
-                    PERFORM PRINT-LINE
                     MOVE "Y" TO WS-MESSAGE-EXIT
                  WHEN OTHER
                     MOVE "Invalid selection." TO OUTPUT-RECORD
@@ -134,6 +132,7 @@
            MOVE WS-USERNAME      TO MSG-SENDER
            MOVE WS-MSG-RECIPIENT TO MSG-RECIPIENT
            MOVE WS-MSG-TEXT      TO MSG-CONTENT
+           MOVE WS-MSG-TIMESTAMP TO MSG-TIMESTAMP
            OPEN EXTEND MESSAGES-FILE
            WRITE MESSAGE-RECORD
            CLOSE MESSAGES-FILE
@@ -146,12 +145,48 @@
 
       VERIFY-MESSAGE-NETWORK.
            MOVE "N" TO WS-CAN-MESSAGE
+           MOVE "N" TO WS-MSG-USER-FOUND
            MOVE "N" TO WS-EST-EOF
+
+           OPEN INPUT USERS-FILE
+
+           IF WS-USERS-STATUS = "35"
+              MOVE "User not found in your network" TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PARAGRAPH
+           END-IF
+
+           IF WS-USERS-STATUS NOT = "00"
+              MOVE "Error opening users file." TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PARAGRAPH
+           END-IF
+
+           PERFORM UNTIL WS-EOF = "Y" OR WS-MSG-USER-FOUND = "Y"
+              READ USERS-FILE
+                  AT END
+                      MOVE "Y" TO WS-EOF
+                  NOT AT END
+                      IF FUNCTION TRIM(USERNAME) =
+                         FUNCTION TRIM(WS-MSG-RECIPIENT)
+                          MOVE "Y" TO WS-MSG-USER-FOUND
+                      END-IF
+              END-READ
+           END-PERFORM
+
+           CLOSE USERS-FILE
+
+           IF WS-MSG-USER-FOUND NOT = "Y"
+              MOVE "N" TO WS-EOF
+              MOVE "User not found in your network" TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PARAGRAPH
+           END-IF
 
            OPEN INPUT ESTABLISHED-FILE
 
            IF WS-EST-FILE-STATUS = "35"
-              MOVE "You can only message users in your network."
+              MOVE "You can only message users you are connected with"
                 TO OUTPUT-RECORD
               PERFORM PRINT-LINE
               EXIT PARAGRAPH
@@ -186,7 +221,7 @@
            CLOSE ESTABLISHED-FILE
 
            IF WS-CAN-MESSAGE NOT = "Y"
-              MOVE "You may only send messages to users in your network."
+              MOVE "You can only message users you are connected with"
                 TO OUTPUT-RECORD
               PERFORM PRINT-LINE
            END-IF.
