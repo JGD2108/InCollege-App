@@ -24,6 +24,16 @@ You have successfully logged in
 1. Send a New Message
 2. View My Messages
 3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+WelcomeUser
+Enter your message (max 200 chars):
+Hello Jane, welcome to InCollege! Can't wait to start working with you!
+Message sent to WelcomeUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
 2
 View My Messages is under construction.
 --- Messages Menu ---

@@ -137,6 +137,7 @@
            WRITE MESSAGE-RECORD
            CLOSE MESSAGES-FILE
 
+           MOVE SPACES TO OUTPUT-RECORD
            STRING "Message sent to " DELIMITED BY SIZE
                   FUNCTION TRIM(WS-MSG-RECIPIENT) DELIMITED BY SPACE
                   " successfully!" DELIMITED BY SIZE
