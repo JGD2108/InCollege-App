@@ -131,6 +131,7 @@
            MOVE WS-USERNAME      TO MSG-SENDER
            MOVE WS-MSG-RECIPIENT TO MSG-RECIPIENT
            MOVE WS-MSG-TEXT      TO MSG-CONTENT
+           MOVE WS-MSG-TIMESTAMP TO MSG-TIMESTAMP
            OPEN EXTEND MESSAGES-FILE
            WRITE MESSAGE-RECORD
            CLOSE MESSAGES-FILE
@@ -218,7 +219,7 @@
                           FUNCTION TRIM(WS-USERNAME)
                            ADD 1 TO WS-MSG-FOUND-COUNT
                            STRING "From: " DELIMITED BY SIZE
-                                  FUNCTION TRIM(MSG-SENDER) DELIMITED BY SPACE
+                                  FUNCTION TRIM(MSG-SENDER) DELIMITED BY SIZE
                              INTO OUTPUT-RECORD
                            PERFORM PRINT-LINE
                            STRING "Message: " DELIMITED BY SIZE
@@ -246,5 +247,8 @@
 
            IF WS-MSG-FOUND-COUNT = 0
                MOVE "You have no messages at this time." TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+           ELSE
+               MOVE "---------------------" TO OUTPUT-RECORD
                PERFORM PRINT-LINE
            END-IF.
