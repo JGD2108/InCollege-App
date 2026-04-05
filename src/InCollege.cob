@@ -224,6 +224,9 @@
         *> Messages file status and timestamp
          01 WS-MESSAGES-STATUS PIC XX.
          77 WS-MSG-TIMESTAMP   PIC X(20).
+        *> View messages variables
+         77 WS-MESSAGES-EOF      PIC X  VALUE "N".
+         77 WS-MSG-FOUND-COUNT   PIC 99 VALUE 0.
 
       *> WS-TRIMMED-IN: holds trimmed input
       *> WS-IN-LEN: length trimmed input

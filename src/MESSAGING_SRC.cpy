@@ -24,10 +24,7 @@
                  WHEN "1"
                     PERFORM SEND-MESSAGE
                  WHEN "2"
-                    MOVE "View My Messages is under construction." TO OUTPUT-RECORD
-                    PERFORM PRINT-LINE
-                    *> Later:
-                    *> CALL "REVIEWMESSAGES" USING ...
+                    PERFORM VIEW-MY-MESSAGES
                  WHEN "3"
                     MOVE "Returning to post-login menu." TO OUTPUT-RECORD
                     PERFORM PRINT-LINE
@@ -189,4 +186,65 @@
               MOVE "You may only send messages to users in your network."
                 TO OUTPUT-RECORD
               PERFORM PRINT-LINE
+           END-IF.
+
+      VIEW-MY-MESSAGES.
+           MOVE 0   TO WS-MSG-FOUND-COUNT
+           MOVE "N" TO WS-MESSAGES-EOF
+
+           MOVE "--- Your Messages ---" TO OUTPUT-RECORD
+           PERFORM PRINT-LINE
+
+           OPEN INPUT MESSAGES-FILE
+
+           IF WS-MESSAGES-STATUS = "35"
+               MOVE "You have no messages at this time." TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+               EXIT PARAGRAPH
+           END-IF
+
+           IF WS-MESSAGES-STATUS NOT = "00"
+               MOVE "Error opening messages file." TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
+               EXIT PARAGRAPH
+           END-IF
+
+           PERFORM UNTIL WS-MESSAGES-EOF = "Y"
+               READ MESSAGES-FILE
+                   AT END
+                       MOVE "Y" TO WS-MESSAGES-EOF
+                   NOT AT END
+                       IF FUNCTION TRIM(MSG-RECIPIENT) =
+                          FUNCTION TRIM(WS-USERNAME)
+                           ADD 1 TO WS-MSG-FOUND-COUNT
+                           STRING "From: " DELIMITED BY SIZE
+                                  FUNCTION TRIM(MSG-SENDER) DELIMITED BY SPACE
+                             INTO OUTPUT-RECORD
+                           PERFORM PRINT-LINE
+                           STRING "Message: " DELIMITED BY SIZE
+                                  FUNCTION TRIM(MSG-CONTENT) DELIMITED BY SIZE
+                             INTO OUTPUT-RECORD
+                           PERFORM PRINT-LINE
+                           IF MSG-TIMESTAMP NOT = SPACES
+                               STRING "Sent: "
+                                      MSG-TIMESTAMP(1:4) "-"
+                                      MSG-TIMESTAMP(5:2) "-"
+                                      MSG-TIMESTAMP(7:2) " "
+                                      MSG-TIMESTAMP(9:2) ":"
+                                      MSG-TIMESTAMP(11:2)
+                                      DELIMITED BY SIZE
+                                 INTO OUTPUT-RECORD
+                               PERFORM PRINT-LINE
+                           END-IF
+                           MOVE "---" TO OUTPUT-RECORD
+                           PERFORM PRINT-LINE
+                       END-IF
+               END-READ
+           END-PERFORM
+
+           CLOSE MESSAGES-FILE
+
+           IF WS-MSG-FOUND-COUNT = 0
+               MOVE "You have no messages at this time." TO OUTPUT-RECORD
+               PERFORM PRINT-LINE
            END-IF.
