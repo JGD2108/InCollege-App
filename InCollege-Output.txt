@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-LoginUser1
+JobUser
 Enter password:
-Login@11
+JobUser@1
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -24,22 +24,13 @@ You have successfully logged in
 1. Send a New Message
 2. View My Messages
 3. Back to Main Menu
-1
-Enter recipient's username (must be a connection):
-JobUser
-Enter your message (max 200 chars):
-Hey did you see the latest job posting for a software engineer?
-Message sent to JobUser successfully!
---- Messages Menu ---
-1. Send a New Message
-2. View My Messages
-3. Back to Main Menu
-1
-Enter recipient's username (must be a connection):
-SkillsUser
-Enter your message (max 200 chars):
-I just tried out skill 3, you should too!
-Message sent to SkillsUser successfully!
+2
+--- Your Messages ---
+From: LoginUser1
+Message: Hey did you see the latest job posting for a software engineer?
+Sent: 2026-04-06 14:50
+---
+---------------------
 --- Messages Menu ---
 1. Send a New Message
 2. View My Messages

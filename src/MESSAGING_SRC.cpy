@@ -219,14 +219,17 @@
                        IF FUNCTION TRIM(MSG-RECIPIENT) =
                           FUNCTION TRIM(WS-USERNAME)
                            ADD 1 TO WS-MSG-FOUND-COUNT
+                           MOVE SPACES TO OUTPUT-RECORD
                            STRING "From: " DELIMITED BY SIZE
                                   FUNCTION TRIM(MSG-SENDER) DELIMITED BY SIZE
                              INTO OUTPUT-RECORD
                            PERFORM PRINT-LINE
+                           MOVE SPACES TO OUTPUT-RECORD
                            STRING "Message: " DELIMITED BY SIZE
                                   FUNCTION TRIM(MSG-CONTENT) DELIMITED BY SIZE
                              INTO OUTPUT-RECORD
                            PERFORM PRINT-LINE
+                           MOVE SPACES TO OUTPUT-RECORD
                            IF MSG-TIMESTAMP NOT = SPACES
                                STRING "Sent: "
                                       MSG-TIMESTAMP(1:4) "-"

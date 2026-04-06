@@ -1,13 +1,8 @@
 1
-LoginUser1
-Login@11
-8
-1
 JobUser
-Hey did you see the latest job posting for a software engineer?
-1
-SkillsUser
-I just tried out skill 3, you should too!
+JobUser@1
+8
+2
 3
 5
 3
