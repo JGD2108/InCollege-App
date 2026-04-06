@@ -48,15 +48,3 @@ Skills@1
 3
 5
 3
-
-
-3
-5
-3
-
-LoginUser1
-Login@11
-JobUser
-JobUser@1
-SkillsUser
-Skills@1

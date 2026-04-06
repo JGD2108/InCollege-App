@@ -1,0 +1,15 @@
+1
+SkillsUser
+Skills@1
+8
+2
+3
+5
+1
+JobUser
+JobUser@1
+8
+2
+3
+5
+3
