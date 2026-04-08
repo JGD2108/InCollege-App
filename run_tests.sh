@@ -39,6 +39,41 @@ reset_users_dat() {
     > "$WORKSPACE/USERS.DAT"
 }
 
+# Find the nearest ancestor directory (including itself) that contains
+# shared DAT fixtures for the requested test path.
+resolve_test_root() {
+    local path="$1"
+    local dir="$path"
+    local fallback=""
+
+    if [ -f "$dir" ]; then
+        dir=$(dirname "$dir")
+    fi
+
+    while [ "$dir" != "/" ] && [ "$dir" != "." ]; do
+        if [ -f "$dir/USERS.DAT" ]; then
+            echo "$dir"
+            return
+        fi
+
+        if [ -z "$fallback" ] && find "$dir" -maxdepth 1 -type f -name "*.DAT" | grep -q .; then
+            fallback="$dir"
+        fi
+
+        if [ "$dir" = "/workspace/Tests" ]; then
+            break
+        fi
+
+        dir=$(dirname "$dir")
+    done
+
+    if [ -n "$fallback" ]; then
+        echo "$fallback"
+    else
+        echo "$path"
+    fi
+}
+
 # Resolve fixture path from test root.
 # Priority:
 # 1) <test_root>/<DAT name>
@@ -90,6 +125,62 @@ seed_dat_for_test() {
     else
         seed_or_blank_dat "$dat_name"
     fi
+}
+
+# Optional substring assertions for persisted message records.
+# If a test case contains MESSAGES-CONTAINS.txt, each non-empty line
+# must appear somewhere in WORKSPACE/MESSAGES.DAT after the test run.
+run_optional_data_assertions() {
+    local test_path="$1"
+    local assertions_file="$test_path/MESSAGES-CONTAINS.txt"
+    local expect_empty_file="$test_path/MESSAGES-EMPTY"
+    local require_timestamp_file="$test_path/MESSAGES-HAS-TIMESTAMP"
+    local timestamp_text=""
+    DATA_ASSERT_RESULT="PASS"
+    DATA_ASSERT_MESSAGE=""
+
+    if [ -f "$expect_empty_file" ]; then
+        if [ -f "$WORKSPACE/MESSAGES.DAT" ] && grep -aq '[^[:space:]]' "$WORKSPACE/MESSAGES.DAT"; then
+            DATA_ASSERT_RESULT="FAIL"
+            DATA_ASSERT_MESSAGE="MESSAGES.DAT was expected to remain empty."
+        fi
+        return
+    fi
+
+    if [ ! -f "$assertions_file" ] && [ ! -f "$require_timestamp_file" ]; then
+        return
+    fi
+
+    if [ ! -s "$WORKSPACE/MESSAGES.DAT" ]; then
+        DATA_ASSERT_RESULT="FAIL"
+        DATA_ASSERT_MESSAGE="MESSAGES.DAT was empty, but persisted message content was expected."
+        return
+    fi
+
+    if [ -f "$require_timestamp_file" ]; then
+        timestamp_text=$(grep -a '[^[:space:]]' "$WORKSPACE/MESSAGES.DAT" | tail -n 1 | grep -aoE '[0-9]{14}$' | tail -n 1)
+        if ! printf '%s' "$timestamp_text" | grep -Eq '^[0-9]{14}$'; then
+            DATA_ASSERT_RESULT="FAIL"
+            DATA_ASSERT_MESSAGE="MESSAGES.DAT did not contain a valid 14-digit timestamp in the timestamp field."
+            return
+        fi
+    fi
+
+    if [ ! -f "$assertions_file" ]; then
+        return
+    fi
+
+    while IFS= read -r expected || [ -n "$expected" ]; do
+        if [ -z "$expected" ]; then
+            continue
+        fi
+
+        if ! grep -Fq -- "$expected" "$WORKSPACE/MESSAGES.DAT"; then
+            DATA_ASSERT_RESULT="FAIL"
+            DATA_ASSERT_MESSAGE="Missing persisted text in MESSAGES.DAT: $expected"
+            return
+        fi
+    done < "$assertions_file"
 }
 
 # Function to determine if test needs baseline users
@@ -219,8 +310,10 @@ run_test() {
             fi
         fi
 
+        run_optional_data_assertions "$test_path"
+
         # Overall result
-        if [ "$RUN1_RESULT" = "PASS" ] && [ "$RUN2_RESULT" = "PASS" ]; then
+        if [ "$RUN1_RESULT" = "PASS" ] && [ "$RUN2_RESULT" = "PASS" ] && [ "$DATA_ASSERT_RESULT" = "PASS" ]; then
             echo -e "${GREEN}  ✓ PASS${NC} (Run 1 & Run 2)"
             PASSED_TESTS=$((PASSED_TESTS + 1))
         else
@@ -257,10 +350,16 @@ run_test() {
                 "$PROGRAM" > /dev/null 2>&1
                 diff "$ws_output_file" "$output2_file" | head -10
             fi
+            if [ "$DATA_ASSERT_RESULT" = "FAIL" ]; then
+                echo -e "${YELLOW}  Data assertion failure:${NC}"
+                echo "$DATA_ASSERT_MESSAGE"
+            fi
         fi
     else
+        run_optional_data_assertions "$test_path"
+
         # Single run test
-        if [ "$RUN1_RESULT" = "PASS" ]; then
+        if [ "$RUN1_RESULT" = "PASS" ] && [ "$DATA_ASSERT_RESULT" = "PASS" ]; then
             echo -e "${GREEN}  ✓ PASS${NC}"
             PASSED_TESTS=$((PASSED_TESTS + 1))
         else
@@ -268,8 +367,14 @@ run_test() {
             FAILED_TESTS=$((FAILED_TESTS + 1))
 
             # Show diff for debugging (first 10 lines)
-            echo -e "${YELLOW}  Differences (first 10 lines):${NC}"
-            diff "$ws_output_file" "$output_file" | head -10
+            if [ "$RUN1_RESULT" = "FAIL" ]; then
+                echo -e "${YELLOW}  Differences (first 10 lines):${NC}"
+                diff "$ws_output_file" "$output_file" | head -10
+            fi
+            if [ "$DATA_ASSERT_RESULT" = "FAIL" ]; then
+                echo -e "${YELLOW}  Data assertion failure:${NC}"
+                echo "$DATA_ASSERT_MESSAGE"
+            fi
         fi
     fi
 
@@ -286,7 +391,7 @@ echo ""
 # Find all test directories (those containing input files) and sort them
 for test_root in "${TEST_DIRS[@]}"; do
     if [ -d "$test_root" ]; then
-        CURRENT_TEST_ROOT="$test_root"
+        CURRENT_TEST_ROOT=$(resolve_test_root "$test_root")
         reset_extra_dat_files
         echo "Loaded DAT fixtures from: $CURRENT_TEST_ROOT"
         setup_users_dat

@@ -1,24 +1,10 @@
 1
+LoginUser1
+Login@11
+8
+1
 WelcomeUser
-Welcome@1
-8
-1
-SkillsUser
-This is a deliberately long message intended to exceed eighty characters so we can observe truncation in the output when printed by the program.
-3
-5
-1
-SkillsUser
-Skills@1
-8
-2
-3
-5
-3
-1
-SkillsUser
-Skills@1
-8
+Hello Jane, welcome to InCollege! Can't wait to start working with you!
 2
 3
 5

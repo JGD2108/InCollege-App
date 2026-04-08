@@ -24,10 +24,11 @@
                  WHEN "1"
                     PERFORM SEND-MESSAGE
                  WHEN "2"
-                    PERFORM VIEW-MY-MESSAGES
-                 WHEN "3"
-                    MOVE "Returning to post-login menu." TO OUTPUT-RECORD
+                    MOVE "View My Messages is under construction." TO OUTPUT-RECORD
                     PERFORM PRINT-LINE
+                    *> Later:
+                    *> CALL "REVIEWMESSAGES" USING ...
+                 WHEN "3"
                     MOVE "Y" TO WS-MESSAGE-EXIT
                  WHEN OTHER
                     MOVE "Invalid selection." TO OUTPUT-RECORD
@@ -145,12 +146,48 @@
 
       VERIFY-MESSAGE-NETWORK.
            MOVE "N" TO WS-CAN-MESSAGE
+           MOVE "N" TO WS-MSG-USER-FOUND
            MOVE "N" TO WS-EST-EOF
+
+           OPEN INPUT USERS-FILE
+
+           IF WS-USERS-STATUS = "35"
+              MOVE "User not found in your network" TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PARAGRAPH
+           END-IF
+
+           IF WS-USERS-STATUS NOT = "00"
+              MOVE "Error opening users file." TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PARAGRAPH
+           END-IF
+
+           PERFORM UNTIL WS-EOF = "Y" OR WS-MSG-USER-FOUND = "Y"
+              READ USERS-FILE
+                  AT END
+                      MOVE "Y" TO WS-EOF
+                  NOT AT END
+                      IF FUNCTION TRIM(USERNAME) =
+                         FUNCTION TRIM(WS-MSG-RECIPIENT)
+                          MOVE "Y" TO WS-MSG-USER-FOUND
+                      END-IF
+              END-READ
+           END-PERFORM
+
+           CLOSE USERS-FILE
+
+           IF WS-MSG-USER-FOUND NOT = "Y"
+              MOVE "N" TO WS-EOF
+              MOVE "User not found in your network" TO OUTPUT-RECORD
+              PERFORM PRINT-LINE
+              EXIT PARAGRAPH
+           END-IF
 
            OPEN INPUT ESTABLISHED-FILE
 
            IF WS-EST-FILE-STATUS = "35"
-              MOVE "You can only message users in your network."
+              MOVE "You can only message users you are connected with"
                 TO OUTPUT-RECORD
               PERFORM PRINT-LINE
               EXIT PARAGRAPH
@@ -185,94 +222,7 @@
            CLOSE ESTABLISHED-FILE
 
            IF WS-CAN-MESSAGE NOT = "Y"
-              MOVE "You may only send messages to users in your network."
+              MOVE "You can only message users you are connected with"
                 TO OUTPUT-RECORD
               PERFORM PRINT-LINE
-           END-IF.
-
-      VIEW-MY-MESSAGES.
-           MOVE 0   TO WS-MSG-FOUND-COUNT
-           MOVE "N" TO WS-MESSAGES-EOF
-
-           MOVE "--- Your Messages ---" TO OUTPUT-RECORD
-           PERFORM PRINT-LINE
-
-           OPEN INPUT MESSAGES-FILE
-
-           IF WS-MESSAGES-STATUS = "35"
-               MOVE "You have no messages at this time." TO OUTPUT-RECORD
-               PERFORM PRINT-LINE
-               EXIT PARAGRAPH
-           END-IF
-
-           IF WS-MESSAGES-STATUS NOT = "00"
-               MOVE "Error opening messages file." TO OUTPUT-RECORD
-               PERFORM PRINT-LINE
-               EXIT PARAGRAPH
-           END-IF
-
-           PERFORM UNTIL WS-MESSAGES-EOF = "Y"
-               READ MESSAGES-FILE
-                   AT END
-                       MOVE "Y" TO WS-MESSAGES-EOF
-                   NOT AT END
-                       IF FUNCTION TRIM(MSG-RECIPIENT) =
-                          FUNCTION TRIM(WS-USERNAME)
-                           ADD 1 TO WS-MSG-FOUND-COUNT
-                           MOVE SPACES TO OUTPUT-RECORD
-                           STRING "From: " DELIMITED BY SIZE
-                                  FUNCTION TRIM(MSG-SENDER) DELIMITED BY SIZE
-                             INTO OUTPUT-RECORD
-                           PERFORM PRINT-LINE
-                           MOVE SPACES TO OUTPUT-RECORD
-                           MOVE FUNCTION TRIM(MSG-CONTENT) TO WS-MSG-CONT-TRIM
-                           MOVE FUNCTION LENGTH(FUNCTION TRIM(MSG-CONTENT))
-                             TO WS-MSG-CONTENT-LEN
-                           IF WS-MSG-CONTENT-LEN > 0
-                               MOVE 1 TO WS-MSG-INDEX
-                               PERFORM UNTIL WS-MSG-INDEX > WS-MSG-CONTENT-LEN
-                                   IF WS-MSG-INDEX = 1
-                                       MOVE SPACES TO OUTPUT-RECORD
-                                       STRING "Message: " DELIMITED BY SIZE
-                                              WS-MSG-CONT-TRIM(WS-MSG-INDEX:80)
-                                                DELIMITED BY SIZE
-                                          INTO OUTPUT-RECORD
-                                       PERFORM PRINT-LINE
-                                   ELSE
-                                       MOVE SPACES TO OUTPUT-RECORD
-                                       STRING "         " DELIMITED BY SIZE
-                                              WS-MSG-CONT-TRIM(WS-MSG-INDEX:80)
-                                                DELIMITED BY SIZE
-                                          INTO OUTPUT-RECORD
-                                       PERFORM PRINT-LINE
-                                   END-IF
-                                   ADD 80 TO WS-MSG-INDEX
-                               END-PERFORM
-                           END-IF
-                           MOVE SPACES TO OUTPUT-RECORD
-                           IF MSG-TIMESTAMP NOT = SPACES
-                               STRING "Sent: "
-                                      MSG-TIMESTAMP(1:4) "-"
-                                      MSG-TIMESTAMP(5:2) "-"
-                                      MSG-TIMESTAMP(7:2) " "
-                                      MSG-TIMESTAMP(9:2) ":"
-                                      MSG-TIMESTAMP(11:2)
-                                      DELIMITED BY SIZE
-                                 INTO OUTPUT-RECORD
-                               PERFORM PRINT-LINE
-                           END-IF
-                           MOVE "---" TO OUTPUT-RECORD
-                           PERFORM PRINT-LINE
-                       END-IF
-               END-READ
-           END-PERFORM
-
-           CLOSE MESSAGES-FILE
-
-           IF WS-MSG-FOUND-COUNT = 0
-               MOVE "You have no messages at this time." TO OUTPUT-RECORD
-               PERFORM PRINT-LINE
-           ELSE
-               MOVE "---------------------" TO OUTPUT-RECORD
-               PERFORM PRINT-LINE
            END-IF.

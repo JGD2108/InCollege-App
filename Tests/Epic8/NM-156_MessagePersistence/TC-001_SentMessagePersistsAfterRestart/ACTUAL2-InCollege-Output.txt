@@ -5,9 +5,9 @@ Please select an option:
 3. Logout
 1
 Enter username:
-LoginUser1
+JobUser
 Enter password:
-Login@11
+JobUser@1
 You have successfully logged in
 --- Welcome to InCollege, select an option ---
 0. Create/Edit your profile
@@ -20,16 +20,6 @@ You have successfully logged in
 7. View My Network
 8. Messages
 8
---- Messages Menu ---
-1. Send a New Message
-2. View My Messages
-3. Back to Main Menu
-1
-Enter recipient's username (must be a connection):
-WelcomeUser
-Enter your message (max 200 chars):
-Hello Jane, welcome to InCollege! Can't wait to start working with you!
-Message sent to WelcomeUser successfully!
 --- Messages Menu ---
 1. Send a New Message
 2. View My Messages

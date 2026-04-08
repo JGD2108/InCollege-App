@@ -55,11 +55,11 @@
        DATA DIVISION.
        FILE SECTION.
 
-        FD  INPUT-FILE.
-          01  INPUT-RECORD        PIC X(200).
+         FD  INPUT-FILE.
+            01  INPUT-RECORD        PIC X(255).
 
-        FD  OUTPUT-FILE.
-          01  OUTPUT-RECORD       PIC X(200).
+         FD  OUTPUT-FILE.
+            01  OUTPUT-RECORD       PIC X(255).
 
          FD USERS-FILE.
            01 USER-RECORD.
@@ -219,24 +219,18 @@
          77 WS-MESSAGE-EXIT PIC X VALUE "N".
         *> Message verification variables
          77 WS-CAN-MESSAGE PIC X VALUE "N".
+         77 WS-MSG-USER-FOUND PIC X VALUE "N".
          77 WS-MSG-RECIPIENT PIC X(12).
          77 WS-MSG-TEXT PIC X(200).
         *> Messages file status and timestamp
          01 WS-MESSAGES-STATUS PIC XX.
          77 WS-MSG-TIMESTAMP   PIC X(20).
-        *> View messages variables
-         77 WS-MESSAGES-EOF      PIC X  VALUE "N".
-         77 WS-MSG-FOUND-COUNT   PIC 99 VALUE 0.
-        *> Message print-wrapping helpers
-         77 WS-MSG-CONTENT-LEN PIC 9(3) VALUE 0.
-         77 WS-MSG-INDEX PIC 9(3) VALUE 0.
-         01 WS-MSG-CONT-TRIM PIC X(200).
 
       *> WS-TRIMMED-IN: holds trimmed input
       *> WS-IN-LEN: length trimmed input
       *> WS-OK:'N' if the username of password is too long
-         77 WS-TRIMMED-IN   PIC X(80).
-         77 WS-IN-LEN       PIC 99 VALUE 0.
+         77 WS-TRIMMED-IN   PIC X(255).
+         77 WS-IN-LEN       PIC 999 VALUE 0.
          77 WS-OK           PIC X VALUE "Y".
 
           *> Variables and tables for account creation (inlined from CREATEACCOUNT)
@@ -833,7 +827,7 @@
                  PERFORM PRINT-LINE
                  MOVE "7. View My Network" TO OUTPUT-RECORD
                  PERFORM PRINT-LINE
-                 MOVE "8. Messaging" TO OUTPUT-RECORD
+                 MOVE "8. Messages" TO OUTPUT-RECORD
                  PERFORM PRINT-LINE
 
                  PERFORM READ-AND-LOG
