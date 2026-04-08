@@ -5,7 +5,7 @@
 
 PROGRAM="/workspace/bin/InCollege"
 WORKSPACE="/workspace"
-TEST_DIRS=("/workspace/Tests/Epic5")
+TEST_DIRS=("/workspace/Tests/Epic9")
 CURRENT_TEST_ROOT=""
 
 # Allow overriding test root from command line
@@ -106,7 +106,7 @@ needs_baseline_users() {
 
 # Function to blank profile/education/experience/jobs data files
 reset_extra_dat_files() {
-    for f in "PROFILES.DAT" "EDUCATION.DAT" "EXPERIENCE.DAT" "CONNECTIONS.DAT" "ESTABLISHED.DAT" "JOBS.DAT"; do
+    for f in "PROFILES.DAT" "EDUCATION.DAT" "EXPERIENCE.DAT" "CONNECTIONS.DAT" "ESTABLISHED.DAT" "JOBS.DAT" "MESSAGES.DAT"; do
         seed_or_blank_dat "$f"
     done
 }
@@ -160,6 +160,7 @@ run_test() {
     seed_dat_for_test "$test_path" "CONNECTIONS.DAT"
     seed_dat_for_test "$test_path" "ESTABLISHED.DAT"
     seed_dat_for_test "$test_path" "JOBS.DAT"
+    seed_dat_for_test "$test_path" "MESSAGES.DAT"
 
     # Setup USERS.DAT based on test requirements
     if needs_baseline_users "$input_file"; then
@@ -234,6 +235,8 @@ run_test() {
                 seed_dat_for_test "$test_path" "EXPERIENCE.DAT"
                 seed_dat_for_test "$test_path" "CONNECTIONS.DAT"
                 seed_dat_for_test "$test_path" "ESTABLISHED.DAT"
+                seed_dat_for_test "$test_path" "JOBS.DAT"
+                seed_dat_for_test "$test_path" "MESSAGES.DAT"
                 if needs_baseline_users "$input_file"; then
                     if [ -f "$test_path/USERS.DAT" ]; then
                         cp "$test_path/USERS.DAT" "$WORKSPACE/USERS.DAT"

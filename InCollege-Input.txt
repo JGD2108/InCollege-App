@@ -1,24 +1,47 @@
 1
+WelcomeUser
+Welcome@1
+2
+Jane Doe
+1
+5
+1
+JourneyUser
+Journey@1
+2
+Jane Doe
+1
+5
+1
 SkillsUser
 Skills@1
+4
+A
+A
+5
+1
+WelcomeUser
+Welcome@1
 8
 1
-LoginUser1
-I recommend learning skill 2 for better job opportunities.
+SkillsUser
+Extra message 1
 3
 5
 1
-LoginUser1
-Login@11
+JourneyUser
+Journey@1
+8
+1
+SkillsUser
+Extra message 2
+3
+5
+1
+SkillsUser
+Skills@1
 8
 2
 3
 5
 3
-
-LoginUser1
-Login@11
-JobUser
-JobUser@1
-SkillsUser
-Skills@1
