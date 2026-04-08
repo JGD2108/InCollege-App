@@ -7,9 +7,8 @@ InCollege is a menu-driven COBOL application that now includes the full project 
 - full-name user search
 - sending, viewing, accepting, and rejecting connection requests
 - viewing established network connections
-- sending private messages to established connections
-- placeholder "View My Messages" menu flow for Week 8
-- basic profile storage (plus education/experience backing files)
+- job posting and job browsing
+- basic messaging, including sending messages and viewing received messages
 
 The compiled executable is `/workspace/bin/InCollege` and is built from `src/InCollege.cob`.
 
@@ -52,96 +51,75 @@ Post-login menu:
 - `5. Logout`
 - `6. View My Profile`
 - `7. View My Network`
-- `8. Messages`
+- `8. Messaging`
 
 Messages submenu:
 - `1. Send a New Message`
 - `2. View My Messages`
 - `3. Back to Main Menu`
 
-### Week 5 Connection Behavior
-Pending request management (`4. View My Pending Connection Requests`):
-- displays each pending request for the logged-in user
-- prompts for `A` (accept) or `R` (reject) per request
-- on accept:
-  - removes the request from pending storage
-  - adds the pair to established connections storage
-  - prints confirmation
-- on reject:
-  - removes the request from pending storage
-  - does not create an established connection
-  - prints confirmation
-- prints a processed summary for accepted/rejected totals
+Job submenu:
+- `1. Post a Job/Internship`
+- `2. Browse Jobs/Internships`
+- `3. Back to Main Menu`
 
-Network display (`7. View My Network`):
-- reads established connections and lists users connected to the logged-in user
-- displays at least full name (and also University/Major when profile exists)
-- prompts `Enter 0 to return to post-login menu.`
+### Messaging Behavior
+Messaging is the completed Week 8 and Week 9 feature set.
+
+Send message flow:
+- the sender chooses `8` from the post-login menu, then `1` in the Messages menu
+- the recipient must be a user in the sender's established network
+- the message body accepts up to 200 characters
+- messages are persisted to `MESSAGES.DAT`
+- each saved message includes sender, recipient, content, and timestamp data
+
+View messages flow:
+- the user chooses `8` from the post-login menu, then `2` in the Messages menu
+- all messages addressed to the logged-in user are displayed
+- each message shows:
+  - sender username
+  - message content
+  - timestamp
+- if there are no messages, the program prints `You have no messages at this time.`
+- the current alpha does not track read/unread state
+
+### File I/O Rules
+- All user input is read from `InCollege-Input.txt`.
+- The same lines shown on screen are also written to `InCollege-Output.txt`.
+- Input is echoed into the output file because the shared read/display flow logs the scripted selections for test verification.
+- This file-based behavior is used for login, profiles, connection requests, jobs, and messaging.
 
 ### Data Files
-The program uses line-sequential `.DAT` files in the workspace root:
-- `USERS.DAT`
-- `PROFILES.DAT`
-- `CONNECTIONS.DAT`
-- `ESTABLISHED.DAT`
-- `EDUCATION.DAT`
-- `EXPERIENCE.DAT`
-- `MESSAGES.DAT`
-
-Connection file roles:
-- `CONNECTIONS.DAT`: pending requests only (`requester`, `recipient`, status field used as pending workflow input)
-- `ESTABLISHED.DAT`: established permanent connections (`user1`, `user2`)
-- `MESSAGES.DAT`: private message storage (`sender`, `recipient`, `content`, `timestamp`)
-
-### I/O Rules
-- Input is read from `InCollege-Input.txt` via file reads (no interactive keyboard input required).
-- Every line printed to the screen is also written to `InCollege-Output.txt` through shared print logic.
-- This applies to Week 8 messaging flows as well, including recipient prompts, message prompts, confirmations, and validation errors.
-
-### Automated Tests
-Run all Epic 8 tests:
-```bash
-./run_tests.sh /workspace/Tests/Epic8
-```
-
-Run a specific test root:
-```bash
-./run_tests.sh /workspace/Tests/Epic8/NM-154_SendMessage
-```
-
-Test runner behavior:
-- discovers test cases by `InCollege-Input.txt` (or `INPUT.DAT`)
-- writes actual outputs into each case as `ACTUAL-InCollege-Output.txt`
-- reseeds `.DAT` fixtures per test for isolation
-- loads epic-level fixtures from files like `Tests/Epic4/USERS.DAT`, `Tests/Epic4/PROFILES.DAT`, etc.
-- supports per-test fixture overrides by placing `.DAT` files directly in a test case folder
+The application uses line-sequential files in the workspace root:
+- `USERS.DAT`: usernames and passwords
+- `PROFILES.DAT`: core profile details
+- `EDUCATION.DAT`: education entries
+- `EXPERIENCE.DAT`: experience entries
+- `CONNECTIONS.DAT`: pending connection requests
+- `ESTABLISHED.DAT`: accepted network connections
+- `JOBS.DAT`: posted jobs and internships
+- `MESSAGES.DAT`: saved messages with sender, recipient, content, and timestamp
 
 ### Important Files
-- `src/InCollege.cob`: primary source (includes program units and copied source snippets)
-- `src/SendRequest.cob`: connection request validation/save logic
-- `src/MESSAGING_SRC.cpy`: messages submenu, send-message flow, and recipient validation
-- `src/VIEWREQ_SRC.cpy`: pending request view + accept/reject processing
-- `src/VIEWNET_SRC.cpy`: established network display logic
+- `src/InCollege.cob`: main single-file build target
+- `src/MESSAGING_SRC.cpy`: messaging menu, send flow, and view-my-messages flow
+- `src/VIEWREQ_SRC.cpy`: pending request processing
+- `src/VIEWNET_SRC.cpy`: established network display
+- `src/JOBS_SRC.cpy`: job posting menu flow
+- `src/BROWSEJOBS_SRC.cpy`: job listing and detail view logic
 - `run_tests.sh`: automated test runner
-- `Tests/Epic8/`: Epic 8 test cases and isolated fixture `.DAT` files
+- `Tests/Epic9/`: Week 9 messaging fixtures and regression tests
 
-### Build And Try Week 8 Messaging Flow
-1. Build:
+### Automated Tests
+Build first:
 ```bash
 mkdir -p bin
 cobc -x -free -o bin/InCollege src/InCollege.cob
 ```
 
-2. Optional fixture setup for a sample Week 8 run:
+Run the currently configured default test suite:
 ```bash
-cp Tests/Epic8/USERS.DAT USERS.DAT
-: > PROFILES.DAT
-: > CONNECTIONS.DAT
-: > ESTABLISHED.DAT
-: > EDUCATION.DAT
-: > EXPERIENCE.DAT
-: > JOBS.DAT
-: > MESSAGES.DAT
+./run_tests.sh
 ```
 
 Run a specific test root:
@@ -149,7 +127,25 @@ Run a specific test root:
 ./run_tests.sh /workspace/Tests/Epic9
 ```
 
-4. Review output:
-- screen output
-- `/workspace/InCollege-Output.txt` (should match screen output line-for-line)
-- `/workspace/MESSAGES.DAT` for persisted sender/recipient/content/timestamp records
+Test runner behavior:
+- discovers test cases by `InCollege-Input.txt` or `INPUT.DAT`
+- writes actual outputs into each case as `ACTUAL-InCollege-Output.txt`
+- reseeds `.DAT` fixtures per test for isolation
+- loads epic-level fixtures such as `Tests/Epic9/USERS.DAT` and `Tests/Epic9/MESSAGES.DAT`
+- supports per-test fixture overrides by placing `.DAT` files directly in a test case folder
+
+### Preparing Input For Message Viewing
+To test viewing messages from an input file, include a login flow followed by:
+1. `8` to open the Messages menu
+2. `2` to choose `View My Messages`
+3. `3` to return to the post-login menu
+4. `5` to log out, if needed by the scenario
+
+The resulting output will be written to:
+- the terminal
+- `/workspace/InCollege-Output.txt`
+
+### Finished Project Notes
+- The executable is built from `src/InCollege.cob`, which includes the copied source modules needed for a single-file build.
+- Messaging output includes sender, message body, and timestamp formatting required for Week 9.
+- The repository now includes expected output files for the Week 9 truncated-message test cases so they can run as normal regression tests.
