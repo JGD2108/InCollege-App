@@ -1,12 +1,11 @@
 ## InCollege (COBOL)
 
 ### Overview
-InCollege is a menu-driven COBOL application that supports:
+InCollege is a menu-driven COBOL application that now includes the full project workflow:
 - account creation and login
-- profile search by full name
-- sending connection requests
-- viewing pending connection requests
-- accepting/rejecting pending requests
+- profile create, edit, and view
+- full-name user search
+- sending, viewing, accepting, and rejecting connection requests
 - viewing established network connections
 - sending private messages to established connections
 - placeholder "View My Messages" menu flow for Week 8
@@ -15,7 +14,7 @@ InCollege is a menu-driven COBOL application that supports:
 The compiled executable is `/workspace/bin/InCollege` and is built from `src/InCollege.cob`.
 
 ### Prerequisites
-- Open the project in the provided dev container (or equivalent environment with `cobc` installed).
+- Open the project in the provided dev container, or use an environment with `cobc` installed.
 
 ### Build
 Use either method:
@@ -30,7 +29,7 @@ cobc -x -free -o bin/InCollege src/InCollege.cob
 The program reads scripted input from:
 - `InCollege-Input.txt`
 
-And writes output to:
+The program writes the exact displayed output to:
 - `InCollege-Output.txt`
 
 Run:
@@ -38,7 +37,7 @@ Run:
 /workspace/bin/InCollege
 ```
 
-### Current Menus
+### Main Menus
 Top-level menu:
 - `1. Log In`
 - `2. Create a new account`
@@ -145,9 +144,9 @@ cp Tests/Epic8/USERS.DAT USERS.DAT
 : > MESSAGES.DAT
 ```
 
-3. Use the provided `/workspace/InCollege-Input.txt` sample and run:
+Run a specific test root:
 ```bash
-/workspace/bin/InCollege
+./run_tests.sh /workspace/Tests/Epic9
 ```
 
 4. Review output:

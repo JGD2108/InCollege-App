@@ -5,7 +5,7 @@
 
 PROGRAM="/workspace/bin/InCollege"
 WORKSPACE="/workspace"
-TEST_DIRS=("/workspace/Tests/Epic5")
+TEST_DIRS=("/workspace/Tests/Epic9")
 CURRENT_TEST_ROOT=""
 
 # Allow overriding test root from command line
@@ -275,13 +275,18 @@ run_test() {
     ACTUAL1_FILE="$test_path/ACTUAL-$(basename "$ws_output_file")"
     cp "$ws_output_file" "$ACTUAL1_FILE" 2>/dev/null || true
 
-    # Compare output
+    # Compare output (normalize dynamic timestamps like "Sent: YYYY-MM-DD HH:MM")
     if [ -f "$output_file" ]; then
-        if diff -q "$ws_output_file" "$output_file" > /dev/null 2>&1; then
+        NORM_ACTUAL=$(mktemp)
+        NORM_EXPECTED=$(mktemp)
+        sed -E 's/Sent: [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}/Sent: 0000-00-00 00:00/g' "$ws_output_file" > "$NORM_ACTUAL"
+        sed -E 's/Sent: [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}/Sent: 0000-00-00 00:00/g' "$output_file" > "$NORM_EXPECTED"
+        if diff -q "$NORM_ACTUAL" "$NORM_EXPECTED" > /dev/null 2>&1; then
             RUN1_RESULT="PASS"
         else
             RUN1_RESULT="FAIL"
         fi
+        rm -f "$NORM_ACTUAL" "$NORM_EXPECTED"
     else
         echo -e "${YELLOW}  SKIP: No output file found${NC}"
         return

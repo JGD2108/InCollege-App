@@ -1,0 +1,270 @@
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+LoginUser1
+Enter password:
+Login@11
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
+8. Messaging
+8
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+SkillsUser
+Enter your message (max 200 chars):
+Extra message 1
+Message sent to SkillsUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+SkillsUser
+Enter your message (max 200 chars):
+Extra message 2
+Message sent to SkillsUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+SkillsUser
+Enter your message (max 200 chars):
+Extra message 3
+Message sent to SkillsUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+SkillsUser
+Enter your message (max 200 chars):
+Extra message 4
+Message sent to SkillsUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+SkillsUser
+Enter your message (max 200 chars):
+Extra message 5
+Message sent to SkillsUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+SkillsUser
+Enter your message (max 200 chars):
+Extra message 6
+Message sent to SkillsUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+SkillsUser
+Enter your message (max 200 chars):
+Extra message 7
+Message sent to SkillsUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+SkillsUser
+Enter your message (max 200 chars):
+Extra message 8
+Message sent to SkillsUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+SkillsUser
+Enter your message (max 200 chars):
+Extra message 9
+Message sent to SkillsUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+SkillsUser
+Enter your message (max 200 chars):
+Extra message 10
+Message sent to SkillsUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+SkillsUser
+Enter your message (max 200 chars):
+Extra message 11
+Message sent to SkillsUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+1
+Enter recipient's username (must be a connection):
+SkillsUser
+Enter your message (max 200 chars):
+Extra message 12
+Message sent to SkillsUser successfully!
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+3
+Returning to post-login menu.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
+8. Messaging
+5
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+1
+Enter username:
+SkillsUser
+Enter password:
+Skills@1
+You have successfully logged in
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
+8. Messaging
+8
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+2
+--- Your Messages ---
+From: LoginUser1
+Message: I just tried out skill 3, you should too!
+Sent: 2026-04-06 14:50
+---
+From: JobUser
+Message: Would you like to work together on a project?
+Sent: 2026-04-06 15:15
+---
+From: LoginUser1
+Message: Extra message 1
+Sent: 2026-04-08 20:19
+---
+From: LoginUser1
+Message: Extra message 2
+Sent: 2026-04-08 20:19
+---
+From: LoginUser1
+Message: Extra message 3
+Sent: 2026-04-08 20:19
+---
+From: LoginUser1
+Message: Extra message 4
+Sent: 2026-04-08 20:19
+---
+From: LoginUser1
+Message: Extra message 5
+Sent: 2026-04-08 20:19
+---
+From: LoginUser1
+Message: Extra message 6
+Sent: 2026-04-08 20:19
+---
+From: LoginUser1
+Message: Extra message 7
+Sent: 2026-04-08 20:19
+---
+From: LoginUser1
+Message: Extra message 8
+Sent: 2026-04-08 20:19
+---
+From: LoginUser1
+Message: Extra message 9
+Sent: 2026-04-08 20:19
+---
+From: LoginUser1
+Message: Extra message 10
+Sent: 2026-04-08 20:19
+---
+From: LoginUser1
+Message: Extra message 11
+Sent: 2026-04-08 20:19
+---
+From: LoginUser1
+Message: Extra message 12
+Sent: 2026-04-08 20:19
+---
+---------------------
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+3
+Returning to post-login menu.
+--- Welcome to InCollege, select an option ---
+0. Create/Edit your profile
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. View My Pending Connection Requests
+5. Logout
+6. View My Profile
+7. View My Network
+8. Messaging
+5
+Logging out. Goodbye!
+Welcome to InCollege!
+Please select an option:
+1. Log In
+2. Create a new account
+3. Logout
+3
+Logging out. Goodbye!
