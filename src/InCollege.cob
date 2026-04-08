@@ -55,11 +55,11 @@
        DATA DIVISION.
        FILE SECTION.
 
-         FD  INPUT-FILE.
-            01  INPUT-RECORD        PIC X(80).
+        FD  INPUT-FILE.
+          01  INPUT-RECORD        PIC X(200).
 
-         FD  OUTPUT-FILE.
-            01  OUTPUT-RECORD       PIC X(80).
+        FD  OUTPUT-FILE.
+          01  OUTPUT-RECORD       PIC X(200).
 
          FD USERS-FILE.
            01 USER-RECORD.
@@ -227,6 +227,10 @@
         *> View messages variables
          77 WS-MESSAGES-EOF      PIC X  VALUE "N".
          77 WS-MSG-FOUND-COUNT   PIC 99 VALUE 0.
+        *> Message print-wrapping helpers
+         77 WS-MSG-CONTENT-LEN PIC 9(3) VALUE 0.
+         77 WS-MSG-INDEX PIC 9(3) VALUE 0.
+         01 WS-MSG-CONT-TRIM PIC X(200).
 
       *> WS-TRIMMED-IN: holds trimmed input
       *> WS-IN-LEN: length trimmed input

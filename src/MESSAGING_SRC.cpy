@@ -225,10 +225,30 @@
                              INTO OUTPUT-RECORD
                            PERFORM PRINT-LINE
                            MOVE SPACES TO OUTPUT-RECORD
-                           STRING "Message: " DELIMITED BY SIZE
-                                  FUNCTION TRIM(MSG-CONTENT) DELIMITED BY SIZE
-                             INTO OUTPUT-RECORD
-                           PERFORM PRINT-LINE
+                           MOVE FUNCTION TRIM(MSG-CONTENT) TO WS-MSG-CONT-TRIM
+                           MOVE FUNCTION LENGTH(FUNCTION TRIM(MSG-CONTENT))
+                             TO WS-MSG-CONTENT-LEN
+                           IF WS-MSG-CONTENT-LEN > 0
+                               MOVE 1 TO WS-MSG-INDEX
+                               PERFORM UNTIL WS-MSG-INDEX > WS-MSG-CONTENT-LEN
+                                   IF WS-MSG-INDEX = 1
+                                       MOVE SPACES TO OUTPUT-RECORD
+                                       STRING "Message: " DELIMITED BY SIZE
+                                              WS-MSG-CONT-TRIM(WS-MSG-INDEX:80)
+                                                DELIMITED BY SIZE
+                                          INTO OUTPUT-RECORD
+                                       PERFORM PRINT-LINE
+                                   ELSE
+                                       MOVE SPACES TO OUTPUT-RECORD
+                                       STRING "         " DELIMITED BY SIZE
+                                              WS-MSG-CONT-TRIM(WS-MSG-INDEX:80)
+                                                DELIMITED BY SIZE
+                                          INTO OUTPUT-RECORD
+                                       PERFORM PRINT-LINE
+                                   END-IF
+                                   ADD 80 TO WS-MSG-INDEX
+                               END-PERFORM
+                           END-IF
                            MOVE SPACES TO OUTPUT-RECORD
                            IF MSG-TIMESTAMP NOT = SPACES
                                STRING "Sent: "
